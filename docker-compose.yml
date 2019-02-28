@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  testsendcore:
+    image: vivelin/testsendcore:dev2
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: none
+        max_attempts: 0
+        delay: 60s
