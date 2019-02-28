@@ -1,13 +1,12 @@
 ﻿using Decos.Diagnostics;
 using Decos.Diagnostics.Trace;
 using System;
-using System.Threading;
 
-namespace TestSend
+namespace TestSendCore
 {
-    internal class Program
+    class Program
     {
-        private static void Main(string[] args)
+        static void Main(string[] args)
         {
             var logFactory = new TraceSourceLogFactory();
             var log = logFactory.Create<Program>();
@@ -26,7 +25,7 @@ namespace TestSend
                 log.Error("Error message.");
                 throw new Exception();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 log.Error(new { exception = ex, message = "Error message." });
             }

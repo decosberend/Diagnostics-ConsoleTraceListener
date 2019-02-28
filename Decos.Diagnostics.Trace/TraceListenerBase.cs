@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace Decos.Diagnostics
+namespace Decos.Diagnostics.Trace
 {
     /// <summary>
     /// Provides an abstract base class for listeners who monitor trace and debug

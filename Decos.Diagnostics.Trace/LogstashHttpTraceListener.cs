@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Decos.Diagnostics
+namespace Decos.Diagnostics.Trace
 {
     public class LogstashHttpTraceListener : TraceListenerBase
     {

@@ -17,5 +17,10 @@ namespace Decos.Diagnostics
         public int ProcessId { get; set; }
 
         public string ThreadId { get; set; }
+
+        public LogEntry()
+        {
+            // We can initialize some of these properties here
+        }
     }
 }

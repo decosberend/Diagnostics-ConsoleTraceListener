@@ -54,6 +54,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Decos.Diagnostics.Trace\Decos.Diagnostics.Trace.csproj">
+      <Project>{7bc468b7-40af-4432-b820-fd9a572f6ead}</Project>
+      <Name>Decos.Diagnostics.Trace</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Decos.Diagnostics\Decos.Diagnostics.csproj">
       <Project>{80be96ad-9a11-4310-8a53-0933c2f1e6cc}</Project>
       <Name>Decos.Diagnostics</Name>
