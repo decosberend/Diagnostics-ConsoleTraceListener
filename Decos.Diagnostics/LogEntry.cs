@@ -20,7 +20,10 @@ namespace Decos.Diagnostics
 
         public LogEntry()
         {
-            // We can initialize some of these properties here
+            // While a little convoluted, this will return the FQDN when 
+            // possible (unlike GetHostName alone), and otherwise the host name
+            // (as opposed to simply "localhost").
+            HostName = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).HostName;
         }
     }
 }

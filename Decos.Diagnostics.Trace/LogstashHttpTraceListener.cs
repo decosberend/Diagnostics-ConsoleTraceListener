@@ -21,14 +21,12 @@ namespace Decos.Diagnostics.Trace
 
         protected override void TraceInternal(TraceEventData e, string message)
         {
-            var hostName = System.Net.Dns.GetHostEntry("localhost").HostName;
             var logEntry = new LogEntry
             {
                 Level = e.Type.ToString(),
                 Source = e.Source,
                 Message = message,
                 EventId = e.ID,
-                HostName = hostName,
                 ProcessId = e.Cache.ProcessId,
                 ThreadId = e.Cache.ThreadId
             };

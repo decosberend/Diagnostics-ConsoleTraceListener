@@ -8,6 +8,9 @@ namespace TestSendCore
     {
         static void Main(string[] args)
         {
+            System.Diagnostics.Trace.AutoFlush = true;
+            System.Diagnostics.Trace.Listeners.Add(new LogstashHttpTraceListener("http://log-dev.decos.nl:9090"));
+
             var logFactory = new TraceSourceLogFactory();
             var log = logFactory.Create<Program>();
 
