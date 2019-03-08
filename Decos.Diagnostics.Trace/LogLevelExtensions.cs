@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Decos.Diagnostics.Trace
 {
-    public static class LogLevelExtensions
+    internal static class LogLevelExtensions
     {
         private static readonly IDictionary<LogLevel, TraceEventType> logLevelTypes = new Dictionary<LogLevel, TraceEventType>()
         {

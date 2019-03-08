@@ -34,7 +34,7 @@ namespace TestSendCore
                 }
                 catch (Exception ex)
                 {
-                    log.Error(new { exception = ex, message = "Error message." });
+                    log.Error("Test", ex);
                 }
 
                 log.Critical("Critical message.");
