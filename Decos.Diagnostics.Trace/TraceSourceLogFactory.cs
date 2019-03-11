@@ -46,7 +46,7 @@ namespace Decos.Diagnostics.Trace
         /// <typeparam name="T">The type (e.g. class) that acts as the source of logging information.</typeparam>
         /// <returns>A new <see cref="ILog"/> instance for the specified type.</returns>
         public ILog Create<T>()
-            => Create(typeof(T).Namespace);
+            => Create(SourceName.FromType<T>());
 
         /// <summary>
         /// Creates a new <see cref="ILog"/> instance that write logging 
@@ -54,14 +54,14 @@ namespace Decos.Diagnostics.Trace
         /// </summary>
         /// <param name="name">A name for the source of the logging information.</param>
         /// <returns>A new <see cref="ILog"/> instance with the specified name.</returns>
-        public ILog Create(string name)
+        public ILog Create(SourceName name)
         {
             var traceSource = CreateSource(name);
 
             return new TraceSourceLog(traceSource);
         }
 
-        private TraceSource CreateSource(string name)
+        private TraceSource CreateSource(SourceName name)
         {
             var traceSource = new TraceSource(name, Options.MinimumLogLevel.ToSourceLevels());
             // TODO: allow overriding switch level per source based on a dictionary in Options. Support inheritance like ASP.NET Core logging.

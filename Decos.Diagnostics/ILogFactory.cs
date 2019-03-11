@@ -17,6 +17,6 @@
         /// </summary>
         /// <param name="name">A name for the source of the logging information.</param>
         /// <returns>A new <see cref="ILog"/> instance with the specified name.</returns>
-        ILog Create(string name);
+        ILog Create(SourceName name);
     }
 }
