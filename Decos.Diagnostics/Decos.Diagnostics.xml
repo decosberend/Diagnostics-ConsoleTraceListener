@@ -277,6 +277,29 @@
             Gets the currently configured logging options.
             </summary>
         </member>
+        <member name="M:Decos.Diagnostics.LogFactoryBuilder`1.SetMinimumLogLevel(Decos.Diagnostics.LogLevel)">
+            <summary>
+            Specifies the minimum severity level that messages must have to be
+            written to a log if no other filters match.
+            </summary>
+            <param name="logLevel">The minimum log level.</param>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.LogFactoryBuilder`1.AddFilter(Decos.Diagnostics.SourceName,Decos.Diagnostics.LogLevel)">
+            <summary>
+            Specifies the minimum severity level that messages from sources with
+            the specified name must have to be written to a log.
+            </summary>
+            <param name="name">
+            The name of sources that the filter applies to. This follows the same
+            rules as namespaces and can be used to configure inheritance; for
+            example, a filter on "Decos" will also match "Decos.Diagnostics".
+            </param>
+            <param name="logLevel">
+            The minimum log level messages must have.
+            </param>
+            <returns>A reference to this builder.</returns>
+        </member>
         <member name="M:Decos.Diagnostics.LogFactoryBuilder`1.ConfigureOptions(System.Action{`0})">
             <summary>
             Specifies additional logging options.
@@ -365,6 +388,183 @@
             Logs that describe an unrecoverable application or system crash, or
             anything else that requires immediate attention.
             </summary>
+        </member>
+        <member name="T:Decos.Diagnostics.SourceName">
+            <summary>
+            Represents the name of a logging source.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.SourceName"/> class with
+            the specified name.
+            </summary>
+            <param name="name">The name of the logging source.</param>
+        </member>
+        <member name="P:Decos.Diagnostics.SourceName.Name">
+            <summary>
+            Gets the name of the logging source.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.SourceName.Parent">
+            <summary>
+            Gets the name of the parent source, or <c>null</c> if this name
+            specifies a top-level source.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.FromType(System.Type)">
+            <summary>
+            Creates a new <see cref="T:Decos.Diagnostics.SourceName"/> that represents the specified
+            type.
+            </summary>
+            <param name="type">The type of logging source.</param>
+            <returns>
+            A new instance of the <see cref="T:Decos.Diagnostics.SourceName"/> class for the
+            specified type.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.FromType``1">
+            <summary>
+            Creates a new <see cref="T:Decos.Diagnostics.SourceName"/> that represents the specified
+            type.
+            </summary>
+            <typeparam name="T">The type of logging source.</typeparam>
+            <returns>
+            A new instance of the <see cref="T:Decos.Diagnostics.SourceName"/> class for the
+            specified type.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.op_Implicit(System.String)~Decos.Diagnostics.SourceName">
+            <summary>
+            Returns a new <see cref="T:Decos.Diagnostics.SourceName"/> with the specified name.
+            </summary>
+            <param name="name">The name of the logging source.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.op_Implicit(Decos.Diagnostics.SourceName)~System.String">
+            <summary>
+            Returns the name of the logging source.
+            </summary>
+            <param name="sourceName">The name of the logging source.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.op_Equality(Decos.Diagnostics.SourceName,Decos.Diagnostics.SourceName)">
+            <summary>
+            Determines whether two source names are the same.
+            </summary>
+            <param name="a">The first source name to compare.</param>
+            <param name="b">The second source name to compare with.</param>
+            <returns>
+            <c>true</c> if both names represent the same source; otherwise,
+            <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.op_Inequality(Decos.Diagnostics.SourceName,Decos.Diagnostics.SourceName)">
+            <summary>
+            Determines whether two source names are different.
+            </summary>
+            <param name="a">The first source name to compare.</param>
+            <param name="b">The second source name to compare with.</param>
+            <returns>
+            <c>true</c> if both names represent a different source; otherwise,
+            <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.op_LessThan(Decos.Diagnostics.SourceName,Decos.Diagnostics.SourceName)">
+            <summary>
+            Determines whether one source name is less than another source name.
+            </summary>
+            <param name="left">The first source name to compare.</param>
+            <param name="right">The second source name to compare with.</param>
+            <returns>
+            <c>true</c> if <paramref name="left"/> is less than <paramref
+            name="right"/>; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.op_LessThanOrEqual(Decos.Diagnostics.SourceName,Decos.Diagnostics.SourceName)">
+            <summary>
+            Determines whether one source name is less than or equal to source
+            name.
+            </summary>
+            <param name="left">The first source name to compare.</param>
+            <param name="right">The second source name to compare with.</param>
+            <returns>
+            <c>true</c> if <paramref name="left"/> is less than or equal to
+            <paramref name="right"/>; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.op_GreaterThan(Decos.Diagnostics.SourceName,Decos.Diagnostics.SourceName)">
+            <summary>
+            Determines whether one source name is greater than another source
+            name.
+            </summary>
+            <param name="left">The first source name to compare.</param>
+            <param name="right">The second source name to compare with.</param>
+            <returns>
+            <c>true</c> if <paramref name="left"/> is greater than or equal to
+            <paramref name="right"/>; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.op_GreaterThanOrEqual(Decos.Diagnostics.SourceName,Decos.Diagnostics.SourceName)">
+            <summary>
+            Determines whether one source name is greater than or equal to
+            another source name.
+            </summary>
+            <param name="left">The first source name to compare.</param>
+            <param name="right">The second source name to compare with.</param>
+            <returns>
+            <c>true</c> if <paramref name="left"/> is greater than or equal to
+            <paramref name="right"/>; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.CompareTo(Decos.Diagnostics.SourceName)">
+            <summary>
+            Compares the source name with another source name and returns an
+            integer that indicates whether the source name precedes, follows, or
+            occurs in the same position in the sort order as the other source
+            name.
+            </summary>
+            <param name="other">
+            A source name to compare with this source name.
+            </param>
+            <returns>
+            A value that indicates the relative order of the source names being
+            compared. If the return value is less than zero, this name precedes
+            <paramref name="other"/> in the sort order. If the return value is
+            zero, this name occurs in the same position in the sort order as
+            <paramref name="other"/> and if the return value is greater than
+            zero, this name follows <paramref name="other"/> in the sort order.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.Equals(Decos.Diagnostics.SourceName)">
+            <summary>
+            Determines whether the source name is equal to another name.
+            </summary>
+            <param name="other">A name to compare with this source name.</param>
+            <returns>
+            <c>true</c> if this source name is equal to <paramref name="other"/>;
+            otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.Equals(System.Object)">
+            <summary>
+            Determines whether the source name is equal to another object.
+            </summary>
+            <param name="obj">An object to compare with this source name.</param>
+            <returns>
+            <c>true</c> if this source name is equal to <paramref name="obj"/>;
+            otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.GetHashCode">
+            <summary>
+            Returns the hash code for this name.
+            </summary>
+            <returns>A 32-bit signed integer hash code.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.SourceName.ToString">
+            <summary>
+            Returns a string representation of the source name.
+            </summary>
+            <returns>A string that represents this source name.</returns>
         </member>
         <member name="M:Decos.Diagnostics.SourceName.Matches(Decos.Diagnostics.SourceName)">
             <summary>

@@ -41,6 +41,23 @@ namespace Decos.Diagnostics.Trace.Tests
         }
 
         [TestMethod]
+        public void CreatedTraceSourceLogUsesBestMatchingFilter()
+        {
+            // Test to ensure dictionary is sorted properly
+
+            var factory = CreateFactory(LogLevel.None,
+                ("Decos", LogLevel.Information),
+                ("Decos.Diagnostics.Trace.Tests.Something", LogLevel.None),
+                ("Decos.Diagnostics", LogLevel.Warning),
+                ("Decos.Diagnostics.Trace.Tests", LogLevel.Debug),
+                ("Decos.Diagnostics.Trace", LogLevel.Critical));
+
+            var log = factory.Create("Decos.Diagnostics.Trace.Tests");
+
+            Assert.IsTrue(log.IsEnabled(LogLevel.Debug));
+        }
+
+        [TestMethod]
         public void CreatedTraceSourceCanBeTurnedOffIndividually()
         {
             var factory = CreateFactory(LogLevel.Information, 
