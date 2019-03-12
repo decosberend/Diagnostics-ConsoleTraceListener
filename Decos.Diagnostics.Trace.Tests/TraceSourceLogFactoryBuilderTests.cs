@@ -24,7 +24,7 @@ namespace Decos.Diagnostics.Trace.Tests
         {
             var factory = new LogFactoryBuilder()
                 .UseTraceSource()
-                .ConfigureOptions(options => options.DefaultMinimumLogLevel = LogLevel.Debug)
+                .SetMinimumLogLevel(LogLevel.Debug)
                 .Build();
 
             var log = factory.Create("Test");
@@ -36,11 +36,8 @@ namespace Decos.Diagnostics.Trace.Tests
         {
             var factory = new LogFactoryBuilder()
                 .UseTraceSource()
-                .ConfigureOptions(options =>
-                {
-                    options.DefaultMinimumLogLevel = LogLevel.Information;
-                    options.Filters.Add("Decos.Diagnostics", LogLevel.Debug);
-                })
+                .SetMinimumLogLevel(LogLevel.Information)
+                .AddFilter("Decos.Diagnostics", LogLevel.Debug)
                 .Build();
 
             Assert.IsTrue(factory.Create("Decos.Diagnostics").IsEnabled(LogLevel.Debug));

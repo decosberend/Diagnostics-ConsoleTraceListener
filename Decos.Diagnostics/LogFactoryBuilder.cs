@@ -31,6 +31,37 @@ namespace Decos.Diagnostics
             = new TOptions();
 
         /// <summary>
+        /// Specifies the minimum severity level that messages must have to be
+        /// written to a log if no other filters match.
+        /// </summary>
+        /// <param name="logLevel">The minimum log level.</param>
+        /// <returns>A reference to this builder.</returns>
+        public virtual LogFactoryBuilder<TOptions> SetMinimumLogLevel(LogLevel logLevel)
+        {
+            Options.DefaultMinimumLogLevel = logLevel;
+            return this;
+        }
+
+        /// <summary>
+        /// Specifies the minimum severity level that messages from sources with
+        /// the specified name must have to be written to a log.
+        /// </summary>
+        /// <param name="name">
+        /// The name of sources that the filter applies to. This follows the same
+        /// rules as namespaces and can be used to configure inheritance; for
+        /// example, a filter on "Decos" will also match "Decos.Diagnostics".
+        /// </param>
+        /// <param name="logLevel">
+        /// The minimum log level messages must have.
+        /// </param>
+        /// <returns>A reference to this builder.</returns>
+        public virtual LogFactoryBuilder<TOptions> AddFilter(SourceName name, LogLevel logLevel)
+        {
+            Options.Filters.Add(name, logLevel);
+            return this;
+        }
+
+        /// <summary>
         /// Specifies additional logging options.
         /// </summary>
         /// <param name="configure">
