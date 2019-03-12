@@ -4,6 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics.Trace\Decos.Diagnostics.Trace.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Decos.Diagnostics\Decos.Diagnostics.csproj" />
   </ItemGroup>

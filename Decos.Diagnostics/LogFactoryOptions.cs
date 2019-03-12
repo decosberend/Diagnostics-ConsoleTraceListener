@@ -10,17 +10,17 @@ namespace Decos.Diagnostics
     public class LogFactoryOptions
     {
         /// <summary>
-        /// Gets or sets the minimum severity level messages must have to be
+        /// Gets or sets the minimum severity level that messages must have to be
         /// written to a log if no other filters match.
         /// </summary>
         public LogLevel DefaultMinimumLogLevel { get; set; }
             = LogLevel.Information;
 
         /// <summary>
-        /// Gets a dictionary that specifies the minimum severity levels messages
-        /// from certain sources must have to be written to a log.
+        /// Gets a dictionary that specifies the minimum severity levels that
+        /// messages from certain sources must have to be written to a log.
         /// </summary>
-        public IDictionary<SourceName, LogLevel> MinimumLogLevels { get; }
+        public IDictionary<SourceName, LogLevel> Filters { get; }
             = new SortedDictionary<SourceName, LogLevel>();
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace Decos.Diagnostics
         /// </returns>
         public virtual LogLevel GetLogLevel(SourceName name)
         {
-            if (MinimumLogLevels.Any(x => name.Matches(x.Key)))
+            if (Filters.Any(x => name.Matches(x.Key)))
             {
-                return MinimumLogLevels.FirstOrDefault(x => name.Matches(x.Key)).Value;
+                return Filters.FirstOrDefault(x => name.Matches(x.Key)).Value;
             }
 
             return DefaultMinimumLogLevel;

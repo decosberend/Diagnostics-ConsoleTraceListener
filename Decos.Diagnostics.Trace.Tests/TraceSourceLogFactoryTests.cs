@@ -61,7 +61,7 @@ namespace Decos.Diagnostics.Trace.Tests
             options.DefaultMinimumLogLevel = minLogLevel;
 
             foreach (var item in levels)
-                options.MinimumLogLevels.Add(item.Item1, item.Item2);
+                options.Filters.Add(item.Item1, item.Item2);
 
             return new TraceSourceLogFactory(options);
         }
