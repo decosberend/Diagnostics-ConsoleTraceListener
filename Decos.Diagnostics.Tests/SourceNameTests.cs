@@ -128,6 +128,10 @@ namespace Decos.Diagnostics.Tests
         [DataRow("A", "B")]
         [DataRow("A", "a")]
         [DataRow(null, "A")]
+        [DataRow("Decos.Diagnostics.Tests", "Decos.Diagnostics.Trace")]
+        [DataRow("Decos.Diagnostics.Trace", "Decos.Diagnostics")]
+        [DataRow("Decos.Diagnostics.Trace", "Decos")]
+        [DataRow("Decos.Diagnostics", "Decos")]
         public void SourceNameShouldBeSortedAlphabetically_LessThan(string a, string b)
         {
             SourceName x = a;
@@ -139,6 +143,9 @@ namespace Decos.Diagnostics.Tests
         [DataRow("B", "A")]
         [DataRow("a", "A")]
         [DataRow("A", null)]
+        [DataRow("Decos", "Decos.Diagnostics")]
+        [DataRow("Decos.Diagnostics", "Decos.Diagnostics.Trace")]
+        [DataRow("Decos", "Decos.Diagnostics.Trace")]
         public void SourceNameShouldBeSortedAlphabetically_GreaterThan(string a, string b)
         {
             SourceName x = a;
@@ -152,6 +159,9 @@ namespace Decos.Diagnostics.Tests
         [DataRow("A", "A")]
         [DataRow(null, "A")]
         [DataRow(null, null)]
+        [DataRow("Decos.Diagnostics.Trace", "Decos.Diagnostics")]
+        [DataRow("Decos.Diagnostics.Trace", "Decos")]
+        [DataRow("Decos.Diagnostics", "Decos")]
         public void SourceNameShouldBeSortedAlphabetically_LessThanOrEqual(string a, string b)
         {
             SourceName x = a;
@@ -165,11 +175,44 @@ namespace Decos.Diagnostics.Tests
         [DataRow("A", "A")]
         [DataRow("A", null)]
         [DataRow(null, null)]
+        [DataRow("Decos", "Decos.Diagnostics")]
+        [DataRow("Decos.Diagnostics", "Decos.Diagnostics.Trace")]
+        [DataRow("Decos", "Decos.Diagnostics.Trace")]
         public void SourceNameShouldBeSortedAlphabetically_GreaterThanOrEqual(string a, string b)
         {
             SourceName x = a;
             SourceName y = b;
             Assert.IsTrue(x >= y);
+        }
+
+        [DataTestMethod]
+        [DataRow("Decos.Diagnostics.Tests", "Decos.Diagnostics")]
+        [DataRow("Decos.Diagnostics", "Decos")]
+        public void SourceNameWithMultiplePartsShouldHaveParent(string value, string expected)
+        {
+            var x = new SourceName(value);
+            Assert.AreEqual(expected, x.Parent.Name);
+        }
+
+        [TestMethod]
+        public void SourceNameWithSinglePartShouldNotHaveParent()
+        {
+            var x = new SourceName("Decos");
+            Assert.IsNull(x.Parent);
+        }
+
+        [DataTestMethod]
+        [DataRow("Decos.Diagnostics.Trace", "Decos.Diagnostics.Trace", true)]
+        [DataRow("Decos.Diagnostics.Trace", "Decos.Diagnostics", true)]
+        [DataRow("Decos.Diagnostics.Trace", "Decos", true)]
+        [DataRow("Decos.Diagnostics.Trace", "Deco", false)]
+        [DataRow("Decos.Diagnostics.Trace", "Decos.Diagnostics.Trace.Tests", false)]
+        [DataRow("Decos.Diagnostics.Trace", "Decos.Diagnostics.Tests", false)]
+        [DataRow("Decos.Diagnostics.Trace", "Microsoft", false)]
+        public void SourceNameShouldMatchFilter(string value, string filter, bool expected)
+        {
+            var sourceName = new SourceName(value);
+            Assert.AreEqual(expected, sourceName.Matches(filter));
         }
     }
 }

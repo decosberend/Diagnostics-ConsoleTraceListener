@@ -10,7 +10,7 @@ namespace Decos.Diagnostics.Trace
     public class TraceSourceLogFactory : ILogFactory
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TraceSourceLogFactory/>
+        /// Initializes a new instance of the <see cref="TraceSourceLogFactory"/>
         /// class with the default options.
         /// </summary>
         public TraceSourceLogFactory()
@@ -63,9 +63,9 @@ namespace Decos.Diagnostics.Trace
 
         private TraceSource CreateSource(SourceName name)
         {
-            var traceSource = new TraceSource(name, Options.MinimumLogLevel.ToSourceLevels());
-            // TODO: allow overriding switch level per source based on a dictionary in Options. Support inheritance like ASP.NET Core logging.
-
+            var switchValue = Options.GetLogLevel(name).ToSourceLevels();
+            var traceSource = new TraceSource(name, switchValue);
+            
             foreach (TraceListener listener in System.Diagnostics.Trace.Listeners)
             {
                 if (!traceSource.Listeners.Cast<TraceListener>().Any(x => x.Name == listener.Name))
