@@ -1,6 +1,8 @@
 ﻿using Decos.Diagnostics;
 using Decos.Diagnostics.Trace;
+using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
 
 namespace TestSendCore
 {
@@ -12,41 +14,37 @@ namespace TestSendCore
 
             try
             {
-                System.Diagnostics.Trace.AutoFlush = true;
-                System.Diagnostics.Trace.Listeners.Add(new LogstashHttpTraceListener("http://log-dev.decos.nl:9090"));
+                var provider = ConfigureServices();
+                var log = provider.GetRequiredService<ILog<Program>>();
 
-                var logFactory = new TraceSourceLogFactory();
-                var log = logFactory.Create<Program>();
+                Console.WriteLine("Sending logs...");
 
-                log.Debug("Debug message.");
-                log.Debug(new { data = "Debug data", data2 = 1 });
-
-                log.Info("Info message.");
-                log.Info(new { data = "Info data", data2 = 2 });
-
-                log.Warn("Warning message.");
-                log.Warn(new { data = "Warning data", data2 = 3 });
-
-                try
+                var stopwatch = Stopwatch.StartNew();
+                for (int i = 0; i < 100; i++)
                 {
-                    log.Error("Error message.");
-                    throw new Exception();
+                    log.Info($"Test message {i}");
                 }
-                catch (Exception ex)
-                {
-                    log.Error("Test", ex);
-                }
+                stopwatch.Stop();
 
-                log.Critical("Critical message.");
-                log.Critical(new { data = "Critical data", data2 = 4 });
-
-                Console.WriteLine("Done.");
+                Console.WriteLine($"Done ({stopwatch.Elapsed}).");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Unhandled exception!");
                 Console.WriteLine(ex);
             }
+        }
+
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            services.AddTraceSourceLogging(options =>
+            {
+                options.AddLogstash("http://log-dev.decos.nl:9090");
+            });
+
+            return services.BuildServiceProvider();
         }
     }
 }

@@ -4,8 +4,8 @@ using System.Linq;
 namespace Decos.Diagnostics.Trace
 {
     /// <summary>
-    /// Provides <see cref="ILog"/> instances that use the <see cref="TraceSource"/>
-    /// infrastructure.
+    /// Provides <see cref="ILog"/> instances that use the <see
+    /// cref="TraceSource"/> infrastructure.
     /// </summary>
     public class TraceSourceLogFactory : ILogFactory
     {
@@ -23,9 +23,8 @@ namespace Decos.Diagnostics.Trace
         /// class with the specified options.
         /// </summary>
         /// <param name="options">
-        /// Options that specify the behavior of the 
-        /// <see cref="TraceSourceLogFactory"/> class and the instances it 
-        /// creates.
+        /// Options that specify the behavior of the <see
+        /// cref="TraceSourceLogFactory"/> class and the instances it creates.
         /// </param>
         public TraceSourceLogFactory(TraceSourceLogFactoryOptions options)
         {
@@ -33,27 +32,34 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
-        /// Gets the options that specify the behavior of the 
-        /// <see cref="TraceSourceLogFactory"/> class and the instances it 
-        /// creates.
+        /// Gets the options that specify the behavior of the <see
+        /// cref="TraceSourceLogFactory"/> class and the instances it creates.
         /// </summary>
         protected TraceSourceLogFactoryOptions Options { get; }
 
         /// <summary>
-        /// Creates a new <see cref="ILog"/> instance that writes logging 
+        /// Creates a new <see cref="ILog"/> instance that writes logging
         /// information to a <see cref="TraceSource"/> for the specified type.
         /// </summary>
-        /// <typeparam name="T">The type (e.g. class) that acts as the source of logging information.</typeparam>
-        /// <returns>A new <see cref="ILog"/> instance for the specified type.</returns>
+        /// <typeparam name="T">
+        /// The type (e.g. class) that acts as the source of logging information.
+        /// </typeparam>
+        /// <returns>
+        /// A new <see cref="ILog"/> instance for the specified type.
+        /// </returns>
         public ILog Create<T>()
             => Create(SourceName.FromType<T>());
 
         /// <summary>
-        /// Creates a new <see cref="ILog"/> instance that write logging 
+        /// Creates a new <see cref="ILog"/> instance that write logging
         /// information to a <see cref="TraceSource"/> with the specified name.
         /// </summary>
-        /// <param name="name">A name for the source of the logging information.</param>
-        /// <returns>A new <see cref="ILog"/> instance with the specified name.</returns>
+        /// <param name="name">
+        /// A name for the source of the logging information.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="ILog"/> instance with the specified name.
+        /// </returns>
         public ILog Create(SourceName name)
         {
             var traceSource = CreateSource(name);
@@ -65,10 +71,16 @@ namespace Decos.Diagnostics.Trace
         {
             var switchValue = Options.GetLogLevel(name).ToSourceLevels();
             var traceSource = new TraceSource(name, switchValue);
-            
+
             foreach (TraceListener listener in System.Diagnostics.Trace.Listeners)
             {
-                if (!traceSource.Listeners.Cast<TraceListener>().Any(x => x.Name == listener.Name))
+                // For some reason, the identical DefaultTraceListeners aren't
+                // actually the same.
+                if (listener is DefaultTraceListener
+                    && traceSource.Listeners.OfType<DefaultTraceListener>().Any())
+                    continue;
+
+                if (!traceSource.Listeners.Contains(listener))
                     traceSource.Listeners.Add(listener);
             }
 

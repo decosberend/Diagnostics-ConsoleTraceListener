@@ -3,28 +3,33 @@
 namespace Decos.Diagnostics.Trace
 {
     /// <summary>
-    /// Represents a trace listener that sends logging events and data to a Logstash HTTP input plugin.
+    /// Represents a trace listener that sends logging events and data to a
+    /// Logstash HTTP input plugin.
     /// </summary>
     public class LogstashHttpTraceListener : TraceListenerBase
     {
-        private static readonly Uri defaultEndpoint = new Uri("http://log.decos.nl:9090");
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="LogstashHttpTraceListener"/> using the default production endpoint.
+        /// Initializes a new instance of the <see
+        /// cref="LogstashHttpTraceListener"/> using the specified endpoint.
         /// </summary>
-        public LogstashHttpTraceListener()
+        /// <param name="endpointAddress">
+        /// The Logstash HTTP input plugin URL.
+        /// </param>
+        public LogstashHttpTraceListener(string endpointAddress)
+            : this(new Uri(endpointAddress, UriKind.Absolute))
         {
-            LogstashClient = new HttpLogstashClient(defaultEndpoint);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LogstashHttpTraceListener"/> using the specified endpoint.
+        /// Initializes a new instance of the <see
+        /// cref="LogstashHttpTraceListener"/> using the specified endpoint.
         /// </summary>
-        /// <param name="endpointAddress">The Logstash HTTP input plugin URL.</param>
-        public LogstashHttpTraceListener(string endpointAddress)
+        /// <param name="endpointAddress">
+        /// The Logstash HTTP input plugin URL.
+        /// </param>
+        public LogstashHttpTraceListener(Uri endpointAddress)
         {
-            var endpoint = new Uri(endpointAddress, UriKind.Absolute);
-            LogstashClient = new HttpLogstashClient(endpoint);
+            LogstashClient = new HttpLogstashClient(endpointAddress);
         }
 
         /// <summary>
@@ -36,8 +41,8 @@ namespace Decos.Diagnostics.Trace
         /// Writes trace information and a message to Logstash.
         /// </summary>
         /// <param name="e">
-        /// A <see cref="TraceListenerBase.TraceEventData" /> object that contains information about
-        /// the trace event.
+        /// A <see cref="TraceListenerBase.TraceEventData"/> object that contains
+        /// information about the trace event.
         /// </param>
         /// <param name="message">The message to write.</param>
         protected override void TraceInternal(TraceEventData e, string message)

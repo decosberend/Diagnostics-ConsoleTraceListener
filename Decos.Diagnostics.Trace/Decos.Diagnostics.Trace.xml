@@ -26,19 +26,27 @@
         </member>
         <member name="T:Decos.Diagnostics.Trace.LogstashHttpTraceListener">
             <summary>
-            Represents a trace listener that sends logging events and data to a Logstash HTTP input plugin.
-            </summary>
-        </member>
-        <member name="M:Decos.Diagnostics.Trace.LogstashHttpTraceListener.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.LogstashHttpTraceListener"/> using the default production endpoint.
+            Represents a trace listener that sends logging events and data to a
+            Logstash HTTP input plugin.
             </summary>
         </member>
         <member name="M:Decos.Diagnostics.Trace.LogstashHttpTraceListener.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.LogstashHttpTraceListener"/> using the specified endpoint.
+            Initializes a new instance of the <see
+            cref="T:Decos.Diagnostics.Trace.LogstashHttpTraceListener"/> using the specified endpoint.
             </summary>
-            <param name="endpointAddress">The Logstash HTTP input plugin URL.</param>
+            <param name="endpointAddress">
+            The Logstash HTTP input plugin URL.
+            </param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.LogstashHttpTraceListener.#ctor(System.Uri)">
+            <summary>
+            Initializes a new instance of the <see
+            cref="T:Decos.Diagnostics.Trace.LogstashHttpTraceListener"/> using the specified endpoint.
+            </summary>
+            <param name="endpointAddress">
+            The Logstash HTTP input plugin URL.
+            </param>
         </member>
         <member name="P:Decos.Diagnostics.Trace.LogstashHttpTraceListener.LogstashClient">
             <summary>
@@ -50,8 +58,8 @@
             Writes trace information and a message to Logstash.
             </summary>
             <param name="e">
-            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData" /> object that contains information about
-            the trace event.
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains
+            information about the trace event.
             </param>
             <param name="message">The message to write.</param>
         </member>
@@ -462,8 +470,8 @@
         </member>
         <member name="T:Decos.Diagnostics.Trace.TraceSourceLogFactory">
             <summary>
-            Provides <see cref="T:Decos.Diagnostics.ILog"/> instances that use the <see cref="T:System.Diagnostics.TraceSource"/>
-            infrastructure.
+            Provides <see cref="T:Decos.Diagnostics.ILog"/> instances that use the <see
+            cref="T:System.Diagnostics.TraceSource"/> infrastructure.
             </summary>
         </member>
         <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactory.#ctor">
@@ -478,39 +486,82 @@
             class with the specified options.
             </summary>
             <param name="options">
-            Options that specify the behavior of the 
-            <see cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactory"/> class and the instances it 
-            creates.
+            Options that specify the behavior of the <see
+            cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactory"/> class and the instances it creates.
             </param>
         </member>
         <member name="P:Decos.Diagnostics.Trace.TraceSourceLogFactory.Options">
             <summary>
-            Gets the options that specify the behavior of the 
-            <see cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactory"/> class and the instances it 
-            creates.
+            Gets the options that specify the behavior of the <see
+            cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactory"/> class and the instances it creates.
             </summary>
         </member>
         <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactory.Create``1">
             <summary>
-            Creates a new <see cref="T:Decos.Diagnostics.ILog"/> instance that writes logging 
+            Creates a new <see cref="T:Decos.Diagnostics.ILog"/> instance that writes logging
             information to a <see cref="T:System.Diagnostics.TraceSource"/> for the specified type.
             </summary>
-            <typeparam name="T">The type (e.g. class) that acts as the source of logging information.</typeparam>
-            <returns>A new <see cref="T:Decos.Diagnostics.ILog"/> instance for the specified type.</returns>
+            <typeparam name="T">
+            The type (e.g. class) that acts as the source of logging information.
+            </typeparam>
+            <returns>
+            A new <see cref="T:Decos.Diagnostics.ILog"/> instance for the specified type.
+            </returns>
         </member>
         <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactory.Create(Decos.Diagnostics.SourceName)">
             <summary>
-            Creates a new <see cref="T:Decos.Diagnostics.ILog"/> instance that write logging 
+            Creates a new <see cref="T:Decos.Diagnostics.ILog"/> instance that write logging
             information to a <see cref="T:System.Diagnostics.TraceSource"/> with the specified name.
             </summary>
-            <param name="name">A name for the source of the logging information.</param>
-            <returns>A new <see cref="T:Decos.Diagnostics.ILog"/> instance with the specified name.</returns>
+            <param name="name">
+            A name for the source of the logging information.
+            </param>
+            <returns>
+            A new <see cref="T:Decos.Diagnostics.ILog"/> instance with the specified name.
+            </returns>
         </member>
         <member name="T:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder">
             <summary>
             Provides <see cref="T:Decos.Diagnostics.ILogFactory"/> instances that use the <see
             cref="T:System.Diagnostics.TraceSource"/> infrastructure.
             </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.Listeners">
+            <summary>
+            Gets a collection of trace listeners to be added
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddLogstash(System.String)">
+            <summary>
+            Enables logging to a Logstash HTTP input plugin.
+            </summary>
+            <param name="endpoint">
+            The endpoint at which the Logstash HTTP input plugin is listening.
+            </param>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddLogstash(System.Uri)">
+            <summary>
+            Enables logging to a Logstash HTTP input plugin.
+            </summary>
+            <param name="endpoint">
+            The endpoint at which the Logstash HTTP input plugin is listening.
+            </param>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddTraceListener(System.Diagnostics.TraceListener)">
+            <summary>
+            Enables logging to the specified trace listener.
+            </summary>
+            <param name="traceListener">The trace listener to add.</param>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddTraceListener``1">
+            <summary>
+            Enables logging a trace listener of the specified type.
+            </summary>
+            <typeparam name="T">The type of trace listener to add.</typeparam>
+            <returns>A reference to this builder.</returns>
         </member>
         <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.Build">
             <summary>
