@@ -53,6 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var logFactory = builder.Build();
 
             services.AddSingleton(logFactory);
+            services.AddTransient(typeof(ILog<>), typeof(Log<>));
 
             return services;
         }

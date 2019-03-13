@@ -30,4 +30,18 @@
         /// <param name="data">The data to log.</param>
         void Write<T>(LogLevel logLevel, T data);
     }
+
+    /// <summary>
+    /// Defines methods for writing events and data to a log.
+    /// </summary>
+    /// <typeparam name="TSource">
+    /// The type (e.g. class) that acts as the source of logging information.
+    /// </typeparam>
+    /// <remarks>
+    /// This interface is generally only used to enable resolving <see
+    /// cref="ILog"/> instances using dependency injection directly.
+    /// </remarks>
+    public interface ILog<out TSource> : ILog
+    {
+    }
 }
