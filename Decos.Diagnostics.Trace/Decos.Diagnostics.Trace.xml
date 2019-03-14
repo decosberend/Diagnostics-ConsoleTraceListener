@@ -62,6 +62,11 @@
             </summary>
             <param name="name">The name of the trace listener.</param>
         </member>
+        <member name="P:Decos.Diagnostics.Trace.AsyncTraceListener.IsThreadSafe">
+            <summary>
+            Gets a value indicating whether the trace listener is thread safe.
+            </summary>
+        </member>
         <member name="P:Decos.Diagnostics.Trace.AsyncTraceListener.EmptyQueueDelay">
             <summary>
             Gets or sets the delay in milliseconds in between checking whether

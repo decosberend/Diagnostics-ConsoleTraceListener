@@ -3,6 +3,8 @@ using Decos.Diagnostics.Trace;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TestSendCore
 {
@@ -11,10 +13,19 @@ namespace TestSendCore
     {
         static void Main(string[] args)
         {
+            var cancellationTokenSource = new CancellationTokenSource();
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                e.Cancel = true;
+                cancellationTokenSource.Cancel();
+            };
+
             Console.WriteLine("Starting.");
 
             try
             {
+                Trace.UseGlobalLock = false;
+
                 var provider = ConfigureServices();
                 var factory = provider.GetRequiredService<ILogFactory>();
                 var log = provider.GetRequiredService<ILog<Program>>();
@@ -22,20 +33,21 @@ namespace TestSendCore
                 Console.WriteLine("Sending logs...");
 
                 var stopwatch = Stopwatch.StartNew();
-                for (int i = 0; i < 1000; i++)
+                Parallel.For(0, 1000, i =>
                 {
                     log.Info($"Test message {i}");
-                }
+                });
                 stopwatch.Stop();
 
                 Console.WriteLine($"Done ({stopwatch.Elapsed}).");
 
                 stopwatch.Restart();
-                factory.ShutdownAsync().GetAwaiter().GetResult();
+                factory.ShutdownAsync(cancellationTokenSource.Token).GetAwaiter().GetResult();
                 stopwatch.Stop();
 
                 Console.WriteLine($"Shut down took {stopwatch.Elapsed}.");
             }
+            catch (OperationCanceledException) { }
             catch (Exception ex)
             {
                 Console.WriteLine("Unhandled exception!");

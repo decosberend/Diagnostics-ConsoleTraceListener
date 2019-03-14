@@ -5,19 +5,35 @@
     /// </summary>
     public class LogEntry
     {
+        private static readonly string hostName = GetHostName();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogEntry"/> class.
         /// </summary>
         public LogEntry()
+        {
+            HostName = hostName;
+        }
+
+        private static string GetHostName()
         {
             try
             {
                 // While a little convoluted, this will return the FQDN when 
                 // possible (unlike GetHostName alone), and otherwise the host name
                 // (as opposed to simply "localhost").
-                HostName = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).HostName;
+                return System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).HostName;
             }
-            catch { }
+            catch
+            {
+                try
+                {
+                    return System.Net.Dns.GetHostName();
+                }
+                catch { }
+            }
+
+            return string.Empty;
         }
 
         /// <summary>

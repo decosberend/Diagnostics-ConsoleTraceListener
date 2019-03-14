@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,6 +30,11 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
+        /// Gets a value indicating whether the trace listener is thread safe.
+        /// </summary>
+        public override bool IsThreadSafe => true;
+
+        /// <summary>
         /// Gets or sets the delay in milliseconds in between checking whether
         /// there are log entries to send.
         /// </summary>
@@ -38,7 +43,8 @@ namespace Decos.Diagnostics.Trace
         /// <summary>
         /// Gets a queue that contains the log entries to be written.
         /// </summary>
-        protected Queue<LogEntry> RequestQueue { get; } = new Queue<LogEntry>();
+        protected ConcurrentQueue<LogEntry> RequestQueue { get; } 
+            = new ConcurrentQueue<LogEntry>();
 
         /// <summary>
         /// Sends log entries that have been queued up.
@@ -58,11 +64,9 @@ namespace Decos.Diagnostics.Trace
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                while (RequestQueue.Count > 0)
+                while (RequestQueue.TryDequeue(out var logEntry))
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-
-                    var logEntry = RequestQueue.Dequeue();
                     await TraceAsync(logEntry, cancellationToken);
                 }
 
