@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Decos.Diagnostics.Trace.Tests
@@ -53,7 +54,7 @@ namespace Decos.Diagnostics.Trace.Tests
                 .UseTraceSource()
                 .AddTraceListener(traceListener);
 
-            CollectionAssert.DoesNotContain(System.Diagnostics.Trace.Listeners, 
+            CollectionAssert.DoesNotContain(System.Diagnostics.Trace.Listeners,
                 traceListener);
         }
 
@@ -66,24 +67,24 @@ namespace Decos.Diagnostics.Trace.Tests
                 .AddTraceListener(traceListener)
                 .Build();
 
-            CollectionAssert.Contains(System.Diagnostics.Trace.Listeners, 
-                traceListener);
-
             var log = (TraceSourceLog)factory.Create("Test");
             CollectionAssert.Contains(log.TraceSource.Listeners, traceListener);
         }
 
         [TestMethod]
-        public void BuilderDoesNotAddTraceListenersTwiceWhenCallingBuildMultipleTimes()
+        public void BuilderRunsAsyncListeners()
         {
-            var builder = new LogFactoryBuilder()
+            var listener = new DelayAsyncTraceListener(-1);
+            var factory = new LogFactoryBuilder()
                 .UseTraceSource()
-                .AddTraceListener<NullTraceListener>();
+                .AddTraceListener(listener)
+                .Build();
 
-            builder.Build();
-            builder.Build();
+            var log = factory.Create("Test");
+            for (int i = 0; i < 100; i++)
+                log.Info(i);
 
-            CollectionAssert.AllItemsAreUnique(System.Diagnostics.Trace.Listeners);
+            Assert.IsTrue(listener.ProcessQueueAsyncCalled);
         }
     }
 }

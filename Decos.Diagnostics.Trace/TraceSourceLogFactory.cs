@@ -1,5 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Decos.Diagnostics.Trace
 {
@@ -9,6 +12,15 @@ namespace Decos.Diagnostics.Trace
     /// </summary>
     public class TraceSourceLogFactory : ILogFactory
     {
+        private readonly CancellationTokenSource shutdownTokenSource
+            = new CancellationTokenSource();
+
+        private readonly CancellationTokenSource cancellationTokenSource
+            = new CancellationTokenSource();
+
+        private readonly ICollection<Task> shutdownTasks
+            = new List<Task>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceSourceLogFactory"/>
         /// class with the default options.
@@ -72,19 +84,57 @@ namespace Decos.Diagnostics.Trace
             var switchValue = Options.GetLogLevel(name).ToSourceLevels();
             var traceSource = new TraceSource(name, switchValue);
 
-            foreach (TraceListener listener in System.Diagnostics.Trace.Listeners)
+            var listeners = Options.Listeners
+                .Concat(System.Diagnostics.Trace.Listeners.Cast<TraceListener>());
+            foreach (var listener in listeners)
             {
-                // For some reason, the identical DefaultTraceListeners aren't
-                // actually the same.
                 if (listener is DefaultTraceListener
                     && traceSource.Listeners.OfType<DefaultTraceListener>().Any())
                     continue;
 
                 if (!traceSource.Listeners.Contains(listener))
+                {
+                    if (listener is AsyncTraceListener asyncListener)
+                        HookShutdown(asyncListener);
+
                     traceSource.Listeners.Add(listener);
+                }
             }
 
             return traceSource;
+        }
+
+        /// <summary>
+        /// Waits for any long-running logging operations to shut down
+        /// gracefully.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        public async Task ShutdownAsync()
+        {
+            shutdownTokenSource.Cancel();
+            await Task.WhenAll(shutdownTasks);
+        }
+
+        /// <summary>
+        /// Waits for any long-running logging operations to shut down
+        /// gracefully.
+        /// </summary>
+        /// <param name="cancellationToken">
+        /// A token to monitor for cancellation requests. If you cancel the
+        /// shutdown, some logs may be lost.
+        /// </param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        public Task ShutdownAsync(CancellationToken cancellationToken)
+        {
+            cancellationToken.Register(() => cancellationTokenSource.Cancel());
+            return ShutdownAsync();
+        }
+
+        private void HookShutdown(AsyncTraceListener listener)
+        {
+            var processTask = listener.ProcessQueueAsync(
+                shutdownTokenSource.Token, cancellationTokenSource.Token);
+            shutdownTasks.Add(processTask);
         }
     }
 }

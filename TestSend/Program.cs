@@ -5,6 +5,7 @@ using System.Threading;
 
 namespace TestSend
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal class Program
     {
         private static void Main(string[] args)

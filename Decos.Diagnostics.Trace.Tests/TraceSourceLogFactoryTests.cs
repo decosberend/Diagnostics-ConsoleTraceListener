@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Decos.Diagnostics.Trace.Tests
@@ -8,21 +11,6 @@ namespace Decos.Diagnostics.Trace.Tests
     [TestClass]
     public class TraceSourceLogFactoryTests
     {
-        private TraceListenerCollection defaultListeners;
-
-        [TestInitialize]
-        public void OnTestStarting()
-        {
-            defaultListeners = System.Diagnostics.Trace.Listeners;
-        }
-
-        [TestCleanup]
-        public void OnTestEnded()
-        {
-            System.Diagnostics.Trace.Listeners.Clear();
-            System.Diagnostics.Trace.Listeners.AddRange(defaultListeners);
-        }
-
         [TestMethod]
         public void CreatedTraceSourceUsesNamespaceFromType()
         {
@@ -126,6 +114,47 @@ namespace Decos.Diagnostics.Trace.Tests
 
             if (log.TraceSource.Listeners.OfType<DefaultTraceListener>().Count() > 1)
                 Assert.Fail();
+        }
+
+        [TestMethod]
+        public async Task FactoryAllowsForGracefulShutdown()
+        {
+            var listener = new DelayAsyncTraceListener(100);
+            var factory = new LogFactoryBuilder()
+                .UseTraceSource()
+                .AddTraceListener(listener)
+                .Build();
+
+            var log = factory.Create("Test");
+            for (int i = 0; i < 10; i++)
+                log.Info(i);
+
+            await factory.ShutdownAsync();
+
+            Assert.AreEqual(0, listener.QueueCount);
+        }
+
+        [TestMethod]
+        public async Task FactoryShutdownCanBeCancelled()
+        {
+            var listener = new DelayAsyncTraceListener(100);
+            var factory = new LogFactoryBuilder()
+                .UseTraceSource()
+                .AddTraceListener(listener)
+                .Build();
+
+            var log = factory.Create("Test");
+            for (int i = 0; i < 10; i++)
+                log.Info(i);
+
+            var cancellationTokenSource = new CancellationTokenSource(250);
+            try
+            {
+                await factory.ShutdownAsync(cancellationTokenSource.Token);
+            }
+            catch (OperationCanceledException) { }
+
+            Assert.AreNotEqual(0, listener.QueueCount);
         }
 
         private static TraceSourceLogFactory CreateFactory(LogLevel minLogLevel, params (SourceName, LogLevel)[] levels)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Decos.Diagnostics.Trace
@@ -15,19 +14,13 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
-        /// Gets a collection of trace listeners to be added
-        /// </summary>
-        protected ICollection<TraceListener> Listeners { get; }
-            = new List<TraceListener>();
-
-        /// <summary>
         /// Enables logging to a Logstash HTTP input plugin.
         /// </summary>
         /// <param name="endpoint">
         /// The endpoint at which the Logstash HTTP input plugin is listening.
         /// </param>
         /// <returns>A reference to this builder.</returns>
-        public TraceSourceLogFactoryBuilder AddLogstash(string endpoint) 
+        public TraceSourceLogFactoryBuilder AddLogstash(string endpoint)
             => AddLogstash(new Uri(endpoint, UriKind.Absolute));
 
         /// <summary>
@@ -39,7 +32,7 @@ namespace Decos.Diagnostics.Trace
         /// <returns>A reference to this builder.</returns>
         public TraceSourceLogFactoryBuilder AddLogstash(Uri endpoint)
         {
-            var listener = new LogstashHttpTraceListener(endpoint);
+            var listener = new AsyncLogstashHttpTraceListener(endpoint);
             return AddTraceListener(listener);
         }
 
@@ -53,7 +46,7 @@ namespace Decos.Diagnostics.Trace
             if (traceListener == null)
                 throw new ArgumentNullException(nameof(traceListener));
 
-            Listeners.Add(traceListener);
+            Options.Listeners.Add(traceListener);
             return this;
         }
 
@@ -76,12 +69,6 @@ namespace Decos.Diagnostics.Trace
         /// <returns>A new <see cref="ILogFactory"/> instance.</returns>
         public override ILogFactory Build()
         {
-            foreach (var listener in Listeners)
-            {
-                if (!System.Diagnostics.Trace.Listeners.Contains(listener))
-                    System.Diagnostics.Trace.Listeners.Add(listener);
-            }
-
             return new TraceSourceLogFactory(Options);
         }
     }

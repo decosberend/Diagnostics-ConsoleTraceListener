@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace TestSendCore
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     class Program
     {
         static void Main(string[] args)
@@ -15,18 +16,25 @@ namespace TestSendCore
             try
             {
                 var provider = ConfigureServices();
+                var factory = provider.GetRequiredService<ILogFactory>();
                 var log = provider.GetRequiredService<ILog<Program>>();
 
                 Console.WriteLine("Sending logs...");
 
                 var stopwatch = Stopwatch.StartNew();
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 1000; i++)
                 {
                     log.Info($"Test message {i}");
                 }
                 stopwatch.Stop();
 
                 Console.WriteLine($"Done ({stopwatch.Elapsed}).");
+
+                stopwatch.Restart();
+                factory.ShutdownAsync().GetAwaiter().GetResult();
+                stopwatch.Stop();
+
+                Console.WriteLine($"Shut down took {stopwatch.Elapsed}.");
             }
             catch (Exception ex)
             {
