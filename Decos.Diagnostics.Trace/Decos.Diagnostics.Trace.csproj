@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0-alpha</Version>
+    <Authors>Laura Verdoes</Authors>
+    <Company>Decos Information Solutions</Company>
+    <Product>Decos.Diagnostics.Trace</Product>
+    <Description>Provides a System.Diagnostics.TraceSource implementation for the Decos.Diagnostics abstractions.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
