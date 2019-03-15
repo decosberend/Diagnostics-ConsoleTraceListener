@@ -9,9 +9,6 @@
     <Company>Decos Information Solutions</Company>
     <Product>Decos.Diagnostics.Trace</Product>
     <Description>Provides a System.Diagnostics.TraceSource implementation for the Decos.Diagnostics abstractions.</Description>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics.Trace\Decos.Diagnostics.Trace.xml</DocumentationFile>
   </PropertyGroup>
 
