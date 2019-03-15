@@ -14,6 +14,13 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
+        /// Enables logging to the standard output stream.
+        /// </summary>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddConsole()
+            => AddTraceListener<ConsoleTraceListener>();
+
+        /// <summary>
         /// Enables logging to a Logstash HTTP input plugin.
         /// </summary>
         /// <param name="endpoint">

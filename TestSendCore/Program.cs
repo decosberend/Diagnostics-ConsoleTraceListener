@@ -35,7 +35,7 @@ namespace TestSendCore
                 var stopwatch = Stopwatch.StartNew();
                 Parallel.For(0, 1000, i =>
                 {
-                    log.Info($"Test message {i}");
+                    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
                 });
                 stopwatch.Stop();
 
@@ -61,6 +61,8 @@ namespace TestSendCore
 
             services.AddTraceSourceLogging(options =>
             {
+                options.SetMinimumLogLevel(LogLevel.Debug);
+                options.AddConsole();
                 options.AddLogstash("http://log-dev.decos.nl:9090");
             });
 

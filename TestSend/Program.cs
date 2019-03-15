@@ -10,7 +10,12 @@ namespace TestSend
     {
         private static void Main(string[] args)
         {
-            var logFactory = new TraceSourceLogFactory();
+            var logFactory = new LogFactoryBuilder()
+                .UseTraceSource()
+                .AddConsole()
+                .AddLogstash("http://log-dev.decos.nl/")
+                .SetMinimumLogLevel(LogLevel.Debug)
+                .Build();
             var log = logFactory.Create<Program>();
 
             log.Debug("Debug message.");

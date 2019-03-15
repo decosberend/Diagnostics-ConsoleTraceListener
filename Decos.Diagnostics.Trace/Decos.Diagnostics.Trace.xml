@@ -636,6 +636,12 @@
             cref="T:System.Diagnostics.TraceSource"/> infrastructure.
             </summary>
         </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddConsole">
+            <summary>
+            Enables logging to the standard output stream.
+            </summary>
+            <returns>A reference to this builder.</returns>
+        </member>
         <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddLogstash(System.String)">
             <summary>
             Enables logging to a Logstash HTTP input plugin.
