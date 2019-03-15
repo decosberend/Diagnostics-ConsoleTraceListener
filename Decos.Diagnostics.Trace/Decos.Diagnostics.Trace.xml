@@ -116,6 +116,108 @@
             </param>
             <param name="message">The message to write.</param>
         </member>
+        <member name="T:Decos.Diagnostics.Trace.ConsoleTraceListener">
+            <summary>
+            Represents a trace listener that writes logging events and data to the
+            system console.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener"/>
+            class.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener"/>
+            class with the specified name.
+            </summary>
+            <param name="name">The name of the trace listener.</param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.ConsoleTraceListener.IsThreadSafe">
+            <summary>
+            Gets a value indicating whether the trace listener is thread safe.
+            </summary>
+            <remarks>
+            While <see cref="T:System.Console"/> is thread safe, writing messages in
+            multiple steps is not and will result in garbled output.
+            </remarks>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.TraceInternal(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.String)">
+            <summary>
+            Writes trace information and a message to standard output.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains
+            information about the trace event.
+            </param>
+            <param name="message">The message to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.FormatForLogLevel(System.Nullable{System.Diagnostics.TraceEventType})">
+            <summary>
+            Changes the console formatting options for the specified event type
+            and returns an object that, when disposed, resets the settings to
+            their previous values.
+            </summary>
+            <param name="e">The type of event to format for.</param>
+            <returns>
+            An <see cref="T:System.IDisposable"/> that will return the settings to their
+            previous values.
+            </returns>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight">
+            <summary>
+            Provides a mechanic for temporarily changing console formatting
+            options and resetting the affected settings to their previous values
+            when the object is disposed.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight"/>
+            class that does not change any settings.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.#ctor(System.ConsoleColor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight"/>
+            class that changes the foreground color.
+            </summary>
+            <param name="foregroundColor">
+            The new foreground color to use.
+            </param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.#ctor(System.ConsoleColor,System.ConsoleColor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight"/>
+            class that changes the foreground and background colors.
+            </summary>
+            <param name="foregroundColor">
+            The new foreground color to use.
+            </param>
+            <param name="backgroundColor">
+            The new background color to use.
+            </param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.PreviousForegroundColor">
+            <summary>
+            Gets the original foreground color, or <c>null</c> if the
+            foreground color has not been changed.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.PreviousBackgroundColor">
+            <summary>
+            Gets the original background color, or <c>null</c> if the
+            background color has not been changed.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.Dispose">
+            <summary>
+            Resets affected console formatting options to their original
+            values.
+            </summary>
+        </member>
         <member name="T:Decos.Diagnostics.Trace.LogstashHttpTraceListener">
             <summary>
             Represents a trace listener that sends logging events and data to a
