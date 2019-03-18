@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <Version>1.0.0-alpha</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Laura Verdoes</Authors>
+    <Company>Decos Information Solutions</Company>
+    <Description>Decos.Diagnostics is a .NET Standard 2.0 library that provides logging abstractions.</Description>
+    <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics\Decos.Diagnostics.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jil" Version="2.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net461'" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Decos.Diagnostics.AspNetCore</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Extensions.DependencyInjection.DecosDiagnosticsServiceCollectionExtensions">
+            <summary>
+            Provides a set of static methods for adding Decos Diagnostics logging
+            services.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DecosDiagnosticsServiceCollectionExtensions.AddTraceSourceLogging(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds logging services using the <see
+            cref="T:System.Diagnostics.TraceSource"/> infrastructure with the
+            default options.
+            </summary>
+            <param name="services">
+            The service collection to add the services to.
+            </param>
+            <returns>A reference to the service collection.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DecosDiagnosticsServiceCollectionExtensions.AddTraceSourceLogging(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder})">
+            <summary>
+            Adds logging services using the <see
+            cref="T:System.Diagnostics.TraceSource"/> infrastructure.
+            </summary>
+            <param name="services">
+            The service collection to add the services to.
+            </param>
+            <param name="configure">
+            A delegate to configure the logging options.
+            </param>
+            <returns>A reference to the service collection.</returns>
+        </member>
+    </members>
+</doc>

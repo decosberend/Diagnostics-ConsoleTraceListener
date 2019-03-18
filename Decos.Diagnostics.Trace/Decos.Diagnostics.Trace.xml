@@ -1,0 +1,818 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Decos.Diagnostics.Trace</name>
+    </assembly>
+    <members>
+        <member name="T:Decos.Diagnostics.Trace.AsyncLogstashHttpTraceListener">
+            <summary>
+            Represents a trace listener that sends logging events and data to a
+            Logstash HTTP input plugin.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.AsyncLogstashHttpTraceListener.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see
+            cref="T:Decos.Diagnostics.Trace.AsyncLogstashHttpTraceListener"/> using the specified endpoint.
+            </summary>
+            <param name="endpointAddress">
+            The Logstash HTTP input plugin URL.
+            </param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.AsyncLogstashHttpTraceListener.#ctor(System.Uri)">
+            <summary>
+            Initializes a new instance of the <see
+            cref="T:Decos.Diagnostics.Trace.AsyncLogstashHttpTraceListener"/> using the specified endpoint.
+            </summary>
+            <param name="endpointAddress">
+            The Logstash HTTP input plugin URL.
+            </param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.AsyncLogstashHttpTraceListener.LogstashClient">
+            <summary>
+            Gets a reference to the client used to send log entries to Logstash.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.AsyncLogstashHttpTraceListener.TraceAsync(Decos.Diagnostics.LogEntry,System.Threading.CancellationToken)">
+            <summary>
+            Sends a log entry to Logstash.
+            </summary>
+            <param name="logEntry">The log entry to be written.</param>
+            <param name="cancellationToken">
+            A token to monitor for cancellation requests.
+            </param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.AsyncTraceListener">
+            <summary>
+            Defines a trace listener that queues up log entries to be processed
+            asynchronously.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.AsyncTraceListener.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.AsyncTraceListener"/>
+            class.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.AsyncTraceListener.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.AsyncTraceListener"/>
+            class with the specified name.
+            </summary>
+            <param name="name">The name of the trace listener.</param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.AsyncTraceListener.IsThreadSafe">
+            <summary>
+            Gets a value indicating whether the trace listener is thread safe.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.AsyncTraceListener.EmptyQueueDelay">
+            <summary>
+            Gets or sets the delay in milliseconds in between checking whether
+            there are log entries to send.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.AsyncTraceListener.RequestQueue">
+            <summary>
+            Gets a queue that contains the log entries to be written.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.AsyncTraceListener.ProcessQueueAsync(System.Threading.CancellationToken,System.Threading.CancellationToken)">
+            <summary>
+            Sends log entries that have been queued up.
+            </summary>
+            <param name="shutdownToken">
+            A token to monitor for graceful shutdown requests. When cancellation
+            is requested, the task will complete after the queue has been
+            emptied.
+            </param>
+            <param name="cancellationToken">
+            A token to monitor for cancellation requests. When cancellation is
+            requested, the current operation will be aborted and the queue will
+            not be finished.
+            </param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.AsyncTraceListener.TraceAsync(Decos.Diagnostics.LogEntry,System.Threading.CancellationToken)">
+            <summary>
+            When overridden in a derived class, processes a log entry to be
+            written.
+            </summary>
+            <param name="logEntry">The log entry to be written.</param>
+            <param name="cancellationToken">
+            A token to monitor for cancellation requests.
+            </param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.AsyncTraceListener.TraceInternal(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.String)">
+            <summary>
+            Enqueues trace information and a message to the queue for
+            asynchronous processing.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains
+            information about the trace event.
+            </param>
+            <param name="message">The message to write.</param>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.ConsoleTraceListener">
+            <summary>
+            Represents a trace listener that writes logging events and data to the
+            system console.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener"/>
+            class.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener"/>
+            class with the specified name.
+            </summary>
+            <param name="name">The name of the trace listener.</param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.ConsoleTraceListener.IsThreadSafe">
+            <summary>
+            Gets a value indicating whether the trace listener is thread safe.
+            </summary>
+            <remarks>
+            While <see cref="T:System.Console"/> is thread safe, writing messages in
+            multiple steps is not and will result in garbled output.
+            </remarks>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.TraceInternal(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.String)">
+            <summary>
+            Writes trace information and a message to standard output.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains
+            information about the trace event.
+            </param>
+            <param name="message">The message to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.FormatForLogLevel(System.Nullable{System.Diagnostics.TraceEventType})">
+            <summary>
+            Changes the console formatting options for the specified event type
+            and returns an object that, when disposed, resets the settings to
+            their previous values.
+            </summary>
+            <param name="e">The type of event to format for.</param>
+            <returns>
+            An <see cref="T:System.IDisposable"/> that will return the settings to their
+            previous values.
+            </returns>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight">
+            <summary>
+            Provides a mechanic for temporarily changing console formatting
+            options and resetting the affected settings to their previous values
+            when the object is disposed.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight"/>
+            class that does not change any settings.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.#ctor(System.ConsoleColor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight"/>
+            class that changes the foreground color.
+            </summary>
+            <param name="foregroundColor">
+            The new foreground color to use.
+            </param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.#ctor(System.ConsoleColor,System.ConsoleColor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight"/>
+            class that changes the foreground and background colors.
+            </summary>
+            <param name="foregroundColor">
+            The new foreground color to use.
+            </param>
+            <param name="backgroundColor">
+            The new background color to use.
+            </param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.PreviousForegroundColor">
+            <summary>
+            Gets the original foreground color, or <c>null</c> if the
+            foreground color has not been changed.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.PreviousBackgroundColor">
+            <summary>
+            Gets the original background color, or <c>null</c> if the
+            background color has not been changed.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.ConsoleTraceListener.ConsoleHighlight.Dispose">
+            <summary>
+            Resets affected console formatting options to their original
+            values.
+            </summary>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.LogstashHttpTraceListener">
+            <summary>
+            Represents a trace listener that sends logging events and data to a
+            Logstash HTTP input plugin.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.LogstashHttpTraceListener.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see
+            cref="T:Decos.Diagnostics.Trace.LogstashHttpTraceListener"/> using the specified endpoint.
+            </summary>
+            <param name="endpointAddress">
+            The Logstash HTTP input plugin URL.
+            </param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.LogstashHttpTraceListener.#ctor(System.Uri)">
+            <summary>
+            Initializes a new instance of the <see
+            cref="T:Decos.Diagnostics.Trace.LogstashHttpTraceListener"/> using the specified endpoint.
+            </summary>
+            <param name="endpointAddress">
+            The Logstash HTTP input plugin URL.
+            </param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.LogstashHttpTraceListener.LogstashClient">
+            <summary>
+            Gets a reference to the client used to send log entries to Logstash.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.LogstashHttpTraceListener.TraceInternal(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.String)">
+            <summary>
+            Writes trace information and a message to Logstash.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains
+            information about the trace event.
+            </param>
+            <param name="message">The message to write.</param>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.TraceListenerBase">
+            <summary>
+            Provides an abstract base class for listeners who monitor trace and debug
+            output. Only a single method needs to be implemented.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase"/>
+            class.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase"/>
+            class using the specified name.
+            </summary>
+            <param name="name">The name of the trace listener.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object)">
+            <summary>
+            Writes trace information, a data object and event information to the
+            listener specific output.
+            </summary>
+            <param name="eventCache">
+            A <see cref="T:System.Diagnostics.TraceEventCache"/> object that
+            contains the current process ID, thread ID, and stack trace
+            information.
+            </param>
+            <param name="source">
+            A name used to identify the output, typically the name of the
+            application that generated the trace event.
+            </param>
+            <param name="eventType">
+            One of the <see cref="T:System.Diagnostics.TraceEventType"/> values
+            specifying the type of event that has caused the trace.
+            </param>
+            <param name="id">A numeric identifier for the event.</param>
+            <param name="data">The trace data to emit.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceData(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.Object[])">
+            <summary>
+            Writes trace information, a data object and event information to the
+            listener specific output.
+            </summary>
+            <param name="eventCache">
+            A <see cref="T:System.Diagnostics.TraceEventCache"/> object that
+            contains the current process ID, thread ID, and stack trace
+            information.
+            </param>
+            <param name="source">
+            A name used to identify the output, typically the name of the
+            application that generated the trace event.
+            </param>
+            <param name="eventType">
+            One of the <see cref="T:System.Diagnostics.TraceEventType"/> values
+            specifying the type of event that has caused the trace.
+            </param>
+            <param name="id">A numeric identifier for the event.</param>
+            <param name="data">The trace data to emit.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32)">
+            <summary>
+            Writes trace and event information to the listener specific output.
+            </summary>
+            <param name="eventCache">
+            A <see cref="T:System.Diagnostics.TraceEventCache"/> object that
+            contains the current process ID, thread ID, and stack trace
+            information.
+            </param>
+            <param name="source">
+            A name used to identify the output, typically the name of the
+            application that generated the trace event.
+            </param>
+            <param name="eventType">
+            One of the <see cref="T:System.Diagnostics.TraceEventType"/> values
+            specifying the type of event that has caused the trace.
+            </param>
+            <param name="id">A numeric identifier for the event.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String,System.Object[])">
+            <summary>
+            Writes trace information, a formatted array of objects and event
+            information to the listener specific output.
+            </summary>
+            <param name="eventCache">
+            A <see cref="T:System.Diagnostics.TraceEventCache"/> object that
+            contains the current process ID, thread ID, and stack trace
+            information.
+            </param>
+            <param name="source">
+            A name used to identify the output, typically the name of the
+            application that generated the trace event.
+            </param>
+            <param name="eventType">
+            One of the <see cref="T:System.Diagnostics.TraceEventType"/> values
+            specifying the type of event that has caused the trace.
+            </param>
+            <param name="id">A numeric identifier for the event.</param>
+            <param name="format">
+            A format string that contains zero or more format items, which
+            correspond to objects in the <paramref name="args"/> array.
+            </param>
+            <param name="args">
+            An object array containing zero or more objects to format.
+            </param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String)">
+            <summary>
+            Writes trace information, a message, and event information to the
+            listener specific output.
+            </summary>
+            <param name="eventCache">
+            A <see cref="T:System.Diagnostics.TraceEventCache"/> object that
+            contains the current process ID, thread ID, and stack trace
+            information.
+            </param>
+            <param name="source">
+            A name used to identify the output, typically the name of the
+            application that generated the trace event.
+            </param>
+            <param name="eventType">
+            One of the <see cref="T:System.Diagnostics.TraceEventType"/> values
+            specifying the type of event that has caused the trace.
+            </param>
+            <param name="id">A numeric identifier for the event.</param>
+            <param name="message">A message to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.Write(System.String)">
+            <summary>
+            Writes a message.
+            </summary>
+            <param name="message">The message to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.Write(System.String,System.String)">
+            <summary>
+            Writes a message, using the category as event type.
+            </summary>
+            <param name="message">The message to write.</param>
+            <param name="category">The category to use.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.Write(System.Object)">
+            <summary>
+            Writes the value of an object.
+            </summary>
+            <param name="o">The object to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.Write(System.Object,System.String)">
+            <summary>
+            Writes a data object, using the category as event type.
+            </summary>
+            <param name="o">The object to write.</param>
+            <param name="category">The category to use.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.WriteLine(System.String)">
+            <summary>
+            Writes a message.
+            </summary>
+            <param name="message">The message to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.WriteLine(System.String,System.String)">
+            <summary>
+            Writes a message, using the category as event type.
+            </summary>
+            <param name="message">The message to write.</param>
+            <param name="category">The category to use.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.WriteLine(System.Object)">
+            <summary>
+            Writes the value of an object.
+            </summary>
+            <param name="o">The object to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.WriteLine(System.Object,System.String)">
+            <summary>
+            Writes a data object, using the category as event type.
+            </summary>
+            <param name="o">The object to write.</param>
+            <param name="category">The category to use.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.ParseCategory(System.String)">
+            <summary>
+            Determines the <see cref="T:System.Diagnostics.TraceEventType"/> to use based on the
+            specified category name.
+            </summary>
+            <param name="category">The category name to parse.</param>
+            <returns>A <see cref="T:System.Diagnostics.TraceEventType"/> value.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.ShouldTrace(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String,System.Object[],System.Object,System.Object[])">
+            <summary>
+            Determines whether the trace listener should trace the event.
+            </summary>
+            <param name="cache">
+            The <see cref="T:System.Diagnostics.TraceEventCache"/> that contains information for the
+            trace event.
+            </param>
+            <param name="source">The name of the source.</param>
+            <param name="type">
+            One of the <see cref="T:System.Diagnostics.TraceEventType"/> values specifying the type of
+            event that has caused the trace.
+            </param>
+            <param name="id">A trace identifier number.</param>
+            <param name="message">
+            Either the format to use for writing an array of arguments specified
+            by the <paramref name="args"/> parameter, or a message to write.
+            </param>
+            <param name="args">An array of argument objects.</param>
+            <param name="data1">A trace data object.</param>
+            <param name="data">An array of trace data objects.</param>
+            <returns>
+            <see langword="true"/> to trace the specified event; otherwise, <see
+            langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.Trace(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.String)">
+            <summary>
+            Writes trace information and a message to the listener specific
+            output.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains information about
+            the trace event.
+            </param>
+            <param name="message">The message to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.Trace(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.String,System.Object[])">
+            <summary>
+            Writes trace information and a formatted message to the listener
+            specific output.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains information about
+            the trace event.
+            </param>
+            <param name="format">
+            A format string that contains zero or more format items, which
+            correspond to objects in the <paramref name="args"/> array.
+            </param>
+            <param name="args">
+            An object array containing zero or more objects to format.
+            </param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.Trace(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.Object)">
+            <summary>
+            Writes trace information and a data object to the listener specific
+            output if.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains information about
+            the trace event.
+            </param>
+            <param name="data">The trace data to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceInternal(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.String)">
+            <summary>
+            When overridden in a derived class, writes trace information and a
+            message to the listener specific output.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains information about
+            the trace event.
+            </param>
+            <param name="message">The message to write.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceInternal(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.String,System.Object[])">
+            <summary>
+            Writes trace information and a formatted message to the listener
+            specific output.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains information about
+            the trace event.
+            </param>
+            <param name="format">
+            A format string that contains zero or more format items, which
+            correspond to objects in the <paramref name="args"/> array.
+            </param>
+            <param name="args">
+            An object array containing zero or more objects to format.
+            </param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceInternal(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,System.Object)">
+            <summary>
+            Writes trace information and a data object to the listener specific
+            output.
+            </summary>
+            <param name="e">
+            A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains information about
+            the trace event.
+            </param>
+            <param name="data">The trace data to write.</param>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData">
+            <summary>
+            Provides information about a trace event.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/>
+            class.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData.#ctor(System.Diagnostics.TraceEventType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/>
+            class with the specified event type.
+            </summary>
+            <param name="eventType">The type of event.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData.#ctor(System.Diagnostics.TraceEventCache,System.String,System.Nullable{System.Diagnostics.TraceEventType},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/>
+            class with the specified parameters.
+            </summary>
+            <param name="eventCache">
+            The <see cref="T:System.Diagnostics.TraceEventCache"/> object.
+            </param>
+            <param name="source">The source of the event.</param>
+            <param name="eventType">The type of the event.</param>
+            <param name="id">The ID of the event.</param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData.Cache">
+            <summary>
+            Gets a <see cref="T:System.Diagnostics.TraceEventCache"/> object that provides trace
+            event data specific to a thread and process.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData.ID">
+            <summary>
+            Gets a numeric identifier for the event.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData.Source">
+            <summary>
+            Gets the name used to identify the output, typically the name of
+            the application that generated the trace event.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData.Type">
+            <summary>
+            Gets the type of event, or <c>null</c> if no type was specified.
+            </summary>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.TraceSourceLog">
+            <summary>
+            Represents a log backed by a <see cref="P:Decos.Diagnostics.Trace.TraceSourceLog.TraceSource"/>.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLog.#ctor(System.Diagnostics.TraceSource)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.TraceSourceLog"/> class
+            with the specified <see cref="T:System.Diagnostics.TraceSource"/>.
+            </summary>
+            <param name="traceSource">
+            The <see cref="T:System.Diagnostics.TraceSource"/> to write logging 
+            events and data to.
+            </param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.TraceSourceLog.TraceSource">
+            <summary>
+            Gets the underlying <see cref="T:System.Diagnostics.TraceSource"/>
+            that logging events and data are written to.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLog.IsEnabled(Decos.Diagnostics.LogLevel)">
+            <summary>
+            Determines whether messages of the specified log level are accepted.
+            </summary>
+            <param name="logLevel">The log level to check.</param>
+            <returns>
+            <c>true</c> if message with the specified log level will be written
+            to the log; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLog.Write(Decos.Diagnostics.LogLevel,System.String)">
+            <summary>
+            Writes a message to the log with the specified severity.
+            </summary>
+            <param name="logLevel">The severity of the message.</param>
+            <param name="message">The text of the message to log.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLog.Write(System.Diagnostics.TraceEventType,System.String)">
+            <summary>
+            Writes a message to the log with the specified severity.
+            </summary>
+            <param name="eventType">The severity of the message.</param>
+            <param name="message">The text of the message to log.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLog.Write``1(Decos.Diagnostics.LogLevel,``0)">
+            <summary>
+            Writes structured data to the log with the specified severity.
+            </summary>
+            <typeparam name="T">The type of data to write.</typeparam>
+            <param name="logLevel">The severity of the data.</param>
+            <param name="data">The data to log.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLog.Write``1(System.Diagnostics.TraceEventType,``0)">
+            <summary>
+            Writes structured data to the log with the specified severity.
+            </summary>
+            <typeparam name="T">The type of data to write.</typeparam>
+            <param name="eventType">The severity of the data.</param>
+            <param name="data">The data to log.</param>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.TraceSourceLogFactory">
+            <summary>
+            Provides <see cref="T:Decos.Diagnostics.ILog"/> instances that use the <see
+            cref="T:System.Diagnostics.TraceSource"/> infrastructure.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactory.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactory"/>
+            class with the default options.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactory.#ctor(Decos.Diagnostics.Trace.TraceSourceLogFactoryOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactory"/>
+            class with the specified options.
+            </summary>
+            <param name="options">
+            Options that specify the behavior of the <see
+            cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactory"/> class and the instances it creates.
+            </param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.TraceSourceLogFactory.Options">
+            <summary>
+            Gets the options that specify the behavior of the <see
+            cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactory"/> class and the instances it creates.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactory.Create``1">
+            <summary>
+            Creates a new <see cref="T:Decos.Diagnostics.ILog"/> instance that writes logging
+            information to a <see cref="T:System.Diagnostics.TraceSource"/> for the specified type.
+            </summary>
+            <typeparam name="T">
+            The type (e.g. class) that acts as the source of logging information.
+            </typeparam>
+            <returns>
+            A new <see cref="T:Decos.Diagnostics.ILog"/> instance for the specified type.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactory.Create(Decos.Diagnostics.SourceName)">
+            <summary>
+            Creates a new <see cref="T:Decos.Diagnostics.ILog"/> instance that write logging
+            information to a <see cref="T:System.Diagnostics.TraceSource"/> with the specified name.
+            </summary>
+            <param name="name">
+            A name for the source of the logging information.
+            </param>
+            <returns>
+            A new <see cref="T:Decos.Diagnostics.ILog"/> instance with the specified name.
+            </returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactory.ShutdownAsync">
+            <summary>
+            Waits for any long-running logging operations to shut down
+            gracefully.
+            </summary>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactory.ShutdownAsync(System.Threading.CancellationToken)">
+            <summary>
+            Waits for any long-running logging operations to shut down
+            gracefully.
+            </summary>
+            <param name="cancellationToken">
+            A token to monitor for cancellation requests. If you cancel the
+            shutdown, some logs may be lost.
+            </param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder">
+            <summary>
+            Provides <see cref="T:Decos.Diagnostics.ILogFactory"/> instances that use the <see
+            cref="T:System.Diagnostics.TraceSource"/> infrastructure.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddConsole">
+            <summary>
+            Enables logging to the standard output stream.
+            </summary>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddLogstash(System.String)">
+            <summary>
+            Enables logging to a Logstash HTTP input plugin.
+            </summary>
+            <param name="endpoint">
+            The endpoint at which the Logstash HTTP input plugin is listening.
+            </param>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddLogstash(System.Uri)">
+            <summary>
+            Enables logging to a Logstash HTTP input plugin.
+            </summary>
+            <param name="endpoint">
+            The endpoint at which the Logstash HTTP input plugin is listening.
+            </param>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddTraceListener(System.Diagnostics.TraceListener)">
+            <summary>
+            Enables logging to the specified trace listener.
+            </summary>
+            <param name="traceListener">The trace listener to add.</param>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddTraceListener``1">
+            <summary>
+            Enables logging a trace listener of the specified type.
+            </summary>
+            <typeparam name="T">The type of trace listener to add.</typeparam>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.Build">
+            <summary>
+            Creates a new <see cref="T:Decos.Diagnostics.ILogFactory"/> instance with the configured
+            options.
+            </summary>
+            <returns>A new <see cref="T:Decos.Diagnostics.ILogFactory"/> instance.</returns>
+        </member>
+        <member name="T:Decos.Diagnostics.Trace.TraceSourceLogFactoryOptions">
+            <summary>
+            Represents options for specifying the behavior of the <see
+            cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactory"/> class and the instances it creates.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.TraceSourceLogFactoryOptions.Listeners">
+            <summary>
+            Gets a collection of trace listeners to be added.
+            </summary>
+        </member>
+        <member name="T:Decos.Diagnostics.LogFactoryBuilderExtensions">
+            <summary>
+            Provides a set of static methods for configuring the logging system to
+            use the <see cref="T:System.Diagnostics.TraceSource"/> infrastructure.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.LogFactoryBuilderExtensions.UseTraceSource(Decos.Diagnostics.LogFactoryBuilder)">
+            <summary>
+            Specifies that the <see cref="T:System.Diagnostics.TraceSource"/>
+            infrastructure should be used for logging.
+            </summary>
+            <param name="builder">
+            The <see cref="T:Decos.Diagnostics.LogFactoryBuilder"/> class that acts as an entry point
+            for the logging configuration.
+            </param>
+            <returns>
+            A new <see cref="T:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder"/> used to configure
+            and create <see cref="T:Decos.Diagnostics.ILogFactory"/> instances.
+            </returns>
+        </member>
+    </members>
+</doc>
