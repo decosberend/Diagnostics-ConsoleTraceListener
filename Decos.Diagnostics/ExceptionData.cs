@@ -8,10 +8,15 @@ namespace Decos.Diagnostics
     public class ExceptionData
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExceptionData"/> class with the specified context message and exception.
+        /// Initializes a new instance of the <see cref="ExceptionData"/> class
+        /// with the specified context message and exception.
         /// </summary>
-        /// <param name="context">A message that provides context for the error.</param>
-        /// <param name="exception">The exception that represents the error that occurred</param>
+        /// <param name="context">
+        /// A message that provides context for the error.
+        /// </param>
+        /// <param name="exception">
+        /// The exception that represents the error that occurred
+        /// </param>
         public ExceptionData(string context, Exception exception)
         {
             if (exception == null)
@@ -30,5 +35,12 @@ namespace Decos.Diagnostics
         /// Gets the exception that represents the error that occurred.
         /// </summary>
         public Exception Exception { get; }
+
+        /// <summary>
+        /// Returns a string that represents the logged exception.
+        /// </summary>
+        /// <returns>A string that represents this logged exception.</returns>
+        public override string ToString() 
+            => $"{Context}\n{Exception}";
     }
 }
