@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decos.Diagnostics.AspNetCor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decos.Diagnostics.AspNetCore.Tests", "Decos.Diagnostics.AspNetCore.Tests\Decos.Diagnostics.AspNetCore.Tests.csproj", "{C1C0488E-1FB6-4022-BFB7-FC7FF7AAF42B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decos.Diagnostics.Trace.Slack", "Decos.Diagnostics.Trace.Slack\Decos.Diagnostics.Trace.Slack.csproj", "{C8EB0202-23EC-4E75-BB9F-2EBBFA54737F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{C1C0488E-1FB6-4022-BFB7-FC7FF7AAF42B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1C0488E-1FB6-4022-BFB7-FC7FF7AAF42B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1C0488E-1FB6-4022-BFB7-FC7FF7AAF42B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8EB0202-23EC-4E75-BB9F-2EBBFA54737F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8EB0202-23EC-4E75-BB9F-2EBBFA54737F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8EB0202-23EC-4E75-BB9F-2EBBFA54737F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8EB0202-23EC-4E75-BB9F-2EBBFA54737F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

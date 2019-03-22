@@ -33,10 +33,11 @@ namespace TestSendCore
                 Console.WriteLine("Sending logs...");
 
                 var stopwatch = Stopwatch.StartNew();
-                Parallel.For(0, 1000, i =>
-                {
-                    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
-                });
+                //Parallel.For(0, 1000, i =>
+                //{
+                //    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
+                //});            
+                log.Critical("This is a logging message.");
                 stopwatch.Stop();
 
                 Console.WriteLine($"Done ({stopwatch.Elapsed}).");
@@ -64,6 +65,10 @@ namespace TestSendCore
                 options.SetMinimumLogLevel(LogLevel.Debug);
                 options.AddConsole();
                 options.AddLogstash("http://log-dev.decos.nl:9090");
+
+                var webhookAddress = Environment.GetEnvironmentVariable("SLACK_WEBHOOK");
+                if (!string.IsNullOrEmpty(webhookAddress))
+                    options.AddSlack(webhookAddress);
             });
 
             return services.BuildServiceProvider();
