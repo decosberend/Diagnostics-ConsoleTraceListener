@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <Authors>Laura Verdoes</Authors>
+    <Company>Decos Information Solutions</Company>
+    <Description>Provides a trace listener that sends logs to Slack.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0-alpha</Version>
+    <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics.Trace.Slack\Decos.Diagnostics.Trace.Slack.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Slack.Webhooks" Version="1.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Decos.Diagnostics.Trace\Decos.Diagnostics.Trace.csproj" />
+  </ItemGroup>
+
+</Project>

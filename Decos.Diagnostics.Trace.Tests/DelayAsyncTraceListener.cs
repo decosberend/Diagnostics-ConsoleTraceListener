@@ -17,6 +17,20 @@ namespace Decos.Diagnostics.Trace.Tests
 
         public bool ProcessQueueAsyncCalled { get; private set; }
 
+        public bool TraceCalled { get; private set; }
+
+        protected override void TraceInternal(TraceEventData e, string message)
+        {
+            TraceCalled = true;
+            base.TraceInternal(e, message);
+        }
+
+        protected override void TraceInternal(TraceEventData e, object data)
+        {
+            TraceCalled = true;
+            base.TraceInternal(e, data);
+        }
+
         public override Task TraceAsync(LogEntry logEntry, CancellationToken cancellationToken)
         {
             return Task.Delay(Delay, cancellationToken);

@@ -33,10 +33,21 @@ namespace TestSendCore
                 Console.WriteLine("Sending logs...");
 
                 var stopwatch = Stopwatch.StartNew();
-                Parallel.For(0, 1000, i =>
+                //Parallel.For(0, 1000, i =>
+                //{
+                //    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
+                //});            
+                try
                 {
-                    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
-                });
+                    log.Warn("This message should not appear in Slack.");
+                    throw new NotSupportedException();
+                }
+                catch (Exception ex)
+                {
+                    log.Info(ex);
+                    log.Critical("An unexpected error occurred while sending test messages.", ex);
+                    log.Critical(new { Data = Math.PI, DateTimeOffset = DateTimeOffset.Now.AddDays(1.2), DateTime = DateTime.Now.AddDays(-12.3), Date = DateTime.Today.AddDays(-1) });
+                }
                 stopwatch.Stop();
 
                 Console.WriteLine($"Done ({stopwatch.Elapsed}).");
@@ -64,6 +75,10 @@ namespace TestSendCore
                 options.SetMinimumLogLevel(LogLevel.Debug);
                 options.AddConsole();
                 options.AddLogstash("http://log-dev.decos.nl:9090");
+
+                var webhookAddress = Environment.GetEnvironmentVariable("SLACK_WEBHOOK");
+                if (!string.IsNullOrEmpty(webhookAddress))
+                    options.AddSlack(webhookAddress);
             });
 
             return services.BuildServiceProvider();

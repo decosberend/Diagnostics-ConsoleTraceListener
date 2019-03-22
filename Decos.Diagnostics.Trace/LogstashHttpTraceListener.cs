@@ -49,7 +49,7 @@ namespace Decos.Diagnostics.Trace
         {
             var logEntry = new LogEntry
             {
-                Level = e.Type.ToString(),
+                Level = e.Type.ToLogLevel(),
                 Source = e.Source,
                 Message = message,
                 EventId = e.ID,

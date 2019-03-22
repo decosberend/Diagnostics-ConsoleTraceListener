@@ -105,9 +105,64 @@ namespace Decos.Diagnostics.Trace
         {
             var logEntry = new LogEntry
             {
-                Level = e.Type.ToString(),
+                Level = e.Type.ToLogLevel(),
                 Source = e.Source,
                 Message = message,
+                EventId = e.ID,
+                ProcessId = e.Cache.ProcessId,
+                ThreadId = e.Cache.ThreadId
+            };
+
+            RequestQueue.Enqueue(logEntry);
+        }
+
+        /// <summary>
+        /// Enqueues trace information and data to the queue for
+        /// asynchronous processing.
+        /// </summary>
+        /// <param name="e">
+        /// A <see cref="TraceListenerBase.TraceEventData"/> object that contains
+        /// information about the trace event.
+        /// </param>
+        /// <param name="data">The trace data to write.</param>
+        protected override void TraceInternal(TraceEventData e, object data)
+        {
+            if (data is ExceptionData exceptionData)
+            {
+                TraceInternal(e, exceptionData);
+                return;
+            }
+
+            var logEntry = new LogEntry
+            {
+                Level = e.Type.ToLogLevel(),
+                Source = e.Source,
+                Data = data,
+                EventId = e.ID,
+                ProcessId = e.Cache.ProcessId,
+                ThreadId = e.Cache.ThreadId
+            };
+
+            RequestQueue.Enqueue(logEntry);
+        }
+
+        /// <summary>
+        /// Enqueues trace information and exception data to the queue for
+        /// asynchronous processing.
+        /// </summary>
+        /// <param name="e">
+        /// A <see cref="TraceListenerBase.TraceEventData"/> object that contains
+        /// information about the trace event.
+        /// </param>
+        /// <param name="data">The exception data to write.</param>
+        protected void TraceInternal(TraceEventData e, ExceptionData data)
+        {
+            var logEntry = new LogEntry
+            {
+                Level = e.Type.ToLogLevel(),
+                Source = e.Source,
+                Message = data.Context,
+                Data = data.Exception,
                 EventId = e.ID,
                 ProcessId = e.Cache.ProcessId,
                 ThreadId = e.Cache.ThreadId

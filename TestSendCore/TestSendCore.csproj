@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Decos.Diagnostics.AspNetCore\Decos.Diagnostics.AspNetCore.csproj" />
+    <ProjectReference Include="..\Decos.Diagnostics.Trace.Slack\Decos.Diagnostics.Trace.Slack.csproj" />
     <ProjectReference Include="..\Decos.Diagnostics.Trace\Decos.Diagnostics.Trace.csproj" />
     <ProjectReference Include="..\Decos.Diagnostics\Decos.Diagnostics.csproj" />
   </ItemGroup>

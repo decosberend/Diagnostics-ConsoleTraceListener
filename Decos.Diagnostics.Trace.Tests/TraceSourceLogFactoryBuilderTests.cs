@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -85,6 +86,40 @@ namespace Decos.Diagnostics.Trace.Tests
                 log.Info(i);
 
             Assert.IsTrue(listener.ProcessQueueAsyncCalled);
+        }
+
+        [TestMethod]
+        public void TraceListenerWithSufficientMinimumLevelGetsCalled()
+        {
+            var traceListener = new DelayAsyncTraceListener(-1);
+            var factory = new LogFactoryBuilder()
+                .UseTraceSource()
+                .AddTraceListener(traceListener, LogLevel.Warning)
+                .SetMinimumLogLevel(LogLevel.Information)
+                .Build();
+
+            var log = (TraceSourceLog)factory.Create("Test");
+            Assert.IsTrue(log.IsEnabled(LogLevel.Information));
+
+            log.Warn("Test");
+            Assert.IsTrue(traceListener.TraceCalled);
+        }
+
+        [TestMethod]
+        public void TraceListenerWithHigherMinimumLevelDoesNotGetCalled()
+        {
+            var traceListener = new DelayAsyncTraceListener(-1);
+            var factory = new LogFactoryBuilder()
+                .UseTraceSource()
+                .AddTraceListener(traceListener, LogLevel.Warning)
+                .SetMinimumLogLevel(LogLevel.Information)
+                .Build();
+
+            var log = (TraceSourceLog)factory.Create("Test");
+            Assert.IsTrue(log.IsEnabled(LogLevel.Information));
+
+            log.Info("Test");
+            Assert.IsFalse(traceListener.TraceCalled);
         }
     }
 }
