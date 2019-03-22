@@ -46,7 +46,7 @@ namespace TestSendCore
                 {
                     log.Critical(ex);
                     log.Critical("An unexpected error occurred while sending test messages.", ex);
-                    log.Critical(new { Data = 1, DateTimeOffset = DateTimeOffset.Now, DateTime = DateTime.Now, Date = DateTime.Today });
+                    log.Critical(new { Data = Math.PI, DateTimeOffset = DateTimeOffset.Now.AddDays(1.2), DateTime = DateTime.Now.AddDays(-12.3), Date = DateTime.Today.AddDays(-1) });
                 }
                 stopwatch.Stop();
 

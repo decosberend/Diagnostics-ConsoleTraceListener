@@ -16,7 +16,8 @@ namespace Decos.Diagnostics.Trace.Slack
                 Color = logEntry.Level.GetLogLevelColor(),
                 Text = logEntry.Message,
                 Fields = new List<SlackField>(logEntry.GetDataFields()),
-                Footer = $"{logEntry.Level} - {logEntry.HostName} - PID {logEntry.ProcessId} - thread {logEntry.ThreadId}"
+                Footer = $"{logEntry.Level} - {logEntry.HostName} - PID {logEntry.ProcessId} thread {logEntry.ThreadId}",
+                Timestamp = (int)logEntry.Timestamp.ToUnixTimeSeconds()
             };
 
             if (string.IsNullOrEmpty(logEntry.Message) && logEntry.Data != null)

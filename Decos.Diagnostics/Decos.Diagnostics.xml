@@ -247,17 +247,25 @@
         </member>
         <member name="P:Decos.Diagnostics.LogEntry.HostName">
             <summary>
-            Gets or sets the name or fully-qualified domain name of the host that created the log entry.
+            Gets or sets the name or fully-qualified domain name of the host that
+            created the log entry.
             </summary>
         </member>
         <member name="P:Decos.Diagnostics.LogEntry.ProcessId">
             <summary>
-            Gets or sets the process ID of the process that created the log entry.
+            Gets or sets the process ID of the process that created the log
+            entry.
             </summary>
         </member>
         <member name="P:Decos.Diagnostics.LogEntry.ThreadId">
             <summary>
-            Gets or sets the managed thread ID of the thread that created the log entry.
+            Gets or sets the managed thread ID of the thread that created the log
+            entry.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.LogEntry.Timestamp">
+            <summary>
+            Gets or sets the point in time the log entry was created.
             </summary>
         </member>
         <member name="T:Decos.Diagnostics.LogExtensions">
