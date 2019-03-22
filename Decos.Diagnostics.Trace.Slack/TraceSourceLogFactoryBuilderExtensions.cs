@@ -20,9 +20,12 @@ namespace Decos.Diagnostics
         /// <param name="webhookAddress">
         /// The address of the Slack Incoming Webhook to post messages to.
         /// </param>
+        /// <param name="minimumLogLevel">
+        /// The minimum log level of messages to send to Slack.
+        /// </param>
         /// <returns>A reference to the builder.</returns>
-        public static TraceSourceLogFactoryBuilder AddSlack(this TraceSourceLogFactoryBuilder builder, string webhookAddress)
-            => builder.AddSlack(new Uri(webhookAddress, UriKind.Absolute));
+        public static TraceSourceLogFactoryBuilder AddSlack(this TraceSourceLogFactoryBuilder builder, string webhookAddress, LogLevel minimumLogLevel = LogLevel.Critical)
+            => builder.AddSlack(new Uri(webhookAddress, UriKind.Absolute), minimumLogLevel);
 
         /// <summary>
         /// Enables logging to Slack.
@@ -33,8 +36,11 @@ namespace Decos.Diagnostics
         /// <param name="webhookAddress">
         /// The address of the Slack Incoming Webhook to post messages to.
         /// </param>
+        /// <param name="minimumLogLevel">
+        /// The minimum log level of messages to send to Slack.
+        /// </param>
         /// <returns>A reference to the builder.</returns>
-        public static TraceSourceLogFactoryBuilder AddSlack(this TraceSourceLogFactoryBuilder builder, Uri webhookAddress)
-            => builder.AddTraceListener(new SlackTraceListener(webhookAddress));
+        public static TraceSourceLogFactoryBuilder AddSlack(this TraceSourceLogFactoryBuilder builder, Uri webhookAddress, LogLevel minimumLogLevel = LogLevel.Critical)
+            => builder.AddTraceListener(new SlackTraceListener(webhookAddress), minimumLogLevel);
     }
 }

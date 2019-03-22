@@ -4,6 +4,7 @@ using System.Linq;
 
 using Slack.Webhooks;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Decos.Diagnostics.Trace.Slack.Tests")]
 namespace Decos.Diagnostics.Trace.Slack
 {
     internal static class LogEntryExtensions

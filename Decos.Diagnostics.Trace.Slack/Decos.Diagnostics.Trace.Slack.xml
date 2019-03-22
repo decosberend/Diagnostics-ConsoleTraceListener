@@ -40,7 +40,7 @@
             with a log factory.
             </summary>
         </member>
-        <member name="M:Decos.Diagnostics.TraceSourceLogFactoryBuilderExtensions.AddSlack(Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder,System.String)">
+        <member name="M:Decos.Diagnostics.TraceSourceLogFactoryBuilderExtensions.AddSlack(Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder,System.String,Decos.Diagnostics.LogLevel)">
             <summary>
             Enables logging to Slack.
             </summary>
@@ -49,10 +49,13 @@
             </param>
             <param name="webhookAddress">
             The address of the Slack Incoming Webhook to post messages to.
+            </param>
+            <param name="minimumLogLevel">
+            The minimum log level of messages to send to Slack.
             </param>
             <returns>A reference to the builder.</returns>
         </member>
-        <member name="M:Decos.Diagnostics.TraceSourceLogFactoryBuilderExtensions.AddSlack(Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder,System.Uri)">
+        <member name="M:Decos.Diagnostics.TraceSourceLogFactoryBuilderExtensions.AddSlack(Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder,System.Uri,Decos.Diagnostics.LogLevel)">
             <summary>
             Enables logging to Slack.
             </summary>
@@ -61,6 +64,9 @@
             </param>
             <param name="webhookAddress">
             The address of the Slack Incoming Webhook to post messages to.
+            </param>
+            <param name="minimumLogLevel">
+            The minimum log level of messages to send to Slack.
             </param>
             <returns>A reference to the builder.</returns>
         </member>

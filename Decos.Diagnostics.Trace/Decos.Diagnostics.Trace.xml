@@ -766,12 +766,33 @@
             </summary>
             <returns>A reference to this builder.</returns>
         </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddConsole(Decos.Diagnostics.LogLevel)">
+            <summary>
+            Enables logging to the standard output stream.
+            </summary>
+            <param name="minimumLogLevel">
+            The minimum log level of messages to send to the trace listener.
+            </param>
+            <returns>A reference to this builder.</returns>
+        </member>
         <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddLogstash(System.String)">
             <summary>
             Enables logging to a Logstash HTTP input plugin.
             </summary>
             <param name="endpoint">
             The endpoint at which the Logstash HTTP input plugin is listening.
+            </param>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddLogstash(System.String,Decos.Diagnostics.LogLevel)">
+            <summary>
+            Enables logging to a Logstash HTTP input plugin.
+            </summary>
+            <param name="endpoint">
+            The endpoint at which the Logstash HTTP input plugin is listening.
+            </param>
+            <param name="minimumLogLevel">
+            The minimum log level of messages to send to the trace listener.
             </param>
             <returns>A reference to this builder.</returns>
         </member>
@@ -784,6 +805,18 @@
             </param>
             <returns>A reference to this builder.</returns>
         </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddLogstash(System.Uri,Decos.Diagnostics.LogLevel)">
+            <summary>
+            Enables logging to a Logstash HTTP input plugin.
+            </summary>
+            <param name="endpoint">
+            The endpoint at which the Logstash HTTP input plugin is listening.
+            </param>
+            <param name="minimumLogLevel">
+            The minimum log level of messages to send to the trace listener.
+            </param>
+            <returns>A reference to this builder.</returns>
+        </member>
         <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddTraceListener(System.Diagnostics.TraceListener)">
             <summary>
             Enables logging to the specified trace listener.
@@ -791,11 +824,32 @@
             <param name="traceListener">The trace listener to add.</param>
             <returns>A reference to this builder.</returns>
         </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddTraceListener(System.Diagnostics.TraceListener,Decos.Diagnostics.LogLevel)">
+            <summary>
+            Enables logging to the specified trace listener for messages at a
+            certain level.
+            </summary>
+            <param name="traceListener">The trace listener to add.</param>
+            <param name="minimumLogLevel">
+            The minimum log level of messages to send to the trace listener.
+            </param>
+            <returns>A reference to this builder.</returns>
+        </member>
         <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddTraceListener``1">
             <summary>
             Enables logging a trace listener of the specified type.
             </summary>
             <typeparam name="T">The type of trace listener to add.</typeparam>
+            <returns>A reference to this builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.AddTraceListener``1(Decos.Diagnostics.LogLevel)">
+            <summary>
+            Enables logging a trace listener of the specified type.
+            </summary>
+            <typeparam name="T">The type of trace listener to add.</typeparam>
+            <param name="minimumLogLevel">
+            The minimum log level of messages to send to the trace listener.
+            </param>
             <returns>A reference to this builder.</returns>
         </member>
         <member name="M:Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder.Build">

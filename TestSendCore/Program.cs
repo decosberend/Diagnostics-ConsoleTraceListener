@@ -39,12 +39,12 @@ namespace TestSendCore
                 //});            
                 try
                 {
-                    log.Critical("Test message");
+                    log.Warn("This message should not appear in Slack.");
                     throw new NotSupportedException();
                 }
                 catch (Exception ex)
                 {
-                    log.Critical(ex);
+                    log.Info(ex);
                     log.Critical("An unexpected error occurred while sending test messages.", ex);
                     log.Critical(new { Data = Math.PI, DateTimeOffset = DateTimeOffset.Now.AddDays(1.2), DateTime = DateTime.Now.AddDays(-12.3), Date = DateTime.Today.AddDays(-1) });
                 }
