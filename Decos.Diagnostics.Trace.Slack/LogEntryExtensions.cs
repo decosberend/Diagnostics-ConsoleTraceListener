@@ -11,7 +11,19 @@ namespace Decos.Diagnostics.Trace.Slack
         {
             return new SlackMessage
             {
-                Text = logEntry.Message
+                Attachments = new List<SlackAttachment>
+                {
+                    new SlackAttachment
+                    {
+                        Text = logEntry.Message,
+                        AuthorName = logEntry.Source,
+                        Color = logEntry.Level.GetLogLevelColor(),
+                        Fields = new List<SlackField>
+                        {
+                        },
+                        Footer = $"{logEntry.Level} - {logEntry.HostName} - PID {logEntry.ProcessId} - thread {logEntry.ThreadId}"
+                    }
+                }
             };
         }
     }

@@ -49,9 +49,9 @@ namespace Decos.Diagnostics.Trace
             return SourceLevels.Off;
         }
 
-        public static LogLevel ToLogLevel(this TraceEventType traceEventType)
+        public static LogLevel ToLogLevel(this TraceEventType? traceEventType)
         {
-            if (eventTypeLevels.TryGetValue(traceEventType, out var value))
+            if (traceEventType != null && eventTypeLevels.TryGetValue(traceEventType.Value, out var value))
                 return value;
 
             return LogLevel.None;

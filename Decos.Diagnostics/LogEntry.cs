@@ -42,9 +42,9 @@
         public int? EventId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value that describes the severity level of the log entry.
+        /// Gets or sets the severity level of the log entry.
         /// </summary>
-        public string Level { get; set; }
+        public LogLevel Level { get; set; }
 
         /// <summary>
         /// Gets or sets the source of the log entry.

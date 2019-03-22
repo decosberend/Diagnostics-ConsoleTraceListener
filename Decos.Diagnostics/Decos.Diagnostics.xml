@@ -209,7 +209,7 @@
         </member>
         <member name="P:Decos.Diagnostics.LogEntry.Level">
             <summary>
-            Gets or sets a value that describes the severity level of the log entry.
+            Gets or sets the severity level of the log entry.
             </summary>
         </member>
         <member name="P:Decos.Diagnostics.LogEntry.Source">

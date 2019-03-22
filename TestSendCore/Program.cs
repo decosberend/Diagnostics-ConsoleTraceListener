@@ -37,7 +37,9 @@ namespace TestSendCore
                 //{
                 //    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
                 //});            
-                log.Critical("This is a logging message.");
+                log.Warn("This is a warning message.");
+                log.Error("This is an error message.");
+                log.Critical("This is a critical error message.");
                 stopwatch.Stop();
 
                 Console.WriteLine($"Done ({stopwatch.Elapsed}).");

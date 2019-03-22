@@ -4,5 +4,65 @@
         <name>Decos.Diagnostics.Trace.Slack</name>
     </assembly>
     <members>
+        <member name="T:Decos.Diagnostics.Trace.Slack.SlackTraceListener">
+            <summary>
+            Represents an asynchronous trace listener that sends messages to Slack.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.Slack.SlackTraceListener.#ctor(System.Uri)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.Trace.Slack.SlackTraceListener"/>
+            class using the specified webhook address.
+            </summary>
+            <param name="webhookAddress">
+            The address of the Slack Incoming Webhook to post messages to.
+            </param>
+        </member>
+        <member name="P:Decos.Diagnostics.Trace.Slack.SlackTraceListener.Client">
+            <summary>
+            Gets a reference to the Slack client used to send messages to an
+            Incoming Webhook.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.Trace.Slack.SlackTraceListener.TraceAsync(Decos.Diagnostics.LogEntry,System.Threading.CancellationToken)">
+            <summary>
+            Sends the log entry to Slack.
+            </summary>
+            <param name="logEntry">The log entry to be written.</param>
+            <param name="cancellationToken">
+            A token to monitor for cancellation requests.
+            </param>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="T:Decos.Diagnostics.TraceSourceLogFactoryBuilderExtensions">
+            <summary>
+            Provides a set of static methods for registering a Slack trace listener
+            with a log factory.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.TraceSourceLogFactoryBuilderExtensions.AddSlack(Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder,System.String)">
+            <summary>
+            Enables logging to Slack.
+            </summary>
+            <param name="builder">
+            The log factory builder to register the trace listener with.
+            </param>
+            <param name="webhookAddress">
+            The address of the Slack Incoming Webhook to post messages to.
+            </param>
+            <returns>A reference to the builder.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.TraceSourceLogFactoryBuilderExtensions.AddSlack(Decos.Diagnostics.Trace.TraceSourceLogFactoryBuilder,System.Uri)">
+            <summary>
+            Enables logging to Slack.
+            </summary>
+            <param name="builder">
+            The log factory builder to register the trace listener with.
+            </param>
+            <param name="webhookAddress">
+            The address of the Slack Incoming Webhook to post messages to.
+            </param>
+            <returns>A reference to the builder.</returns>
+        </member>
     </members>
 </doc>
