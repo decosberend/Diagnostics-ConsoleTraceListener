@@ -57,6 +57,11 @@
         public string Message { get; set; }
 
         /// <summary>
+        /// Gets or sets structured data of the log entry.
+        /// </summary>
+        public object Data { get; set; }
+
+        /// <summary>
         /// Gets or sets the name or fully-qualified domain name of the host that created the log entry.
         /// </summary>
         public string HostName { get; set; }

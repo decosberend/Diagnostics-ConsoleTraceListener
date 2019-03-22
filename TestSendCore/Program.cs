@@ -37,9 +37,17 @@ namespace TestSendCore
                 //{
                 //    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
                 //});            
-                log.Warn("This is a warning message.");
-                log.Error("This is an error message.");
-                log.Critical("This is a critical error message.");
+                try
+                {
+                    log.Critical("Test message");
+                    throw new NotSupportedException();
+                }
+                catch (Exception ex)
+                {
+                    log.Critical(ex);
+                    log.Critical("An unexpected error occurred while sending test messages.", ex);
+                    log.Critical(new { Data = 1, DateTimeOffset = DateTimeOffset.Now, DateTime = DateTime.Now, Date = DateTime.Today });
+                }
                 stopwatch.Stop();
 
                 Console.WriteLine($"Done ({stopwatch.Elapsed}).");

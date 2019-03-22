@@ -11,10 +11,15 @@
         </member>
         <member name="M:Decos.Diagnostics.ExceptionData.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:Decos.Diagnostics.ExceptionData"/> class with the specified context message and exception.
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.ExceptionData"/> class
+            with the specified context message and exception.
             </summary>
-            <param name="context">A message that provides context for the error.</param>
-            <param name="exception">The exception that represents the error that occurred</param>
+            <param name="context">
+            A message that provides context for the error.
+            </param>
+            <param name="exception">
+            The exception that represents the error that occurred
+            </param>
         </member>
         <member name="P:Decos.Diagnostics.ExceptionData.Context">
             <summary>
@@ -25,6 +30,12 @@
             <summary>
             Gets the exception that represents the error that occurred.
             </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.ExceptionData.ToString">
+            <summary>
+            Returns a string that represents the logged exception.
+            </summary>
+            <returns>A string that represents this logged exception.</returns>
         </member>
         <member name="T:Decos.Diagnostics.HttpLogstashClient">
             <summary>
@@ -220,6 +231,11 @@
         <member name="P:Decos.Diagnostics.LogEntry.Message">
             <summary>
             Gets or sets the message text of the log entry.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.LogEntry.Data">
+            <summary>
+            Gets or sets structured data of the log entry.
             </summary>
         </member>
         <member name="P:Decos.Diagnostics.LogEntry.HostName">
