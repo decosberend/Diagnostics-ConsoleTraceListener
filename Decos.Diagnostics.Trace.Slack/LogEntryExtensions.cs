@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Slack.Webhooks;
 
 namespace Decos.Diagnostics.Trace.Slack
@@ -56,22 +57,24 @@ namespace Decos.Diagnostics.Trace.Slack
         {
             if (propertyType == typeof(DateTime))
             {
-                var date = (DateTime)value;
-                var unixTime = new DateTimeOffset(date).ToUnixTimeSeconds();
-                if (date.TimeOfDay.Ticks == 0)
-                    return $"<!date^{unixTime}^{{date_pretty}}|{date}>";
-                return $"<!date^{unixTime}^{{date_pretty}} at {{time_secs}}|{date}>";
+                var date = new DateTimeOffset((DateTime)value);
+                return FormatSlackDate(date);
             }
             else if (propertyType == typeof(DateTimeOffset))
             {
                 var date = (DateTimeOffset)value;
-                var unixTime = date.ToUnixTimeSeconds();
-                if (date.TimeOfDay.Ticks == 0)
-                    return $"<!date^{unixTime}^{{date_pretty}}|{date}>";
-                return $"<!date^{unixTime}^{{date_pretty}} at {{time_secs}}|{date}>";
+                return FormatSlackDate(date);
             }
 
             return $"{value}";
+        }
+
+        private static string FormatSlackDate(DateTimeOffset date)
+        {
+            var unixTime = date.ToUnixTimeSeconds();
+            if (date.TimeOfDay.Ticks == 0)
+                return $"<!date^{unixTime}^{{date_pretty}}|{date}>";
+            return $"<!date^{unixTime}^{{date_pretty}} at {{time_secs}}|{date}>";
         }
     }
 }
