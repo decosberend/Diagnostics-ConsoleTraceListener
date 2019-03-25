@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Slack.Webhooks;
 
@@ -42,41 +43,48 @@ namespace Decos.Diagnostics.Trace.Slack
             if (data is Exception ex)
             {
                 yield return new SlackField { Title = $"{ex.GetType()}", Value = ex.Message, Short = false };
-                yield return new SlackField { Title = "Stack trace", Value = $"{ex.StackTrace}", Short = false };
+                foreach (var dataField in GetExceptionDataFields(ex))
+                    yield return dataField;
+
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    yield return new SlackField { Title = $"---> {inner.GetType()}", Value = inner.Message, Short = false };
+                    foreach (var innerField in GetExceptionDataFields(inner))
+                        yield return innerField;
+
+                    inner = inner.InnerException;
+                }
             }
             else
             {
                 var type = data.GetType();
                 foreach (var property in type.GetProperties().Where(x => x.CanRead))
                 {
-                    var value = property.GetValue(data);
-                    yield return new SlackField { Title = property.Name, Value = FormatData(property.PropertyType, value), Short = true };
+                    var field = property.GetValueAsSlackField(data);
+                    if (field != null)
+                        yield return field;
                 }
             }
         }
 
-        private static string FormatData(Type propertyType, object value)
+        private static IEnumerable<SlackField> GetExceptionDataFields(Exception ex)
         {
-            if (propertyType == typeof(DateTime))
+            var type = ex.GetType();
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            foreach (var property in properties.Where(x => x.CanRead && !IsOverridden(x)))
             {
-                var date = new DateTimeOffset((DateTime)value);
-                return FormatSlackDate(date);
+                var field = property.GetValueAsSlackField(ex);
+                if (field != null)
+                    yield return field;
             }
-            else if (propertyType == typeof(DateTimeOffset))
-            {
-                var date = (DateTimeOffset)value;
-                return FormatSlackDate(date);
-            }
-
-            return $"{value}";
         }
 
-        private static string FormatSlackDate(DateTimeOffset date)
+        private static bool IsOverridden(PropertyInfo property)
         {
-            var unixTime = date.ToUnixTimeSeconds();
-            if (date.TimeOfDay.Ticks == 0)
-                return $"<!date^{unixTime}^{{date_pretty}}|{date}>";
-            return $"<!date^{unixTime}^{{date_pretty}} at {{time_secs}}|{date}>";
+            var getter = property.GetGetMethod(nonPublic: false);
+            var baseGetter = getter.GetBaseDefinition();
+            return baseGetter.DeclaringType != getter.DeclaringType;
         }
     }
 }

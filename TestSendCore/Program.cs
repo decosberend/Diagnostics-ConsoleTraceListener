@@ -36,17 +36,22 @@ namespace TestSendCore
                 //Parallel.For(0, 1000, i =>
                 //{
                 //    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
-                //});            
+                //});  
                 try
                 {
                     log.Warn("This message should not appear in Slack.");
-                    throw new NotSupportedException();
+                    try
+                    {
+                        System.IO.File.Open(Guid.NewGuid().ToString(), System.IO.FileMode.Open);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new InvalidOperationException("Outer exception message.", ex);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    log.Info(ex);
                     log.Critical("An unexpected error occurred while sending test messages.", ex);
-                    log.Critical(new { Data = Math.PI, DateTimeOffset = DateTimeOffset.Now.AddDays(1.2), DateTime = DateTime.Now.AddDays(-12.3), Date = DateTime.Today.AddDays(-1) });
                 }
                 stopwatch.Stop();
 

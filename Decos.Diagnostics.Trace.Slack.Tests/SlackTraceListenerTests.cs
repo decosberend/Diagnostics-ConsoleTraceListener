@@ -53,6 +53,48 @@ namespace Decos.Diagnostics.Trace.Slack.Tests
         }
 
         [TestMethod]
+        public void InnerExceptionSendsMessageInSeparateField()
+        {
+            var message = new LogEntry
+            {
+                Data = new NotSupportedException("Test", new InvalidOperationException("Inner"))
+            }.ToSlackMessage();
+
+            Assert.AreEqual(
+                message.Attachments.Single().Fields.Single(x => x.Title == "System.NotSupportedException").Value,
+                "Test");
+
+            Assert.AreEqual(
+                message.Attachments.Single().Fields.Single(x => x.Title.Contains("System.InvalidOperationException")).Value,
+                "Inner");
+        }
+
+        [TestMethod]
+        public void CustomExceptionPropertiesAreIncluded()
+        {
+            var message = new LogEntry
+            {
+                Data = new System.IO.FileNotFoundException("File not found", "filename.txt")
+            }.ToSlackMessage();
+
+            Assert.AreEqual(
+                message.Attachments.Single().Fields.Single(x => x.Title == "FileName").Value,
+                "filename.txt");
+        }
+
+        [TestMethod]
+        public void StandardExceptionPropertiesAreNotIncluded()
+        {
+            var message = new LogEntry
+            {
+                Data = new System.IO.FileNotFoundException("File not found", "filename.txt")
+            }.ToSlackMessage();
+
+            Assert.IsNull(
+                message.Attachments.Single().Fields.SingleOrDefault(x => x.Title == "Message"));
+        }
+
+        [TestMethod]
         public void AnonymousTypePropertiesAreSentInFields()
         {
             var message = new LogEntry
@@ -105,6 +147,17 @@ namespace Decos.Diagnostics.Trace.Slack.Tests
             StringAssert.StartsWith(
                 message.Attachments.Single().Fields.Single().Value,
                 "<!date^");
+        }
+
+        [TestMethod]
+        public void ObjectWithoutStringRepresentationIsNotSent()
+        {
+            var message = new LogEntry
+            {
+                Data = new { Data = new object() }
+            }.ToSlackMessage();
+
+            Assert.IsNull(message.Attachments.Single().Fields.SingleOrDefault(x => x.Title == "Data"));
         }
     }
 }
