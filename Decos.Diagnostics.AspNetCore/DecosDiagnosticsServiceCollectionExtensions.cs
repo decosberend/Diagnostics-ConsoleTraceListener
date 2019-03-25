@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Decos.Diagnostics;
+using Decos.Diagnostics.AspNetCore;
 using Decos.Diagnostics.Trace;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -26,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
 
-            return services.AddTraceSourceLogging(options => { });
+            return services.AddTraceSourceLogging(_ => { });
         }
 
         /// <summary>
@@ -54,6 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton(logFactory);
             services.AddTransient(typeof(ILog<>), typeof(Log<>));
+            services.AddSingleton<ApplicationShutdownHandler>();
 
             return services;
         }
