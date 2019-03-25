@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Decos.Diagnostics.Trace.Tests
 {
-    internal class DelayAsyncTraceListener : AsyncTraceListener
+    public class DelayAsyncTraceListener : AsyncTraceListener
     {
         public DelayAsyncTraceListener(int delay)
         {
