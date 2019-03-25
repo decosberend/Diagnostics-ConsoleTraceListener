@@ -23,7 +23,7 @@ namespace Decos.Diagnostics.Trace.Slack
         public static SlackField GetValueAsSlackField(this PropertyInfo property, object obj, bool @short = true)
         {
             var value = property.GetValue(obj);
-            if (value != null)
+            if (value.HasValue())
             {
                 var formattedValue = FormatFieldValue(value);
                 if (!string.IsNullOrEmpty(formattedValue))
@@ -57,6 +57,21 @@ namespace Decos.Diagnostics.Trace.Slack
                 return formattedValue;
 
             return null;
+        }
+
+        private static bool HasValue(this object obj)
+        {
+            if (obj == null)
+                return false;
+
+            var type = obj.GetType();
+            if (type.IsValueType)
+            {
+                var defaultValue = Activator.CreateInstance(type);
+                return !Equals(obj, defaultValue);
+            }
+
+            return obj != null;
         }
     }
 }
