@@ -150,7 +150,7 @@ namespace Decos.Diagnostics.Trace.Slack.Tests
         }
 
         [TestMethod]
-        public void ObjectWithoutStringRepresentationIsNotSent()
+        public void ObjectWithoutStringRepresentationIsNotIncluded()
         {
             var message = new LogEntry
             {
@@ -158,6 +158,19 @@ namespace Decos.Diagnostics.Trace.Slack.Tests
             }.ToSlackMessage();
 
             Assert.IsNull(message.Attachments.Single().Fields.SingleOrDefault(x => x.Title == "Data"));
+        }
+
+        [TestMethod]
+        public void ObjectsWithDefaultValuesAreNotIncluded()
+        {
+            var message = new LogEntry
+            {
+                Data = new { TestInt32 = 0, TestGuid = Guid.Empty, TestNullableGuid = (Guid?)null }
+            }.ToSlackMessage();
+
+            Assert.IsNull(message.Attachments.Single().Fields.SingleOrDefault(x => x.Title == "TestInt32"));
+            Assert.IsNull(message.Attachments.Single().Fields.SingleOrDefault(x => x.Title == "TestGuid"));
+            Assert.IsNull(message.Attachments.Single().Fields.SingleOrDefault(x => x.Title == "TestNullableGuid"));
         }
     }
 }
