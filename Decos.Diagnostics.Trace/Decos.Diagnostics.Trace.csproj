@@ -4,12 +4,13 @@
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.1-alpha</Version>
+    <Version>1.1.0-alpha</Version>
     <Authors>Laura Verdoes</Authors>
     <Company>Decos Information Solutions</Company>
     <Product>Decos.Diagnostics.Trace</Product>
     <Description>Provides a System.Diagnostics.TraceSource implementation for the Decos.Diagnostics abstractions.</Description>
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics.Trace\Decos.Diagnostics.Trace.xml</DocumentationFile>
+    <PackageReleaseNotes>Added support for logging both a message and structured data at the same time.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

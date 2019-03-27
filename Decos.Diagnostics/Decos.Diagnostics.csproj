@@ -2,12 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-    <Version>1.0.1-alpha</Version>
+    <Version>1.1.0-alpha</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Laura Verdoes</Authors>
     <Company>Decos Information Solutions</Company>
     <Description>Decos.Diagnostics is a .NET Standard 2.0 library that provides logging abstractions.</Description>
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics\Decos.Diagnostics.xml</DocumentationFile>
+    <PackageReleaseNotes>Added support for logging both a message and structured data at the same time.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

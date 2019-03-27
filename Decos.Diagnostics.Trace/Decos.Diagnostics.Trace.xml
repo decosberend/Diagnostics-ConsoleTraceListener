@@ -127,7 +127,7 @@
             </param>
             <param name="data">The trace data to write.</param>
         </member>
-        <member name="M:Decos.Diagnostics.Trace.AsyncTraceListener.TraceInternal(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,Decos.Diagnostics.ExceptionData)">
+        <member name="M:Decos.Diagnostics.Trace.AsyncTraceListener.TraceInternal(Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData,Decos.Diagnostics.LogData)">
             <summary>
             Enqueues trace information and exception data to the queue for
             asynchronous processing.
@@ -136,7 +136,7 @@
             A <see cref="T:Decos.Diagnostics.Trace.TraceListenerBase.TraceEventData"/> object that contains
             information about the trace event.
             </param>
-            <param name="data">The exception data to write.</param>
+            <param name="data">The log data to write.</param>
         </member>
         <member name="T:Decos.Diagnostics.Trace.ConsoleTraceListener">
             <summary>
