@@ -4,6 +4,63 @@
         <name>Decos.Diagnostics.AspNetCore</name>
     </assembly>
     <members>
+        <member name="T:Decos.Diagnostics.AspNetCore.ApplicationShutdownHandler">
+            <summary>
+            Ensures long-running logging operations are finished when an application
+            is shutting down.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.AspNetCore.ApplicationShutdownHandler.#ctor(Decos.Diagnostics.ILogFactory,Microsoft.Extensions.Hosting.IApplicationLifetime)">
+            <summary>
+            Initializes a new instance of the <see
+            cref="T:Decos.Diagnostics.AspNetCore.ApplicationShutdownHandler"/> class for the specified log
+            factory and application lifetime.
+            </summary>
+            <param name="logFactory">
+            The log factory to shut down gracefully.
+            </param>
+            <param name="applicationLifetime">
+            The lifetime of the application to monitor.
+            </param>
+        </member>
+        <member name="P:Decos.Diagnostics.AspNetCore.ApplicationShutdownHandler.LogFactory">
+            <summary>
+            Gets the log factory to shut down gracefully.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.AspNetCore.ApplicationShutdownHandler.OnShutdown">
+            <summary>
+            Logs a message when the application host is shutting down and ensures
+            long-running logging operations have finished.
+            </summary>
+            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="T:Decos.Diagnostics.AspNetCore.WebHostExtensions">
+            <summary>
+            Provides a set of static methods for configuring the web host for loggin.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.AspNetCore.WebHostExtensions.FlushLogsOnShutdown(Microsoft.AspNetCore.Hosting.IWebHost)">
+            <summary>
+            Enables graceful shutdown of the logging system by ensuring
+            long-running logging operations have finished before shutting down
+            the application host.
+            </summary>
+            <param name="host">The configured web host.</param>
+            <returns>A reference to the configured web host.</returns>
+        </member>
+        <member name="M:Decos.Diagnostics.AspNetCore.WebHostExtensions.FlushLogsOnShutdown``1(Microsoft.AspNetCore.Hosting.IWebHost)">
+            <summary>
+            Enables graceful shutdown of the logging system by ensuring
+            long-running logging operations have finished before shutting down
+            the application host.
+            </summary>
+            <typeparam name="T">
+            The type that handles the application shutdown event.
+            </typeparam>
+            <param name="host">The configured web host.</param>
+            <returns>A reference to the configured web host.</returns>
+        </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.DecosDiagnosticsServiceCollectionExtensions">
             <summary>
             Provides a set of static methods for adding Decos Diagnostics logging

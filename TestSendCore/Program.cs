@@ -37,6 +37,8 @@ namespace TestSendCore
                 //{
                 //    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
                 //});  
+
+                log.Info("Something something", new { data = 1, date = DateTimeOffset.Now });
                 try
                 {
                     log.Warn("This message should not appear in Slack.");

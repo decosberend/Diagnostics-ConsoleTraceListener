@@ -4,39 +4,6 @@
         <name>Decos.Diagnostics</name>
     </assembly>
     <members>
-        <member name="T:Decos.Diagnostics.ExceptionData">
-            <summary>
-            Represents a logged exception.
-            </summary>
-        </member>
-        <member name="M:Decos.Diagnostics.ExceptionData.#ctor(System.String,System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Decos.Diagnostics.ExceptionData"/> class
-            with the specified context message and exception.
-            </summary>
-            <param name="context">
-            A message that provides context for the error.
-            </param>
-            <param name="exception">
-            The exception that represents the error that occurred
-            </param>
-        </member>
-        <member name="P:Decos.Diagnostics.ExceptionData.Context">
-            <summary>
-            Gets a message that provides context for the error.
-            </summary>
-        </member>
-        <member name="P:Decos.Diagnostics.ExceptionData.Exception">
-            <summary>
-            Gets the exception that represents the error that occurred.
-            </summary>
-        </member>
-        <member name="M:Decos.Diagnostics.ExceptionData.ToString">
-            <summary>
-            Returns a string that represents the logged exception.
-            </summary>
-            <returns>A string that represents this logged exception.</returns>
-        </member>
         <member name="T:Decos.Diagnostics.HttpLogstashClient">
             <summary>
             Represents a client of sending data to a Logstash HTTP input plugin.
@@ -210,6 +177,53 @@
             <param name="logLevel">The severity of the data.</param>
             <param name="data">The data to log.</param>
         </member>
+        <member name="T:Decos.Diagnostics.LogData">
+            <summary>
+            Represents a logged message with additional structured data.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.LogData.#ctor(System.String,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.LogData"/> class with
+            the specified message and data.
+            </summary>
+            <param name="message">The text of the logged message.</param>
+            <param name="data">An object that provides additional data.</param>
+        </member>
+        <member name="P:Decos.Diagnostics.LogData.Message">
+            <summary>
+            Gets the text of the logged message.
+            </summary>
+        </member>
+        <member name="P:Decos.Diagnostics.LogData.Data">
+            <summary>
+            Gets an object that provides additional data.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.LogData.ToString">
+            <summary>
+            Returns a string that represents the logged message.
+            </summary>
+            <returns>A string that represents this logged message.</returns>
+        </member>
+        <member name="T:Decos.Diagnostics.LogData`1">
+            <summary>
+            Represents a logged message with additional structured data.
+            </summary>
+        </member>
+        <member name="M:Decos.Diagnostics.LogData`1.#ctor(System.String,`0)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Decos.Diagnostics.LogData`1"/> class with
+            the specified message and data.
+            </summary>
+            <param name="message">The text of the logged message.</param>
+            <param name="data">An object that provides additional data.</param>
+        </member>
+        <member name="P:Decos.Diagnostics.LogData`1.Data">
+            <summary>
+            Gets an object that provides additional data.
+            </summary>
+        </member>
         <member name="T:Decos.Diagnostics.LogEntry">
             <summary>
             Represents an entry in a log.
@@ -273,12 +287,29 @@
             Provides a set of static methods for writing logging events and data.
             </summary>
         </member>
+        <member name="M:Decos.Diagnostics.LogExtensions.Write``1(Decos.Diagnostics.ILog,Decos.Diagnostics.LogLevel,System.String,``0)">
+            <summary>
+            Writes a message to the log with the specified severity and additional data.
+            </summary>
+            <param name="log">The log to write to.</param>
+            <param name="logLevel">The severity of the message.</param>
+            <param name="message">The text of the message to log.</param>
+            <param name="data">An object that provides additional data.</param>
+        </member>
         <member name="M:Decos.Diagnostics.LogExtensions.Debug(Decos.Diagnostics.ILog,System.String)">
             <summary>
             Logs a verbose message for development or debugging purposes. These are not enabled in production by default and should only be enabled temporarily for troubleshooting.
             </summary>
             <param name="log">The log to write to.</param>
             <param name="message">The text of the message to log.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.LogExtensions.Debug``1(Decos.Diagnostics.ILog,System.String,``0)">
+            <summary>
+            Logs a verbose message for development or debugging purposes. These are not enabled in production by default and should only be enabled temporarily for troubleshooting.
+            </summary>
+            <param name="log">The log to write to.</param>
+            <param name="message">The text of the message to log.</param>
+            <param name="data">An object that provides additional data.</param>
         </member>
         <member name="M:Decos.Diagnostics.LogExtensions.Debug``1(Decos.Diagnostics.ILog,``0)">
             <summary>
@@ -290,10 +321,18 @@
         </member>
         <member name="M:Decos.Diagnostics.LogExtensions.Info(Decos.Diagnostics.ILog,System.String)">
             <summary>
-            Logs an informational message. These  are typically used to track the general flow of an application and should have long-term value and.
+            Logs an informational message. These are typically used to track the general flow of an application and should have long-term value and.
             </summary>
             <param name="log">The log to write to.</param>
             <param name="message">The text of the message to log.</param>
+        </member>
+        <member name="M:Decos.Diagnostics.LogExtensions.Info``1(Decos.Diagnostics.ILog,System.String,``0)">
+            <summary>
+            Logs an informational message. These are typically used to track the general flow of an application and should have long-term value and.
+            </summary>
+            <param name="log">The log to write to.</param>
+            <param name="message">The text of the message to log.</param>
+            <param name="data">An object that provides additional data.</param>
         </member>
         <member name="M:Decos.Diagnostics.LogExtensions.Info``1(Decos.Diagnostics.ILog,``0)">
             <summary>
@@ -310,13 +349,13 @@
             <param name="log">The log to write to.</param>
             <param name="message">The text of the message to log.</param>
         </member>
-        <member name="M:Decos.Diagnostics.LogExtensions.Warn(Decos.Diagnostics.ILog,System.String,System.Exception)">
+        <member name="M:Decos.Diagnostics.LogExtensions.Warn``1(Decos.Diagnostics.ILog,System.String,``0)">
             <summary>
-            Logs a recoverable error that does not cause the execution of an operation to stop but might need to be investigated later.
+            Logs a warning message highlighting an abnormal or unexpected event, such as a recoverable error that does not cause the execution of an operation to stop but might need to be investigated later.
             </summary>
             <param name="log">The log to write to.</param>
-            <param name="context">A message that provides context for the error.</param>
-            <param name="exception">The exception to log.</param>
+            <param name="message">The text of the message to log.</param>
+            <param name="data">An object that provides additional data.</param>
         </member>
         <member name="M:Decos.Diagnostics.LogExtensions.Warn``1(Decos.Diagnostics.ILog,``0)">
             <summary>
@@ -333,13 +372,13 @@
             <param name="log">The log to write to.</param>
             <param name="message">The text of the message to log.</param>
         </member>
-        <member name="M:Decos.Diagnostics.LogExtensions.Error(Decos.Diagnostics.ILog,System.String,System.Exception)">
+        <member name="M:Decos.Diagnostics.LogExtensions.Error``1(Decos.Diagnostics.ILog,System.String,``0)">
             <summary>
-            Logs an error that causes the execution of an operation to stop.
+            Logs a message indicating a failure that causes the execution of an operation to stop.
             </summary>
             <param name="log">The log to write to.</param>
-            <param name="context">A message that provides context for the error.</param>
-            <param name="exception">The exception to log.</param>
+            <param name="message">The text of the message to log.</param>
+            <param name="data">An object that provides additional data.</param>
         </member>
         <member name="M:Decos.Diagnostics.LogExtensions.Error``1(Decos.Diagnostics.ILog,``0)">
             <summary>
@@ -356,13 +395,13 @@
             <param name="log">The log to write to.</param>
             <param name="message">The text of the message to log.</param>
         </member>
-        <member name="M:Decos.Diagnostics.LogExtensions.Critical(Decos.Diagnostics.ILog,System.String,System.Exception)">
+        <member name="M:Decos.Diagnostics.LogExtensions.Critical``1(Decos.Diagnostics.ILog,System.String,``0)">
             <summary>
-            Logs an error that requires immediate attention.
+            Logs a message that requires immediate attention.
             </summary>
             <param name="log">The log to write to.</param>
-            <param name="context">A message that provides context for the error.</param>
-            <param name="exception">The exception to log.</param>
+            <param name="message">The text of the message to log.</param>
+            <param name="data">An object that provides additional data.</param>
         </member>
         <member name="M:Decos.Diagnostics.LogExtensions.Critical``1(Decos.Diagnostics.ILog,``0)">
             <summary>

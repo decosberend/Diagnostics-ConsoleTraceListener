@@ -127,9 +127,9 @@ namespace Decos.Diagnostics.Trace
         /// <param name="data">The trace data to write.</param>
         protected override void TraceInternal(TraceEventData e, object data)
         {
-            if (data is ExceptionData exceptionData)
+            if (data != null && data is LogData logData)
             {
-                TraceInternal(e, exceptionData);
+                TraceInternal(e, logData);
                 return;
             }
 
@@ -154,15 +154,15 @@ namespace Decos.Diagnostics.Trace
         /// A <see cref="TraceListenerBase.TraceEventData"/> object that contains
         /// information about the trace event.
         /// </param>
-        /// <param name="data">The exception data to write.</param>
-        protected void TraceInternal(TraceEventData e, ExceptionData data)
+        /// <param name="data">The log data to write.</param>
+        protected void TraceInternal(TraceEventData e, LogData data)
         {
             var logEntry = new LogEntry
             {
                 Level = e.Type.ToLogLevel(),
                 Source = e.Source,
-                Message = data.Context,
-                Data = data.Exception,
+                Message = data.Message,
+                Data = data.Data,
                 EventId = e.ID,
                 ProcessId = e.Cache.ProcessId,
                 ThreadId = e.Cache.ThreadId
