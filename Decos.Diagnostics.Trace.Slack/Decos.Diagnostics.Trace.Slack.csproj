@@ -6,8 +6,9 @@
     <Company>Decos Information Solutions</Company>
     <Description>Provides a trace listener that sends logs to Slack.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.0-alpha</Version>
+    <Version>1.1.1-alpha</Version>
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics.Trace.Slack\Decos.Diagnostics.Trace.Slack.xml</DocumentationFile>
+    <PackageReleaseNotes>Added support for value types as additional data.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

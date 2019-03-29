@@ -20,24 +20,27 @@ namespace Decos.Diagnostics.Trace.Slack
             return $"<!date^{unixTime}^{displayFormat}|{date.ToString(fallbackFormat)}>";
         }
 
-        public static SlackField GetValueAsSlackField(this PropertyInfo property, object obj, bool @short = true)
+        public static SlackField CreateSlackField(this PropertyInfo property, object obj, bool @short = true)
         {
             var value = property.GetValue(obj);
-            if (value.HasValue())
-            {
-                var formattedValue = FormatFieldValue(value);
-                if (!string.IsNullOrEmpty(formattedValue))
-                {
-                    return new SlackField
-                    {
-                        Title = property.Name,
-                        Value = formattedValue,
-                        Short = @short
-                    };
-                }
-            }
+            return value.CreateSlackField(property.Name, @short);
+        }
 
-            return null;
+        public static SlackField CreateSlackField(this object value, string name, bool @short = false)
+        {
+            if (!value.HasValue())
+                return null;
+
+            var formattedValue = FormatFieldValue(value);
+            if (string.IsNullOrEmpty(formattedValue))
+                return null;
+
+            return new SlackField
+            {
+                Title = name,
+                Value = formattedValue,
+                Short = @short
+            };
         }
 
         private static string FormatFieldValue(object value)

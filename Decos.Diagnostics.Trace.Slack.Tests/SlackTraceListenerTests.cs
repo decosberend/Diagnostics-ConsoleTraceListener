@@ -172,5 +172,17 @@ namespace Decos.Diagnostics.Trace.Slack.Tests
             Assert.IsNull(message.Attachments.Single().Fields.SingleOrDefault(x => x.Title == "TestGuid"));
             Assert.IsNull(message.Attachments.Single().Fields.SingleOrDefault(x => x.Title == "TestNullableGuid"));
         }
+
+        [TestMethod]
+        public void ValueTypeDataIsInludedAsDataField()
+        {
+            var message = new LogEntry
+            {
+                Data = 1
+            }.ToSlackMessage();
+
+            Assert.AreEqual("Data", message.Attachments.Single().Fields.Single().Title);
+            Assert.AreEqual("1", message.Attachments.Single().Fields.Single().Value);
+        }
     }
 }
