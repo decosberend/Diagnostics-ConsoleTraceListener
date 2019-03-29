@@ -56,12 +56,18 @@ namespace Decos.Diagnostics.Trace.Slack
                     inner = inner.InnerException;
                 }
             }
+            else if (data.GetType().IsValueType)
+            {
+                var field = data.CreateSlackField("Data");
+                if (field != null)
+                    yield return field;
+            }
             else
             {
                 var type = data.GetType();
                 foreach (var property in type.GetProperties().Where(x => x.CanRead))
                 {
-                    var field = property.GetValueAsSlackField(data);
+                    var field = property.CreateSlackField(data);
                     if (field != null)
                         yield return field;
                 }
@@ -74,7 +80,7 @@ namespace Decos.Diagnostics.Trace.Slack
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             foreach (var property in properties.Where(x => x.CanRead && !IsOverridden(x)))
             {
-                var field = property.GetValueAsSlackField(ex);
+                var field = property.CreateSlackField(ex);
                 if (field != null)
                     yield return field;
             }
