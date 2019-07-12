@@ -1,6 +1,7 @@
 Decos.Diagnostics
 =================
 
+[![Build status](https://dev.azure.com/decos/Decos%20Core/_apis/build/status/Decos.Diagnostics)](https://dev.azure.com/decos/Decos%20Core/_build/latest?definitionId=225)
 [![Nuget (Decos.Diagnostics)](https://img.shields.io/nuget/vpre/Decos.Diagnostics.svg?label=Decos.Diagnostics)](https://www.nuget.org/packages/Decos.Diagnostics/)
 [![Nuget (Decos.Diagnostics.AspNetCore)](https://img.shields.io/nuget/vpre/Decos.Diagnostics.AspNetCore.svg?label=Decos.Diagnostics.AspNetCore)](https://www.nuget.org/packages/Decos.Diagnostics.AspNetCore/)
 [![Nuget (Decos.Diagnostics.Trace)](https://img.shields.io/nuget/vpre/Decos.Diagnostics.Trace.svg?label=Decos.Diagnostics.Trace)](https://www.nuget.org/packages/Decos.Diagnostics.Trace/)
