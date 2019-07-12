@@ -10,10 +10,11 @@ namespace TestSend
     {
         private static void Main(string[] args)
         {
+            var logstashAddress = Environment.GetEnvironmentVariable("LOGSTASH_ADDRESS");
             var logFactory = new LogFactoryBuilder()
                 .UseTraceSource()
                 .AddConsole()
-                .AddLogstash("http://log-dev.decos.nl/")
+                .AddLogstash(logstashAddress)
                 .SetMinimumLogLevel(LogLevel.Debug)
                 .Build();
             var log = logFactory.Create<Program>();

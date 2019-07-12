@@ -33,10 +33,6 @@ namespace TestSendCore
                 Console.WriteLine("Sending logs...");
 
                 var stopwatch = Stopwatch.StartNew();
-                //Parallel.For(0, 1000, i =>
-                //{
-                //    log.Write((LogLevel)(i % 6), $"Test message {i + 1}");
-                //});  
 
                 log.Info("Something something", new { data = 1, date = DateTimeOffset.Now });
                 try
@@ -81,11 +77,14 @@ namespace TestSendCore
             {
                 options.SetMinimumLogLevel(LogLevel.Debug);
                 options.AddConsole();
-                options.AddLogstash("http://log-dev.decos.nl:9090");
+
+                var logstashAddress = Environment.GetEnvironmentVariable("LOGSTASH_ADDRESS");
+                if (!string.IsNullOrEmpty(logstashAddress))
+                    options.AddLogstash(logstashAddress);
 
                 var webhookAddress = Environment.GetEnvironmentVariable("SLACK_WEBHOOK");
-                if (!string.IsNullOrEmpty(webhookAddress))
-                    options.AddSlack(webhookAddress);
+                if (!string.IsNullOrEmpty(logstashAddress))
+                    options.AddSlack(logstashAddress);
             });
 
             return services.BuildServiceProvider();
