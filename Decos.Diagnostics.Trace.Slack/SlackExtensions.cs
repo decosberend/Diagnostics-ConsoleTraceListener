@@ -10,8 +10,8 @@ namespace Decos.Diagnostics.Trace.Slack
         public static string ToSlackDate(this DateTimeOffset date)
         {
             if (date.TimeOfDay.Ticks == 0)
-                return date.ToSlackDate("{{date_pretty}}", "d MMM y");
-            return date.ToSlackDate("{{date_pretty}} at {{time_secs}}", "d MMM y 'at' HH:mm:ssK");
+                return date.ToSlackDate("{date_pretty}", "d MMM y");
+            return date.ToSlackDate("{date_pretty} at {time_secs}", "d MMM y 'at' HH:mm:ssK");
         }
 
         public static string ToSlackDate(this DateTimeOffset date, string displayFormat, string fallbackFormat)
