@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging;
 using Decos.Diagnostics.Trace.Tests;
 using Microsoft.Extensions.DependencyInjection;
@@ -73,10 +74,13 @@ namespace Decos.Diagnostics.AspNetCore.Tests
 
             var provider = services.BuildServiceProvider();
             var logger = provider.GetRequiredService<ILogger<DecosDiagnosticsServiceCollectionExtensionsTests>>();
-            var test = 1;
-            logger.LogInformation("Test {Test}", test);
+            var p1 = 1;
+            var p2 = 2;
+            logger.LogInformation("Test {p1} {p2}", p1, p2);
 
-            Assert.IsTrue(listener.TraceCalled);
+            var logData = listener.Invocations.OfType<LogData>().SingleOrDefault();
+            Assert.IsNotNull(logData);
+            Assert.AreEqual("Test 1 2", logData.Data.ToString());
         }
 
         [TestMethod]

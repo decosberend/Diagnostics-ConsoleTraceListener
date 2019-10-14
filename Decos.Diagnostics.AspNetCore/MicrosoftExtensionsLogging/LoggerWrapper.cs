@@ -68,7 +68,7 @@ namespace Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging
             if (exception != null)
                 _log.Write(level, message, exception);
             else
-                _log.Write(level, message);
+                _log.Write(level, message, state);
         }
 
         private static LogLevel Translate(Microsoft.Extensions.Logging.LogLevel logLevel)
