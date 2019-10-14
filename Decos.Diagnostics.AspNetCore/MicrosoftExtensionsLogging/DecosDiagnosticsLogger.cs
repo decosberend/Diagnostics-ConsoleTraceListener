@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 using Microsoft.Extensions.Logging;
 
@@ -9,16 +11,16 @@ namespace Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging
     /// Represents a <see cref="Microsoft.Extensions.Logging"/> logger implementation that sends logs
     /// to an <see cref="ILog"/> instance.
     /// </summary>
-    public class LoggerWrapper : ILogger
+    public class DecosDiagnosticsLogger : ILogger
     {
         private readonly ILog _log;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoggerWrapper"/> class that uses the
+        /// Initializes a new instance of the <see cref="DecosDiagnosticsLogger"/> class that uses the
         /// specified <see cref="ILog"/>.
         /// </summary>
         /// <param name="log">The log to use.</param>
-        public LoggerWrapper(ILog log)
+        public DecosDiagnosticsLogger(ILog log)
         {
             if (log == null)
                 throw new ArgumentNullException(nameof(log));
@@ -65,10 +67,32 @@ namespace Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging
         {
             var level = Translate(logLevel);
             var message = formatter(state, exception);
+            var data = GetDataFromState(state);
             if (exception != null)
                 _log.Write(level, message, exception);
+            else if (data != null)
+                _log.Write(level, message, data);
             else
-                _log.Write(level, message, state);
+                _log.Write(level, message);
+        }
+
+        private static object GetDataFromState(object state)
+        {
+            // Note: FormattedLogValues is internal in 3.0 and specifically implements
+            //       IReadOnlyList<KeyValuePair<string, object>>. Dictionary implements a lot, but
+            //       not this one, so it's relatively safe.
+            if (state is IReadOnlyList<KeyValuePair<string, object>> formattedLogValues)
+            {
+                if (formattedLogValues.Count <= 1)
+                    return null;
+
+                // FormattedLogValues always inserts the original format at the end.
+                return formattedLogValues
+                    .Take(formattedLogValues.Count - 1)
+                    .ToDictionary(x => x.Key, x => x.Value);
+            }
+
+            return state;
         }
 
         private static LogLevel Translate(Microsoft.Extensions.Logging.LogLevel logLevel)
@@ -105,16 +129,16 @@ namespace Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging
     /// to an <see cref="ILog"/> instance for the specified type.
     /// </summary>
     /// <typeparam name="T">The type who's name is used for the category name.</typeparam>
-    public class LoggerWrapper<T> : LoggerWrapper, ILogger<T>
+    public class DecosDiagnosticsLogger<T> : DecosDiagnosticsLogger, ILogger<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoggerWrapper{T}"/> class that uses the
+        /// Initializes a new instance of the <see cref="DecosDiagnosticsLogger{T}"/> class that uses the
         /// specified log factory.
         /// </summary>
         /// <param name="logFactory">
         /// Used to create <see cref="ILog"/> instances to write wrapped logs to.
         /// </param>
-        public LoggerWrapper(ILogFactory logFactory)
+        public DecosDiagnosticsLogger(ILogFactory logFactory)
             : base(logFactory.Create<T>())
         {
         }
