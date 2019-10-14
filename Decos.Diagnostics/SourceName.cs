@@ -55,7 +55,7 @@ namespace Decos.Diagnostics
         /// specified type.
         /// </returns>
         public static SourceName FromType(Type type)
-            => new SourceName(type.Namespace);
+            => new SourceName(type.FullName);
 
         /// <summary>
         /// Creates a new <see cref="SourceName"/> that represents the specified
