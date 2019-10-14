@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 using Microsoft.Extensions.Logging;
 
@@ -65,10 +67,32 @@ namespace Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging
         {
             var level = Translate(logLevel);
             var message = formatter(state, exception);
+            var data = GetDataFromState(state);
             if (exception != null)
                 _log.Write(level, message, exception);
+            else if (data != null)
+                _log.Write(level, message, data);
             else
-                _log.Write(level, message, state);
+                _log.Write(level, message);
+        }
+
+        private static object GetDataFromState(object state)
+        {
+            // Note: FormattedLogValues is internal in 3.0 and specifically implements
+            //       IReadOnlyList<KeyValuePair<string, object>>. Dictionary implements a lot, but
+            //       not this one, so it's relatively safe.
+            if (state is IReadOnlyList<KeyValuePair<string, object>> formattedLogValues)
+            {
+                if (formattedLogValues.Count <= 1)
+                    return null;
+
+                // FormattedLogValues always inserts the original format at the end.
+                return formattedLogValues
+                    .Take(formattedLogValues.Count - 1)
+                    .ToDictionary(x => x.Key, x => x.Value);
+            }
+
+            return state;
         }
 
         private static LogLevel Translate(Microsoft.Extensions.Logging.LogLevel logLevel)

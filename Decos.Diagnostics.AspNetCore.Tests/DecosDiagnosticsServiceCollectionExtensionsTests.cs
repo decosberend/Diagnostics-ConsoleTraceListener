@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging;
@@ -63,7 +64,24 @@ namespace Decos.Diagnostics.AspNetCore.Tests
         }
 
         [TestMethod]
-        public void MicrosoftExtensionsLoggerLogMessagesToTrace()
+        public void MicrosoftExtensionsLoggerLogsMessagesToTrace()
+        {
+            var listener = new DelayAsyncTraceListener(0);
+            var services = new ServiceCollection();
+            services.AddTraceSourceLogging(options =>
+            {
+                options.AddTraceListener(listener);
+            });
+
+            var provider = services.BuildServiceProvider();
+            var logger = provider.GetRequiredService<ILogger<DecosDiagnosticsServiceCollectionExtensionsTests>>();
+            logger.LogInformation("Test");
+
+            Assert.IsTrue(listener.Invocations.Contains("Test"));
+        }
+
+        [TestMethod]
+        public void MicrosoftExtensionsLoggerLogsStructuredMessagesToTrace()
         {
             var listener = new DelayAsyncTraceListener(0);
             var services = new ServiceCollection();
@@ -79,8 +97,9 @@ namespace Decos.Diagnostics.AspNetCore.Tests
             logger.LogInformation("Test {p1} {p2}", p1, p2);
 
             var logData = listener.Invocations.OfType<LogData>().SingleOrDefault();
-            Assert.IsNotNull(logData);
-            Assert.AreEqual("Test 1 2", logData.Data.ToString());
+            var data = (logData.Data as IEnumerable<KeyValuePair<string, object>>)?.ToArray();
+            CollectionAssert.Contains(data, new KeyValuePair<string, object>("p1", p1));
+            CollectionAssert.Contains(data, new KeyValuePair<string, object>("p2", p2));
         }
 
         [TestMethod]
@@ -104,7 +123,7 @@ namespace Decos.Diagnostics.AspNetCore.Tests
                 logger.LogError(ex, "test");
             }
 
-            Assert.IsTrue(listener.TraceCalled);
+            Assert.IsTrue(listener.Invocations.OfType<LogData>().Any(x => x.Data is Exception));
         }
 
         [TestMethod]
