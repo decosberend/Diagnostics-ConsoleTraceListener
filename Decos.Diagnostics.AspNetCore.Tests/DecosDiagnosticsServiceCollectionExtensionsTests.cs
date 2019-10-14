@@ -52,22 +52,14 @@ namespace Decos.Diagnostics.AspNetCore.Tests
         }
 
         [TestMethod]
-        public void MicrosoftExtensionsLoggerCanBeResolved()
-        {
-            var services = new ServiceCollection();
-
-            services.AddTraceSourceLogging();
-
-            var provider = services.BuildServiceProvider();
-            var logger = provider.GetRequiredService<ILogger<DecosDiagnosticsServiceCollectionExtensionsTests>>();
-            Assert.IsInstanceOfType(logger, typeof(LoggerWrapper));
-        }
-
-        [TestMethod]
         public void MicrosoftExtensionsLoggerLogsMessagesToTrace()
         {
             var listener = new DelayAsyncTraceListener(0);
             var services = new ServiceCollection();
+            services.AddLogging(options =>
+            {
+                options.UseDecosDiagnostics();
+            });
             services.AddTraceSourceLogging(options =>
             {
                 options.AddTraceListener(listener);
@@ -85,6 +77,10 @@ namespace Decos.Diagnostics.AspNetCore.Tests
         {
             var listener = new DelayAsyncTraceListener(0);
             var services = new ServiceCollection();
+            services.AddLogging(options =>
+            {
+                options.UseDecosDiagnostics();
+            });
             services.AddTraceSourceLogging(options =>
             {
                 options.AddTraceListener(listener);
@@ -107,6 +103,10 @@ namespace Decos.Diagnostics.AspNetCore.Tests
         {
             var listener = new DelayAsyncTraceListener(0);
             var services = new ServiceCollection();
+            services.AddLogging(options =>
+            {
+                options.UseDecosDiagnostics();
+            });
             services.AddTraceSourceLogging(options =>
             {
                 options.AddTraceListener(listener);
@@ -124,18 +124,6 @@ namespace Decos.Diagnostics.AspNetCore.Tests
             }
 
             Assert.IsTrue(listener.Invocations.OfType<LogData>().Any(x => x.Data is Exception));
-        }
-
-        [TestMethod]
-        public void MicrosoftExtensionsLoggerFactoryCreatesWrapperLoggers()
-        {
-            var services = new ServiceCollection();
-
-            services.AddTraceSourceLogging();
-
-            var provider = services.BuildServiceProvider();
-            var factory = provider.GetRequiredService<ILoggerFactory>();
-            Assert.IsInstanceOfType(factory.CreateLogger("Test"), typeof(LoggerWrapper));
         }
 
         [TestMethod]
