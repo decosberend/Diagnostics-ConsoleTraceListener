@@ -118,10 +118,10 @@ namespace Decos.Diagnostics.Tests
         }
 
         [TestMethod]
-        public void SourceNameUsesNamespaceFromType()
+        public void SourceNameUsesFullNameFromType()
         {
             var sourceName = SourceName.FromType<SourceNameTests>();
-            Assert.AreEqual(sourceName.Name, GetType().Namespace);
+            Assert.AreEqual(sourceName.Name, GetType().FullName);
         }
 
         [DataTestMethod]

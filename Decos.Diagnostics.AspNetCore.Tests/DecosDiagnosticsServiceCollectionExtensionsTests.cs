@@ -1,6 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging;
 using Decos.Diagnostics.Trace.Tests;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Decos.Diagnostics.AspNetCore.Tests
@@ -43,6 +48,75 @@ namespace Decos.Diagnostics.AspNetCore.Tests
 
             var provider = services.BuildServiceProvider();
             Assert.IsNotNull(provider.GetRequiredService<ILog<DecosDiagnosticsServiceCollectionExtensionsTests>>());
+        }
+
+        [TestMethod]
+        public void MicrosoftExtensionsLoggerCanBeResolved()
+        {
+            var services = new ServiceCollection();
+
+            services.AddTraceSourceLogging();
+
+            var provider = services.BuildServiceProvider();
+            var logger = provider.GetRequiredService<ILogger<DecosDiagnosticsServiceCollectionExtensionsTests>>();
+            Assert.IsInstanceOfType(logger, typeof(LoggerWrapper));
+        }
+
+        [TestMethod]
+        public void MicrosoftExtensionsLoggerLogMessagesToTrace()
+        {
+            var listener = new DelayAsyncTraceListener(0);
+            var services = new ServiceCollection();
+            services.AddTraceSourceLogging(options =>
+            {
+                options.AddTraceListener(listener);
+            });
+
+            var provider = services.BuildServiceProvider();
+            var logger = provider.GetRequiredService<ILogger<DecosDiagnosticsServiceCollectionExtensionsTests>>();
+            var p1 = 1;
+            var p2 = 2;
+            logger.LogInformation("Test {p1} {p2}", p1, p2);
+
+            var logData = listener.Invocations.OfType<LogData>().SingleOrDefault();
+            Assert.IsNotNull(logData);
+            Assert.AreEqual("Test 1 2", logData.Data.ToString());
+        }
+
+        [TestMethod]
+        public void MicrosoftExtensionsLoggerLogExceptionsToTrace()
+        {
+            var listener = new DelayAsyncTraceListener(0);
+            var services = new ServiceCollection();
+            services.AddTraceSourceLogging(options =>
+            {
+                options.AddTraceListener(listener);
+            });
+
+            var provider = services.BuildServiceProvider();
+            var logger = provider.GetRequiredService<ILogger<DecosDiagnosticsServiceCollectionExtensionsTests>>();
+            try
+            {
+                throw new Exception("Test exception");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "test");
+            }
+
+            Assert.IsTrue(listener.TraceCalled);
+        }
+
+        [TestMethod]
+        public void MicrosoftExtensionsLoggerFactoryCreatesWrapperLoggers()
+        {
+            var services = new ServiceCollection();
+
+            services.AddTraceSourceLogging();
+
+            var provider = services.BuildServiceProvider();
+            var factory = provider.GetRequiredService<ILoggerFactory>();
+            Assert.IsInstanceOfType(factory.CreateLogger("Test"), typeof(LoggerWrapper));
         }
 
         [TestMethod]
