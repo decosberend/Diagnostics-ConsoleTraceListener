@@ -2,7 +2,9 @@
 
 using Decos.Diagnostics;
 using Decos.Diagnostics.AspNetCore;
+using Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging;
 using Decos.Diagnostics.Trace;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -55,6 +57,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton(logFactory);
             services.AddTransient(typeof(ILog<>), typeof(Log<>));
+            services.AddTransient(typeof(ILogger<>), typeof(LoggerWrapper<>));
+            services.AddTransient(typeof(ILoggerFactory), typeof(LoggerFactoryWrapper));
             services.AddSingleton<ApplicationShutdownHandler>();
 
             return services;

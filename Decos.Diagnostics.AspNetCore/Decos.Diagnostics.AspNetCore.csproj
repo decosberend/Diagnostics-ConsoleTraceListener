@@ -2,19 +2,20 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-    <Version>1.1.0-alpha</Version>
+    <Version>1.2.0-alpha</Version>
     <Authors>Laura Verdoes</Authors>
     <Company>Decos Information Solutions</Company>
     <Description>Provides extension methods for registering the Decos.Diagnostics TraceSource implementation as services with the Microsoft.Extensions.DependencyInjection framework.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics.AspNetCore\Decos.Diagnostics.AspNetCore.xml</DocumentationFile>
-    <PackageReleaseNotes>Added missing XML documentation.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added implementations to cover Microsoft.Extensions.Logging ILogger usage.</PackageReleaseNotes>
   </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

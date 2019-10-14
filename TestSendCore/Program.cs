@@ -83,8 +83,8 @@ namespace TestSendCore
                     options.AddLogstash(logstashAddress);
 
                 var webhookAddress = Environment.GetEnvironmentVariable("SLACK_WEBHOOK");
-                if (!string.IsNullOrEmpty(logstashAddress))
-                    options.AddSlack(logstashAddress);
+                if (!string.IsNullOrEmpty(webhookAddress))
+                    options.AddSlack(webhookAddress);
             });
 
             return services.BuildServiceProvider();
