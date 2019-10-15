@@ -2,6 +2,7 @@
 using Decos.Diagnostics.Trace;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,6 +34,13 @@ namespace TestSendCore
                 Console.WriteLine("Sending logs...");
 
                 var stopwatch = Stopwatch.StartNew();
+
+                log.Info("String array", new string[] { "abc", "αβγ" });
+                log.Info("Object array", new object[] { 1, DateTimeOffset.Now });
+                log.Info("Dictionary", new Dictionary<string, int>()
+                {
+                    ["a"] = 1, ["b"] = 2, ["c"] = 3
+                });
 
                 log.Info("Something something", new { data = 1, date = DateTimeOffset.Now });
                 try
