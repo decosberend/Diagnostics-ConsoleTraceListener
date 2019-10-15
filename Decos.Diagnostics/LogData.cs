@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 
 namespace Decos.Diagnostics
 {
@@ -8,8 +10,8 @@ namespace Decos.Diagnostics
     public class LogData
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LogData"/> class with
-        /// the specified message and data.
+        /// Initializes a new instance of the <see cref="LogData"/> class with the specified message
+        /// and data.
         /// </summary>
         /// <param name="message">The text of the logged message.</param>
         /// <param name="data">An object that provides additional data.</param>
@@ -34,6 +36,37 @@ namespace Decos.Diagnostics
         /// </summary>
         /// <returns>A string that represents this logged message.</returns>
         public override string ToString()
-            => $"{Message}\n{Data}";
+        {
+            var data = Format(Data);
+            if (string.IsNullOrWhiteSpace(data))
+                return Message;
+
+            return $"{Message}\n{data}";
+        }
+
+        /// <summary>
+        /// Returns a string that represents the additional data.
+        /// </summary>
+        /// <param name="data">The data to format.</param>
+        /// <returns>A new string.</returns>
+        protected virtual string Format(object data)
+        {
+            try
+            {
+                switch (data)
+                {
+                    case null:
+                        return null;
+
+                    case IDictionary dictionary:
+                        return string.Join(", ", dictionary.Keys.OfType<object>().Select(key => $"{key}: {dictionary[key]}"));
+
+                    case object[] items:
+                        return string.Join(", ", items);
+                }
+            }
+            catch { }
+            return data?.ToString();
+        }
     }
 }
