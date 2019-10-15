@@ -55,9 +55,13 @@ namespace Decos.Diagnostics
             {
                 switch (data)
                 {
+                    // FormattedLogValues is used for message templates in ASP.NET Core logging and
+                    // won't add any value when printed over the message itself
+                    case FormattedLogValues _:
                     case null:
                         return null;
 
+                    // We will want to show any other type of dictionary, though
                     case IDictionary dictionary:
                         return string.Join(", ", dictionary.Keys.OfType<object>().Select(key => $"{key}: {dictionary[key]}"));
 

@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging;
+
 using Decos.Diagnostics.Trace.Tests;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -73,7 +73,7 @@ namespace Decos.Diagnostics.AspNetCore.Tests
         }
 
         [TestMethod]
-        public void MicrosoftExtensionsLoggerLogsStructuredMessagesToTrace()
+        public void MicrosoftExtensionsLoggerLogsMessageTemplatesWithoutDataToTrace()
         {
             var listener = new DelayAsyncTraceListener(0);
             var services = new ServiceCollection();
@@ -93,9 +93,63 @@ namespace Decos.Diagnostics.AspNetCore.Tests
             logger.LogInformation("Test {p1} {p2}", p1, p2);
 
             var logData = listener.Invocations.OfType<LogData>().SingleOrDefault();
+            Assert.AreEqual("Test 1 2", logData.ToString());
+        }
+
+        [TestMethod]
+        public void MicrosoftExtensionsLoggerLogsMessageTemplatesWithSerializableData()
+        {
+            const int p1 = 1;
+            const int p2 = 2;
+
+            var listener = new DelayAsyncTraceListener(0);
+            var services = new ServiceCollection();
+            services.AddLogging(options =>
+            {
+                options.UseDecosDiagnostics();
+            });
+            services.AddTraceSourceLogging(options =>
+            {
+                options.AddTraceListener(listener);
+            });
+
+            var provider = services.BuildServiceProvider();
+            var logger = provider.GetRequiredService<ILogger<DecosDiagnosticsServiceCollectionExtensionsTests>>();
+            logger.LogInformation("Test {p1} {p2}", p1, p2);
+
+            var logData = listener.Invocations.OfType<LogData>().SingleOrDefault();
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(logData.Data);
+            Assert.AreEqual($"{{\"p1\":{p1},\"p2\":{p2}}}", json);
+        }
+
+        [TestMethod]
+        public void MicrosoftExtensionsLoggerLogsStructuredMessagesToTrace()
+        {
+            var listener = new DelayAsyncTraceListener(0);
+            var services = new ServiceCollection();
+            services.AddLogging(options =>
+            {
+                options.UseDecosDiagnostics();
+            });
+            services.AddTraceSourceLogging(options =>
+            {
+                options.AddTraceListener(listener);
+            });
+
+            var provider = services.BuildServiceProvider();
+            var logger = provider.GetRequiredService<ILogger<DecosDiagnosticsServiceCollectionExtensionsTests>>();
+
+            // Very contrived example but still possible within the interface
+            logger.Log(Microsoft.Extensions.Logging.LogLevel.Information, 0, new Dictionary<string, object>()
+            {
+                ["p1"] = 1,
+                ["p2"] = 2
+            }, null, (state, ex) => "Test");
+
+            var logData = listener.Invocations.OfType<LogData>().SingleOrDefault();
             var data = (logData.Data as IEnumerable<KeyValuePair<string, object>>)?.ToArray();
-            CollectionAssert.Contains(data, new KeyValuePair<string, object>("p1", p1));
-            CollectionAssert.Contains(data, new KeyValuePair<string, object>("p2", p2));
+            CollectionAssert.Contains(data, new KeyValuePair<string, object>("p1", 1));
+            CollectionAssert.Contains(data, new KeyValuePair<string, object>("p2", 2));
         }
 
         [TestMethod]

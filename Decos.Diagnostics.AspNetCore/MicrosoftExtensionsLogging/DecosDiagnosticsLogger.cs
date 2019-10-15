@@ -86,10 +86,7 @@ namespace Decos.Diagnostics.AspNetCore.MicrosoftExtensionsLogging
                 if (formattedLogValues.Count <= 1)
                     return null;
 
-                // FormattedLogValues always inserts the original format at the end.
-                return formattedLogValues
-                    .Take(formattedLogValues.Count - 1)
-                    .ToDictionary(x => x.Key, x => x.Value);
+                return new FormattedLogValues(formattedLogValues);
             }
 
             return state;
