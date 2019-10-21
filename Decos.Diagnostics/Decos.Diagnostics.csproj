@@ -9,6 +9,8 @@
     <Description>Decos.Diagnostics is a .NET Standard 2.0 library that provides logging abstractions.</Description>
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics\Decos.Diagnostics.xml</DocumentationFile>
     <PackageReleaseNotes>Added support for logging both a message and structured data at the same time.</PackageReleaseNotes>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Decos.Diagnostics.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

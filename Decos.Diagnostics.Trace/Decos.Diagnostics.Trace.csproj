@@ -11,6 +11,8 @@
     <Description>Provides a System.Diagnostics.TraceSource implementation for the Decos.Diagnostics abstractions.</Description>
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics.Trace\Decos.Diagnostics.Trace.xml</DocumentationFile>
     <PackageReleaseNotes>Added support for logging both a message and structured data at the same time.</PackageReleaseNotes>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Decos.Diagnostics.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
