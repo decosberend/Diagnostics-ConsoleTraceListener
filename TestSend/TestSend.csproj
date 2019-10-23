@@ -61,9 +61,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Decos.Shared">
-      <Version>1.1.19024.1</Version>
-    </PackageReference>
     <PackageReference Include="Jil">
       <Version>2.16.0</Version>
     </PackageReference>

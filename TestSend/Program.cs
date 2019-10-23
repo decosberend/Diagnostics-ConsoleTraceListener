@@ -15,10 +15,13 @@ namespace TestSend
                 .UseTraceSource()
                 .AddConsole()
                 .AddLogstash(logstashAddress)
+                .AddListenersToTraceListenersCollection()
                 .SetMinimumLogLevel(LogLevel.Debug)
                 .Build();
             var log = logFactory.Create<Program>();
 
+            System.Diagnostics.Trace.WriteLine("I guess the Diagnostics library completely ignores this trace at all");
+            
             log.Debug("Debug message.");
             log.Debug(new { data = "Debug data", data2 = 1 });
 

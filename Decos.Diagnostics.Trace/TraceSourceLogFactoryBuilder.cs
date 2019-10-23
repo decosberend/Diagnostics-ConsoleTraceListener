@@ -143,6 +143,36 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
+        /// Adds the listeners in Options.Listeners to System.Diagnostics.Trace.Listeners
+        /// if they aren't in there already
+        /// </summary>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddListenersToTraceListenersCollection() {
+            foreach (var listener in Options.Listeners) {
+                if (!ListenersContainsType(System.Diagnostics.Trace.Listeners, listener.GetType())) {
+                    System.Diagnostics.Trace.Listeners.Add(listener);
+                }
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Checks is a specific kind of listener is already in a TraceListenerCollection
+        /// </summary>
+        /// <param name="listeners">The collection to check</param>
+        /// <param name="type">The type of listener to find in the collection</param>
+        /// <returns>true if the listeners contain the specified type, else false</returns>
+        private bool ListenersContainsType(TraceListenerCollection listeners, Type type) {
+            foreach (var listener in listeners) {
+                if (listener.GetType() == type) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Creates a new <see cref="ILogFactory"/> instance with the configured
         /// options.
         /// </summary>

@@ -2,13 +2,13 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace Decos.Diagnostics.Trace
+namespace Decos.Diagnostics.Trace 
 {
     /// <summary>
     /// Provides an abstract base class for listeners who monitor trace and debug
     /// output. Only a single method needs to be implemented.
     /// </summary>
-    public abstract class TraceListenerBase : TraceListener
+    public abstract class TraceListenerBase : TraceListener 
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceListenerBase"/>
@@ -157,7 +157,7 @@ namespace Decos.Diagnostics.Trace
         /// Writes the value of an object.
         /// </summary>
         /// <param name="o">The object to write.</param>
-        public sealed override void Write(object o)
+        public sealed override void Write(object o) 
         {
             if (o is Exception)
                 Trace(new TraceEventData(TraceEventType.Error), o);
@@ -178,7 +178,7 @@ namespace Decos.Diagnostics.Trace
         /// </summary>
         /// <param name="message">The message to write.</param>
         public sealed override void WriteLine(string message)
-            => Trace(new TraceEventData(), message);
+        => Trace(new TraceEventData(), message);
 
         /// <summary>
         /// Writes a message, using the category as event type.
@@ -192,7 +192,7 @@ namespace Decos.Diagnostics.Trace
         /// Writes the value of an object.
         /// </summary>
         /// <param name="o">The object to write.</param>
-        public sealed override void WriteLine(object o)
+        public sealed override void WriteLine(object o) 
         {
             if (o is Exception)
                 Trace(new TraceEventData(TraceEventType.Error), o);
@@ -214,12 +214,12 @@ namespace Decos.Diagnostics.Trace
         /// </summary>
         /// <param name="category">The category name to parse.</param>
         /// <returns>A <see cref="TraceEventType"/> value.</returns>
-        protected virtual TraceEventType ParseCategory(string category)
+        protected virtual TraceEventType ParseCategory(string category) 
         {
             if (category.StartsWith("SQL:"))
                 return TraceEventType.Verbose;
 
-            switch (category.ToUpperInvariant())
+            switch (category.ToUpperInvariant()) 
             {
                 case "CRITICAL": return TraceEventType.Critical;
                 case "ERROR": return TraceEventType.Error;
@@ -261,7 +261,7 @@ namespace Decos.Diagnostics.Trace
         /// <see langword="true"/> to trace the specified event; otherwise, <see
         /// langword="false"/>.
         /// </returns>
-        protected virtual bool ShouldTrace(TraceEventCache cache, string source, TraceEventType type, int id, string message, object[] args, object data1, object[] data)
+        protected virtual bool ShouldTrace(TraceEventCache cache, string source, TraceEventType type, int id, string message, object[] args, object data1, object[] data) 
         {
             if (Filter == null)
                 return true;
@@ -277,7 +277,7 @@ namespace Decos.Diagnostics.Trace
         /// the trace event.
         /// </param>
         /// <param name="message">The message to write.</param>
-        protected void Trace(TraceEventData e, string message)
+        protected void Trace(TraceEventData e, string message) 
         {
             var type = e.Type.GetValueOrDefault(TraceEventType.Information);
             if (ShouldTrace(e.Cache, e.Source, type, e.ID, message, null, null, null))
@@ -299,7 +299,7 @@ namespace Decos.Diagnostics.Trace
         /// <param name="args">
         /// An object array containing zero or more objects to format.
         /// </param>
-        protected void Trace(TraceEventData e, string format, params object[] args)
+        protected void Trace(TraceEventData e, string format, params object[] args) 
         {
             var type = e.Type.GetValueOrDefault(TraceEventType.Information);
             if (ShouldTrace(e.Cache, e.Source, type, e.ID, format, args, null, null))
@@ -315,7 +315,7 @@ namespace Decos.Diagnostics.Trace
         /// the trace event.
         /// </param>
         /// <param name="data">The trace data to write.</param>
-        protected void Trace(TraceEventData e, object data)
+        protected void Trace(TraceEventData e, object data) 
         {
             var type = e.Type.GetValueOrDefault(TraceEventType.Information);
             if (ShouldTrace(e.Cache, e.Source, type, e.ID, null, null, data, null))
@@ -359,7 +359,7 @@ namespace Decos.Diagnostics.Trace
         /// the trace event.
         /// </param>
         /// <param name="data">The trace data to write.</param>
-        protected virtual void TraceInternal(TraceEventData e, object data)
+        protected virtual void TraceInternal(TraceEventData e, object data) 
         {
             string message;
             if (data is object[])
@@ -369,13 +369,13 @@ namespace Decos.Diagnostics.Trace
             TraceInternal(e, message);
         }
 
-        private static string ConvertDataToString(object[] data)
+        private static string ConvertDataToString(object[] data) 
         {
             if (data == null)
                 return null;
 
             var messageBuilder = new StringBuilder();
-            for (var i = 0; i < data.Length; i++)
+            for (var i = 0; i < data.Length; i++) 
             {
                 if (i != 0)
                     messageBuilder.Append(", ");
@@ -390,8 +390,10 @@ namespace Decos.Diagnostics.Trace
         /// <summary>
         /// Provides information about a trace event.
         /// </summary>
-        protected class TraceEventData
+        protected class TraceEventData 
         {
+            //private static System.Collections.Generic.Dictionary<string, Type> typePerSourceFileCache = new System.Collections.Generic.Dictionary<string, Type>();
+
             /// <summary>
             /// Initializes a new instance of the <see cref="TraceEventData"/>
             /// class.
@@ -417,12 +419,33 @@ namespace Decos.Diagnostics.Trace
             /// <param name="source">The source of the event.</param>
             /// <param name="eventType">The type of the event.</param>
             /// <param name="id">The ID of the event.</param>
-            public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id)
+            public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id) 
             {
                 Cache = eventCache;
+                if (string.IsNullOrEmpty(source))
+                    source = GetCallingSource();
                 Source = source;
                 Type = eventType;
                 ID = id;
+            }
+
+            private string GetCallingSource([System.Runtime.CompilerServices.CallerMemberName] string memberName = "", [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "") {
+                try {
+                    //if (typePerSourceFileCache.TryGetValue(sourceFilePath, out Type type)) 
+                    //    return type.ToString();
+                    var stackFrames = new System.Diagnostics.StackTrace().GetFrames();
+                    if (stackFrames == null) return null;
+                    foreach (var frame in stackFrames) {
+                        var frameReflectedType = frame.GetMethod().ReflectedType;
+                        var namespaceName = frameReflectedType.Namespace;
+                        if (!namespaceName.StartsWith("System.Diagnostics") && !namespaceName.StartsWith("Decos.Diagnostics")) {
+                            //typePerSourceFileCache.Add(sourceFilePath, frameReflectedType);
+                            return frameReflectedType.ToString();
+                        }
+                    }
+                }
+                catch { }
+                return null;
             }
 
             /// <summary>
