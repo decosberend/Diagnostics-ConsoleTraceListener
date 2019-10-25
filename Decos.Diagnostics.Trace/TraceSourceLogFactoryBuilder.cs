@@ -143,6 +143,17 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
+        /// Clears all Trace listeners in Options.Listeners and System.Diagnostics.Trace.Listeners
+        /// </summary>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder ClearAllTraceListeners()
+        {
+            Options.Listeners.Clear();
+            System.Diagnostics.Trace.Listeners.Clear();
+            return this;
+        }
+
+        /// <summary>
         /// Adds the listeners in Options.Listeners to System.Diagnostics.Trace.Listeners
         /// if they aren't in there already
         /// </summary>
