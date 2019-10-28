@@ -1,4 +1,6 @@
-﻿namespace Decos.Diagnostics
+﻿using System;
+
+namespace Decos.Diagnostics
 {
     /// <summary>
     /// Defines methods for writing events and data to a log.
@@ -29,6 +31,8 @@
         /// <param name="logLevel">The severity of the data.</param>
         /// <param name="data">The data to log.</param>
         void Write<T>(LogLevel logLevel, T data);
+
+        void Write(LogLevel logLevel, string message, Guid customerID);
     }
 
     /// <summary>

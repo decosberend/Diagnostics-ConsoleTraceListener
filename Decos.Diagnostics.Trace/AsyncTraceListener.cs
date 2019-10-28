@@ -132,9 +132,10 @@ namespace Decos.Diagnostics.Trace
                 TraceInternal(e, logData);
                 return;
             }
-
+            data = CustomerLogData.TryExtractCustomerId(data, out Guid? customerId);
             var logEntry = new LogEntry
             {
+                CustomerId = customerId,
                 Level = e.Type.ToLogLevel(),
                 Source = e.Source,
                 Data = data,
