@@ -70,16 +70,9 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The text of the message to log.</param>
         public virtual void Write(TraceEventType eventType, string message)
         {
-            if (Guid.TryParse(TraceSource.Attributes["customerid"], out Guid customerId)) {
-                var objectToLog = new CustomerLogData()
-                {
-                    CustomerId = customerId,
-                    Data = message
-                };
-                Write(eventType, objectToLog);
-            }
-            else
-                TraceSource.TraceEvent(eventType, 0, message);
+            if (CustomerLogData.TryParseFromMessage(TraceSource, message, out CustomerLogData customerLogData))
+                Write(eventType, customerLogData);
+            else TraceSource.TraceEvent(eventType, 0, message);
         }
 
         /// <summary>
@@ -112,64 +105,6 @@ namespace Decos.Diagnostics.Trace
         public void Write(LogLevel logLevel, string message, Guid customerID)
         {
             throw new NotImplementedException();
-        }
-    }
-
-    public class CustomerLogData
-    {
-        public Guid? CustomerId { get; set; }
-        public object Data { get; set; }
-
-        public override string ToString()
-        {
-            if (CustomerId.HasValue)
-            {
-                return CustomerId.ToString() + " " + Data?.ToString();
-            }
-            return Data?.ToString();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public static bool TryParseFromMessage(TraceSource source, string message, out CustomerLogData customerLogData)
-        {
-            customerLogData = null;
-            return false;
-        }
-
-        internal static object TryExtractCustomerId(object data, out Guid? customerId)
-        {
-            customerId = null;
-            if (data != null && data is CustomerLogData customerData)
-            {
-                customerId = customerData.CustomerId;
-                return customerData.Data;
-            }
-            else return data;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public static bool TryParseFromData(TraceSource source, object data, out CustomerLogData customerLogData)
-        {
-            if (Guid.TryParse(source.Attributes["customerid"], out Guid customerId)
-                && (!(data is CustomerLogData)))
-            {
-                customerLogData = new CustomerLogData()
-                {
-                    CustomerId = customerId,
-                    Data = data
-                };
-                return true;
-            }
-            customerLogData = null;
-            return false;
         }
     }
 }
