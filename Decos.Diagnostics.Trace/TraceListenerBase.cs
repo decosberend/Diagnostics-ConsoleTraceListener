@@ -145,22 +145,7 @@ namespace Decos.Diagnostics.Trace
         /// <param name="id">A numeric identifier for the event.</param>
         /// <param name="message">A message to write.</param>
         public sealed override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
-        {
-            Console.WriteLine(this.Attributes["customerid"]);
-            Trace(new TraceEventData(eventCache, source, eventType, id), message);
-        }
-        // We are here now /\
-
-        // public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id) 
-        
-        
-        
-        public void MyTraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message, Guid customerID)
-        {
-            Console.WriteLine(customerID);
-            Trace(new TraceEventData(eventCache, source, eventType, id, customerID), message);
-        }
-
+            => Trace(new TraceEventData(eventCache, source, eventType, id), message);
 
         /// <summary>
         /// Writes a message.
@@ -423,7 +408,7 @@ namespace Decos.Diagnostics.Trace
             /// class.
             /// </summary>
             public TraceEventData()
-              : this(new TraceEventCache(), null, null, 0, new Guid("00000000-0000-0000-0000-000000000000")) { }
+              : this(new TraceEventCache(), null, null, 0) { }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="TraceEventData"/>
@@ -431,7 +416,7 @@ namespace Decos.Diagnostics.Trace
             /// </summary>
             /// <param name="eventType">The type of event.</param>
             public TraceEventData(TraceEventType eventType)
-              : this(new TraceEventCache(), null, eventType, 0, new Guid("00000000-0000-0000-0000-000000000000")) { }
+              : this(new TraceEventCache(), null, eventType, 0) { }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="TraceEventData"/>
