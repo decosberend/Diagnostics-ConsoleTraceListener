@@ -42,6 +42,12 @@ namespace Decos.Diagnostics
             return this;
         }
 
+        public virtual LogFactoryBuilder<TOptions> SetStaticCustomerId(Guid customerID)
+        {
+            Options.DefaultCustomerID = customerID;
+            return this;
+        }
+
         /// <summary>
         /// Specifies the minimum severity level that messages from sources with
         /// the specified name must have to be written to a log.

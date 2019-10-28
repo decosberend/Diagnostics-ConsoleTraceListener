@@ -44,7 +44,16 @@ namespace Decos.Diagnostics.Trace
         /// <param name="id">A numeric identifier for the event.</param>
         /// <param name="data">The trace data to emit.</param>
         public sealed override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data)
-            => Trace(new TraceEventData(eventCache, source, eventType, id), data);
+        {
+            TraceEventData traceEventData = null;
+            if (data != null && data is CustomerLogData customerData)
+            {
+                traceEventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId);
+                Trace(traceEventData, data);
+            }
+            else 
+                Trace(new TraceEventData(eventCache, source, eventType, id), data);
+        }
 
         /// <summary>
         /// Writes trace information, a data object and event information to the
@@ -136,7 +145,22 @@ namespace Decos.Diagnostics.Trace
         /// <param name="id">A numeric identifier for the event.</param>
         /// <param name="message">A message to write.</param>
         public sealed override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
-            => Trace(new TraceEventData(eventCache, source, eventType, id), message);
+        {
+            Console.WriteLine(this.Attributes["customerid"]);
+            Trace(new TraceEventData(eventCache, source, eventType, id), message);
+        }
+        // We are here now /\
+
+        // public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id) 
+        
+        
+        
+        public void MyTraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message, Guid customerID)
+        {
+            Console.WriteLine(customerID);
+            Trace(new TraceEventData(eventCache, source, eventType, id, customerID), message);
+        }
+
 
         /// <summary>
         /// Writes a message.
@@ -399,7 +423,7 @@ namespace Decos.Diagnostics.Trace
             /// class.
             /// </summary>
             public TraceEventData()
-              : this(new TraceEventCache(), null, null, 0) { }
+              : this(new TraceEventCache(), null, null, 0, new Guid("00000000-0000-0000-0000-000000000000")) { }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="TraceEventData"/>
@@ -407,7 +431,7 @@ namespace Decos.Diagnostics.Trace
             /// </summary>
             /// <param name="eventType">The type of event.</param>
             public TraceEventData(TraceEventType eventType)
-              : this(new TraceEventCache(), null, eventType, 0) { }
+              : this(new TraceEventCache(), null, eventType, 0, new Guid("00000000-0000-0000-0000-000000000000")) { }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="TraceEventData"/>
@@ -419,7 +443,7 @@ namespace Decos.Diagnostics.Trace
             /// <param name="source">The source of the event.</param>
             /// <param name="eventType">The type of the event.</param>
             /// <param name="id">The ID of the event.</param>
-            public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id) 
+            public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id, Guid? customerID = null) 
             {
                 Cache = eventCache;
                 if (string.IsNullOrEmpty(source))
@@ -427,6 +451,7 @@ namespace Decos.Diagnostics.Trace
                 Source = source;
                 Type = eventType;
                 ID = id;
+                CustomerID = customerID;
             }
 
             private string GetCallingSource([System.Runtime.CompilerServices.CallerMemberName] string memberName = "", [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "") {
@@ -469,6 +494,8 @@ namespace Decos.Diagnostics.Trace
             /// Gets the type of event, or <c>null</c> if no type was specified.
             /// </summary>
             public TraceEventType? Type { get; }
+
+            public Guid? CustomerID { get; set; }
         }
     }
 }

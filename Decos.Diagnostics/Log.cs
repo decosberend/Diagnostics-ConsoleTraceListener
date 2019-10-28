@@ -62,5 +62,10 @@ namespace Decos.Diagnostics
         /// <param name="data">The data to log.</param>
         public void Write<T>(LogLevel logLevel, T data)
             => log.Write(logLevel, data);
+
+        public void Write(LogLevel logLevel, string message, Guid customerID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

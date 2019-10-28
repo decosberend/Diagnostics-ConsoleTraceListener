@@ -84,5 +84,7 @@ namespace Decos.Diagnostics
 
             return string.Empty;
         }
+
+        public Guid? CustomerId { get; set; }
     }
 }

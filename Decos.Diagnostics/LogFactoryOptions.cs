@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Decos.Diagnostics
 {
@@ -15,6 +16,8 @@ namespace Decos.Diagnostics
         /// </summary>
         public LogLevel DefaultMinimumLogLevel { get; set; }
             = LogLevel.Information;
+
+        public Guid DefaultCustomerID { get; set; }
 
         /// <summary>
         /// Gets a dictionary that specifies the minimum severity levels that

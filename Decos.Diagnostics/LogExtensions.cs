@@ -34,6 +34,9 @@ namespace Decos.Diagnostics
         public static void Debug<T>(this ILog log, string message, T data)
             => log.Write(LogLevel.Debug, message, data);
 
+        public static void Debug(this ILog log, string message, Guid customerID)
+            => log.Write(LogLevel.Debug, message, customerID);
+
         /// <summary>
         /// Logs verbose data for development or debugging purposes. These are not enabled in production by default and should only be enabled temporarily for troubleshooting.
         /// </summary>

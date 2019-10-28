@@ -57,6 +57,11 @@ namespace Decos.Diagnostics.Trace
                 ThreadId = e.Cache.ThreadId
             };
 
+            WriteLogEntry(logEntry);
+        }
+
+        private void WriteLogEntry(LogEntry logEntry)
+        {
             LogstashClient.LogAsync(logEntry).GetAwaiter().GetResult();
         }
     }
