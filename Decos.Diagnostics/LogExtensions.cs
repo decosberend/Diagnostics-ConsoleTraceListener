@@ -34,6 +34,12 @@ namespace Decos.Diagnostics
         public static void Debug<T>(this ILog log, string message, T data)
             => log.Write(LogLevel.Debug, message, data);
 
+        /// <summary>
+        /// Logs verbose data for development or debugging purposes. These are not enabled in production by default and should only be enabled temporarily for troubleshooting.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="message">The text of the message to log</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Debug(this ILog log, string message, Guid customerID)
             => log.Write(LogLevel.Debug, message, customerID);
 
@@ -46,6 +52,13 @@ namespace Decos.Diagnostics
         public static void Debug<T>(this ILog log, T data)
             => log.Write(LogLevel.Debug, data);
 
+        /// <summary>
+        /// ogs verbose data for development or debugging purposes. These are not enabled in production by default and should only be enabled temporarily for troubleshooting.
+        /// </summary>
+        /// <typeparam name="T">The type of data to log.</typeparam>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="data">The data to log.</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Debug<T>(this ILog log, T data, Guid customerID)
             => log.Write(LogLevel.Debug, data, customerID);
 
@@ -66,6 +79,12 @@ namespace Decos.Diagnostics
         public static void Info<T>(this ILog log, string message, T data)
             => log.Write(LogLevel.Information, message, data);
 
+        /// <summary>
+        /// Logs an informational message. These are typically used to track the general flow of an application and should have long-term value and.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Info(this ILog log, string message, Guid customerID)
             => log.Write(LogLevel.Debug, message, customerID);
 
@@ -78,6 +97,13 @@ namespace Decos.Diagnostics
         public static void Info<T>(this ILog log, T data)
             => log.Write(LogLevel.Information, data);
 
+        /// <summary>
+        /// Logs an informational message. These are typically used to track the general flow of an application and should have long-term value and.
+        /// </summary>
+        /// <typeparam name="T">The type of data to log.</typeparam>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="data">The data to log.</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Info<T>(this ILog log, T data, Guid customerID)
             => log.Write(LogLevel.Debug, data, customerID);
 
@@ -98,6 +124,12 @@ namespace Decos.Diagnostics
         public static void Warn<T>(this ILog log, string message, T data)
             => log.Write(LogLevel.Warning, message, data);
 
+        /// <summary>
+        /// Logs a warning message highlighting an abnormal or unexpected event, such as a recoverable error that does not cause the execution of an operation to stop but might need to be investigated later.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Warn(this ILog log, string message, Guid customerID)
             => log.Write(LogLevel.Debug, message, customerID);
 
@@ -110,6 +142,13 @@ namespace Decos.Diagnostics
         public static void Warn<T>(this ILog log, T data)
             => log.Write(LogLevel.Warning, data);
 
+        /// <summary>
+        /// Logs a warning message highlighting an abnormal or unexpected event, such as a recoverable error that does not cause the execution of an operation to stop but might need to be investigated later.
+        /// </summary>
+        /// <typeparam name="T">The type of data to log.</typeparam>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="data">The data to log.</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Warn<T>(this ILog log, T data, Guid customerID)
             => log.Write(LogLevel.Debug, data, customerID);
 
@@ -130,6 +169,12 @@ namespace Decos.Diagnostics
         public static void Error<T>(this ILog log, string message, T data)
             => log.Write(LogLevel.Error, message, data);
 
+        /// <summary>
+        /// Logs a message indicating a failure that causes the execution of an operation to stop.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Error(this ILog log, string message, Guid customerID)
             => log.Write(LogLevel.Debug, message, customerID);
 
@@ -142,6 +187,13 @@ namespace Decos.Diagnostics
         public static void Error<T>(this ILog log, T data)
             => log.Write(LogLevel.Error, data);
 
+        /// <summary>
+        /// Logs a message indicating a failure that causes the execution of an operation to stop.
+        /// </summary>
+        /// <typeparam name="T">The type of data to log.</typeparam>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="data">The data to log.</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Error<T>(this ILog log, T data, Guid customerID)
             => log.Write(LogLevel.Debug, data, customerID);
 
@@ -162,6 +214,12 @@ namespace Decos.Diagnostics
         public static void Critical<T>(this ILog log, string message, T data)
             => log.Write(LogLevel.Critical, message, data);
 
+        /// <summary>
+        /// Logs a message that requires immediate attention.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Critical(this ILog log, string message, Guid customerID)
             => log.Write(LogLevel.Debug, message, customerID);
 
@@ -174,6 +232,13 @@ namespace Decos.Diagnostics
         public static void Critical<T>(this ILog log, T data)
             => log.Write(LogLevel.Critical, data);
 
+        /// <summary>
+        /// Logs a message that requires immediate attention.
+        /// </summary>
+        /// <typeparam name="T">The type of data to log.</typeparam>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="data">The data to log.</param>
+        /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Critical<T>(this ILog log, T data, Guid customerID)
             => log.Write(LogLevel.Debug, data, customerID);
     }

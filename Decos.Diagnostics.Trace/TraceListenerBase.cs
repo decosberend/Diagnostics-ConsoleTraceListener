@@ -428,6 +428,7 @@ namespace Decos.Diagnostics.Trace
             /// <param name="source">The source of the event.</param>
             /// <param name="eventType">The type of the event.</param>
             /// <param name="id">The ID of the event.</param>
+            /// <param name="customerID">The ID of Customer who was active on the moment of writing</param>
             public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id, Guid? customerID = null) 
             {
                 Cache = eventCache;
@@ -480,6 +481,9 @@ namespace Decos.Diagnostics.Trace
             /// </summary>
             public TraceEventType? Type { get; }
 
+            /// <summary>
+            /// The ID of Customer who was active on the moment of writing
+            /// </summary>
             public Guid? CustomerID { get; set; }
         }
     }

@@ -64,6 +64,11 @@ namespace Decos.Diagnostics
         /// </summary>
         public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.Now;
 
+        /// <summary>
+        /// Gets or sets the ID of the Customer who was active when the log was written.
+        /// </summary>
+        public Guid? CustomerId { get; set; }
+
         private static string GetHostName()
         {
             try
@@ -84,7 +89,5 @@ namespace Decos.Diagnostics
 
             return string.Empty;
         }
-
-        public Guid? CustomerId { get; set; }
     }
 }
