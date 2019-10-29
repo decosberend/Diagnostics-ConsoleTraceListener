@@ -30,6 +30,10 @@ namespace Decos.Diagnostics.Trace
         /// </summary>
         public TraceSource TraceSource { get; }
 
+        /// <summary>
+        /// Gets or sets the default CustomerID to send with the logs 
+        /// if no other CustomerId is specified when sending the log itself.
+        /// </summary>
         public Guid DefaultCustomerID { get; set; }
 
         /// <summary>
@@ -90,7 +94,6 @@ namespace Decos.Diagnostics.Trace
                 Write(eventType.Value, customerLogData);
             else Write(eventType.Value, data);
         }
-        // OwO Zonder customerID
 
         /// <summary>
         /// Writes structured data to the log with the specified severity.
@@ -103,6 +106,12 @@ namespace Decos.Diagnostics.Trace
             TraceSource.TraceData(eventType, 0, data);
         }
 
+        /// <summary>
+        /// Writes a message to the log with the specified severity and CustomerID.
+        /// </summary>
+        /// <param name="logLevel">The severity of the message.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="customerID">CustomerID to send with the log</param>
         public void Write(LogLevel logLevel, string message, Guid customerID)
         {
             var eventType = logLevel.ToTraceEventType();
@@ -113,6 +122,13 @@ namespace Decos.Diagnostics.Trace
             Write(eventType.Value, data);
         }
 
+        /// <summary>
+        /// Writes structured data to the log with the specified severity and CustomerID.
+        /// </summary>
+        /// <typeparam name="T">The type of data to write.</typeparam>
+        /// <param name="logLevel">The severity of the data.</param>
+        /// <param name="objectToSend">The data to log.</param>
+        /// <param name="customerID">CustomerID to send with the log</param>
         public void Write<T>(LogLevel logLevel, T objectToSend, Guid customerID)
         {
             var eventType = logLevel.ToTraceEventType();
@@ -122,6 +138,5 @@ namespace Decos.Diagnostics.Trace
             CustomerLogData data = new CustomerLogData(customerID, objectToSend);
             Write(eventType.Value, data);
         }
-        // OwO Met customerID
     }
 }
