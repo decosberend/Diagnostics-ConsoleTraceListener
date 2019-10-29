@@ -26,8 +26,9 @@ namespace TestSend
             // System.Diagnostics.Trace.WriteLine("I guess the Diagnostics library completely ignores this trace at all");
             
             log.Debug("Debug message.");
-            //log.Debug("Debug message.", new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
+            log.Debug("Debug message.", new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
             log.Debug(new { data = "Debug data", data2 = 1 });
+            log.Debug(new { data = "Debug data", data2 = 1 }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
 
             log.Info("Info message.");
             log.Info(new { data = "Info data", data2 = 2 });

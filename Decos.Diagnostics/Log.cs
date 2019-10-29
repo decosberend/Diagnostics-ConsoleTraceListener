@@ -64,8 +64,9 @@ namespace Decos.Diagnostics
             => log.Write(logLevel, data);
 
         public void Write(LogLevel logLevel, string message, Guid customerID)
-        {
-            throw new NotImplementedException();
-        }
+            => log.Write(logLevel, message, customerID);
+
+        public void Write<T>(LogLevel logLevel, T data, Guid customerID)
+            => log.Write(logLevel, data, customerID);
     }
 }

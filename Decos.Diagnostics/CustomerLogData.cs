@@ -12,6 +12,17 @@ namespace Decos.Diagnostics
         public Guid? CustomerId { get; set; }
         public object Data { get; set; }
 
+        public CustomerLogData()
+        {
+
+        }
+
+        public CustomerLogData(Guid? customerId, object data)
+        {
+            CustomerId = customerId;
+            Data = data;
+        }
+
         public override string ToString()
         {
             if (CustomerId.HasValue)
@@ -28,21 +39,21 @@ namespace Decos.Diagnostics
         /// <returns></returns>
         public static bool TryParseFromMessage(TraceSource source, string message, out CustomerLogData customerLogData)
         {
-            if (Guid.TryParse(source.Attributes["customerid"], out Guid customerId))
+            if (source != null)
             {
-                customerLogData = new CustomerLogData()
+                var sourceCustomerId = source.Attributes["customerid"];
+                if (Guid.TryParse(sourceCustomerId, out Guid customerId))
                 {
-                    CustomerId = customerId,
-                    Data = message
-                };
-                return true;
+                    customerLogData = new CustomerLogData()
+                    {
+                        CustomerId = customerId,
+                        Data = message
+                    };
+                    return true;
+                }
             }
             customerLogData = null;
             return false;
-
-            /*
-            customerLogData = null;
-            return false;*/
         }
 
         public static object TryExtractCustomerId(object data, out Guid? customerId)
@@ -63,15 +74,18 @@ namespace Decos.Diagnostics
         /// <returns></returns>
         public static bool TryParseFromData(TraceSource source, object data, out CustomerLogData customerLogData)
         {
-            if (Guid.TryParse(source.Attributes["customerid"], out Guid customerId)
-                && (!(data is CustomerLogData)))
+            if (source != null)
             {
-                customerLogData = new CustomerLogData()
+                if (Guid.TryParse(source.Attributes["customerid"], out Guid customerId)
+                    && (!(data is CustomerLogData)))
                 {
-                    CustomerId = customerId,
-                    Data = data
-                };
-                return true;
+                    customerLogData = new CustomerLogData()
+                    {
+                        CustomerId = customerId,
+                        Data = data
+                    };
+                    return true;
+                }
             }
             customerLogData = null;
             return false;
