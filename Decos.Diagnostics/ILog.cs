@@ -33,6 +33,8 @@ namespace Decos.Diagnostics
         void Write<T>(LogLevel logLevel, T data);
 
         void Write(LogLevel logLevel, string message, Guid customerID);
+
+        void Write<T>(LogLevel logLevel, T data, Guid customerID);
     }
 
     /// <summary>

@@ -90,6 +90,7 @@ namespace Decos.Diagnostics.Trace
                 Write(eventType.Value, customerLogData);
             else Write(eventType.Value, data);
         }
+        // OwO Zonder customerID
 
         /// <summary>
         /// Writes structured data to the log with the specified severity.
@@ -104,7 +105,23 @@ namespace Decos.Diagnostics.Trace
 
         public void Write(LogLevel logLevel, string message, Guid customerID)
         {
-            throw new NotImplementedException();
+            var eventType = logLevel.ToTraceEventType();
+            if (eventType == null)
+                return;
+
+            CustomerLogData data = new CustomerLogData(customerID, message);
+            Write(eventType.Value, data);
         }
+
+        public void Write<T>(LogLevel logLevel, T objectToSend, Guid customerID)
+        {
+            var eventType = logLevel.ToTraceEventType();
+            if (eventType == null)
+                return;
+
+            CustomerLogData data = new CustomerLogData(customerID, objectToSend);
+            Write(eventType.Value, data);
+        }
+        // OwO Met customerID
     }
 }
