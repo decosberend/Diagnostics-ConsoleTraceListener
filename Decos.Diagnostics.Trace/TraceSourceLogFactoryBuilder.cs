@@ -158,9 +158,12 @@ namespace Decos.Diagnostics.Trace
         /// if they aren't in there already
         /// </summary>
         /// <returns>A reference to this builder.</returns>
-        public TraceSourceLogFactoryBuilder AddListenersToTraceListenersCollection() {
-            foreach (var listener in Options.Listeners) {
-                if (!ListenersContainsType(System.Diagnostics.Trace.Listeners, listener.GetType())) {
+        public TraceSourceLogFactoryBuilder AddListenersToTraceListenersCollection()
+        {
+            foreach (var listener in Options.Listeners)
+            {
+                if (!ListenersContainsType(System.Diagnostics.Trace.Listeners, listener.GetType()))
+                {
                     System.Diagnostics.Trace.Listeners.Add(listener);
                 }
             }
@@ -190,7 +193,26 @@ namespace Decos.Diagnostics.Trace
         /// <returns>A new <see cref="ILogFactory"/> instance.</returns>
         public override ILogFactory Build()
         {
+            SetCustomerIdInListenerCollection(Options);
             return new TraceSourceLogFactory(Options);
+        }
+
+        /// <summary>
+        /// Sets the default CustomerId in every Listener in the options
+        /// </summary>
+        /// <param name="options">options containing listeners</param>
+        private void SetCustomerIdInListenerCollection(TraceSourceLogFactoryOptions options)
+        {
+            if (options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) // not null and not guid.empty 
+            {
+                foreach (var listener in Options.Listeners)
+                {
+                    if (listener is TraceListenerBase traceListenerBase)
+                    {
+                        traceListenerBase.SetDefaultCustomerId(Options.DefaultCustomerID);
+                    }
+                }
+            }
         }
     }
 }

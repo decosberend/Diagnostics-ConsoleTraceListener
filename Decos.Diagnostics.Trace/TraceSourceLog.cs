@@ -21,7 +21,10 @@ namespace Decos.Diagnostics.Trace
         public TraceSourceLog(TraceSource traceSource)
         {
             TraceSource = traceSource;
-            DefaultCustomerID = new Guid(TraceSource.Attributes["customerid"]);
+            if (!string.IsNullOrEmpty(TraceSource.Attributes["customerid"]))
+            {
+                DefaultCustomerID = new Guid(TraceSource.Attributes["customerid"]);
+            }
         }
 
         /// <summary>

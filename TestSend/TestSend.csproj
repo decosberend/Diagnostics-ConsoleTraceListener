@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Decos.Diagnostics.Trace, Version=1.1.0.0, Culture=neutral, PublicKeyToken=00c6f8ec93be2f0c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Decos.Diagnostics.Trace\bin\Debug\net461\Decos.Diagnostics.Trace.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -51,10 +55,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Decos.Diagnostics.Trace\Decos.Diagnostics.Trace.csproj">
-      <Project>{7bc468b7-40af-4432-b820-fd9a572f6ead}</Project>
-      <Name>Decos.Diagnostics.Trace</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Decos.Diagnostics\Decos.Diagnostics.csproj">
       <Project>{80be96ad-9a11-4310-8a53-0933c2f1e6cc}</Project>
       <Name>Decos.Diagnostics</Name>
