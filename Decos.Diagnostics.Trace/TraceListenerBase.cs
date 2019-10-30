@@ -213,8 +213,6 @@ namespace Decos.Diagnostics.Trace
                 Trace(new TraceEventData(), message);
             }
         }
-        // => Trace(new TraceEventData(), message);
-        // OwO
 
         /// <summary>
         /// Writes a message, using the category as event type.
