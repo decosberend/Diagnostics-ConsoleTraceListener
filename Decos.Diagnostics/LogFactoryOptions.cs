@@ -17,6 +17,10 @@ namespace Decos.Diagnostics
         public LogLevel DefaultMinimumLogLevel { get; set; }
             = LogLevel.Information;
 
+        /// <summary>
+        /// Gets or sets the defaultCustomerID to send with the logs 
+        /// if it isn't specified when sending the log itself.
+        /// </summary>
         public Guid DefaultCustomerID { get; set; }
 
         /// <summary>

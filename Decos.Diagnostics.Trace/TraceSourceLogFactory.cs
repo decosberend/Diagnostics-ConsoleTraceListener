@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 namespace Decos.Diagnostics.Trace
 {
@@ -83,7 +84,10 @@ namespace Decos.Diagnostics.Trace
         {
             var switchValue = Options.GetLogLevel(name).ToSourceLevels();
             var traceSource = new TraceSource(name, switchValue);
-            traceSource.Attributes.Add("customerID", Options.DefaultCustomerID.ToString());
+            if (Options.DefaultCustomerID != null && Options.DefaultCustomerID != Guid.Empty)
+            {
+                traceSource.Attributes.Add("customerID", Options.DefaultCustomerID.ToString());
+            }
 
             var listeners = Options.Listeners
                 .Concat(System.Diagnostics.Trace.Listeners.Cast<TraceListener>());

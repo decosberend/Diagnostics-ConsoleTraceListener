@@ -32,8 +32,21 @@ namespace Decos.Diagnostics
         /// <param name="data">The data to log.</param>
         void Write<T>(LogLevel logLevel, T data);
 
+        /// <summary>
+        /// Writes a message to the log with specified severity and customerID.
+        /// </summary>
+        /// <param name="logLevel">The severity of the message.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="customerID">The ID of the customer active on the moment of writing.</param>
         void Write(LogLevel logLevel, string message, Guid customerID);
 
+        /// <summary>
+        /// Writes structured data to the log with the specified and customerID.
+        /// </summary>
+        /// <typeparam name="T">The type of data to write.</typeparam>
+        /// <param name="logLevel">The severity of the data.</param>
+        /// <param name="data">The data to log.</param>
+        /// <param name="customerID">The ID of the customer active on the moment of writing.</param>
         void Write<T>(LogLevel logLevel, T data, Guid customerID);
     }
 

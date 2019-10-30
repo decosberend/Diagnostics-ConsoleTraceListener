@@ -17,6 +17,22 @@ namespace Decos.Diagnostics.Trace
         protected TraceListenerBase() { }
 
         /// <summary>
+        /// Gets or sets the defaultCustomerID to send with the logs 
+        /// if it isn't specified when sending the log itself.
+        /// </summary>
+        public Guid DefaultCustomerId { get; set; }
+
+        /// <summary>
+        /// Sets the defaultCustomerID to send with the logs 
+        /// if it isn't specified when sending the log itself.
+        /// </summary>
+        /// <param name="newDefaultCustomerId">the new DefaultCustomerID</param>
+        public void SetDefaultCustomerId(Guid newDefaultCustomerId)
+        {
+            DefaultCustomerId = newDefaultCustomerId;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TraceListenerBase"/>
         /// class using the specified name.
         /// </summary>
@@ -187,7 +203,18 @@ namespace Decos.Diagnostics.Trace
         /// </summary>
         /// <param name="message">The message to write.</param>
         public sealed override void WriteLine(string message)
-        => Trace(new TraceEventData(), message);
+        {
+            if (DefaultCustomerId != null)
+            {
+                Trace(new TraceEventData(DefaultCustomerId), message);
+            }
+            else
+            {
+                Trace(new TraceEventData(), message);
+            }
+        }
+        // => Trace(new TraceEventData(), message);
+        // OwO
 
         /// <summary>
         /// Writes a message, using the category as event type.
@@ -417,6 +444,14 @@ namespace Decos.Diagnostics.Trace
             /// <param name="eventType">The type of event.</param>
             public TraceEventData(TraceEventType eventType)
               : this(new TraceEventCache(), null, eventType, 0) { }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TraceEventData"/>
+            /// class with the specified customerID.
+            /// </summary>
+            /// <param name="customerID">The ID of the customer active when sending the log.</param>
+            public TraceEventData(Guid customerID)
+              : this(new TraceEventCache(), null, null, 0, customerID) { }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="TraceEventData"/>
