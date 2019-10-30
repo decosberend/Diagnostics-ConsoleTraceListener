@@ -12,7 +12,7 @@ namespace TestSend
         {
             var logstashAddress = Environment.GetEnvironmentVariable("LOGSTASH_ADDRESS");
             logstashAddress = "http://logstashtest.decos.com:9090/";
-            var customerID = Guid.NewGuid();
+            var customerID = new Guid("a6835c7c-6095-4e35-809e-4242af81e0d6");
             var logFactory = new LogFactoryBuilder()
                 .UseTraceSource()
                 .AddConsole()
