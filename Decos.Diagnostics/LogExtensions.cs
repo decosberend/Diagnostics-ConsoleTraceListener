@@ -86,7 +86,7 @@ namespace Decos.Diagnostics
         /// <param name="message">The text of the message to log.</param>
         /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Info(this ILog log, string message, Guid customerID)
-            => log.Write(LogLevel.Debug, message, customerID);
+            => log.Write(LogLevel.Information, message, customerID);
 
         /// <summary>
         /// Logs informational data. These are typically used to track the general flow of an application and should have long-term value .
@@ -105,7 +105,7 @@ namespace Decos.Diagnostics
         /// <param name="data">The data to log.</param>
         /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Info<T>(this ILog log, T data, Guid customerID)
-            => log.Write(LogLevel.Debug, data, customerID);
+            => log.Write(LogLevel.Information, data, customerID);
 
         /// <summary>
         /// Logs a warning message highlighting an abnormal or unexpected event.
@@ -131,7 +131,7 @@ namespace Decos.Diagnostics
         /// <param name="message">The text of the message to log.</param>
         /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Warn(this ILog log, string message, Guid customerID)
-            => log.Write(LogLevel.Debug, message, customerID);
+            => log.Write(LogLevel.Warning, message, customerID);
 
         /// <summary>
         /// Logs data highlighting an abnormal or unexpected event.
@@ -150,7 +150,7 @@ namespace Decos.Diagnostics
         /// <param name="data">The data to log.</param>
         /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Warn<T>(this ILog log, T data, Guid customerID)
-            => log.Write(LogLevel.Debug, data, customerID);
+            => log.Write(LogLevel.Warning, data, customerID);
 
         /// <summary>
         /// Logs a message indicating a failure that causes the execution of an operation to stop.
@@ -176,7 +176,7 @@ namespace Decos.Diagnostics
         /// <param name="message">The text of the message to log.</param>
         /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Error(this ILog log, string message, Guid customerID)
-            => log.Write(LogLevel.Debug, message, customerID);
+            => log.Write(LogLevel.Error, message, customerID);
 
         /// <summary>
         /// Logs data indicating a failure that causes the execution of an operation to stop.
@@ -195,7 +195,7 @@ namespace Decos.Diagnostics
         /// <param name="data">The data to log.</param>
         /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Error<T>(this ILog log, T data, Guid customerID)
-            => log.Write(LogLevel.Debug, data, customerID);
+            => log.Write(LogLevel.Error, data, customerID);
 
         /// <summary>
         /// Logs a message that requires immediate attention.
@@ -221,7 +221,7 @@ namespace Decos.Diagnostics
         /// <param name="message">The text of the message to log.</param>
         /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Critical(this ILog log, string message, Guid customerID)
-            => log.Write(LogLevel.Debug, message, customerID);
+            => log.Write(LogLevel.Critical, message, customerID);
 
         /// <summary>
         /// Logs data that requires immediate attention.
@@ -240,6 +240,6 @@ namespace Decos.Diagnostics
         /// <param name="data">The data to log.</param>
         /// <param name="customerID">The ID of the customer who was active when writing the log.</param>
         public static void Critical<T>(this ILog log, T data, Guid customerID)
-            => log.Write(LogLevel.Debug, data, customerID);
+            => log.Write(LogLevel.Critical, data, customerID);
     }
 }
