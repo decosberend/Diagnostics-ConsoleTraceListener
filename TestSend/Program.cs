@@ -19,11 +19,11 @@ namespace TestSend
                 .AddLogstash(logstashAddress)
                 .AddListenersToTraceListenersCollection()
                 .SetMinimumLogLevel(LogLevel.Debug)
-                .SetStaticCustomerId(customerID)
+        //        .SetStaticCustomerId(customerID)
                 .Build();
             var log = logFactory.Create<Program>();
 
-            System.Diagnostics.Trace.WriteLine("I guess the Diagnostics library completely ignores this trace at all");
+            System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMeOwO");
             
             log.Debug("Debug message.");
             log.Debug("Debug message.", new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));

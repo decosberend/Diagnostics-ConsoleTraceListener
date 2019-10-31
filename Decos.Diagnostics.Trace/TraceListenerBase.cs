@@ -204,7 +204,7 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The message to write.</param>
         public sealed override void WriteLine(string message)
         {
-            if (DefaultCustomerId != null)
+            if (DefaultCustomerId != Guid.Empty)
             {
                 Trace(new TraceEventData(DefaultCustomerId), message);
             }
