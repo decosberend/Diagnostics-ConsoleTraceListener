@@ -1,7 +1,5 @@
 ﻿using Decos.Diagnostics;
-using Decos.Diagnostics.Trace;
 using System;
-using System.Threading;
 
 namespace TestSend
 {
@@ -16,14 +14,15 @@ namespace TestSend
             var logFactory = new LogFactoryBuilder()
                 .UseTraceSource()
                 .AddConsole()
+                .AddUdp("127.0.0.1", 7091)
                 .AddLogstash(logstashAddress)
                 .AddListenersToTraceListenersCollection()
                 .SetMinimumLogLevel(LogLevel.Debug)
-        //        .SetStaticCustomerId(customerID)
+                .SetStaticCustomerId(customerID)
                 .Build();
             var log = logFactory.Create<Program>();
 
-            System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMeOwO");
+            System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe");
             
             log.Debug("Debug message.");
             log.Debug("Debug message.", new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
