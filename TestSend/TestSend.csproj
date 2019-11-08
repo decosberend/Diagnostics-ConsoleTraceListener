@@ -33,8 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Decos.Diagnostics.Trace, Version=1.1.0.0, Culture=neutral, PublicKeyToken=00c6f8ec93be2f0c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Decos.Diagnostics.Trace">
       <HintPath>..\Decos.Diagnostics.Trace\bin\Debug\net461\Decos.Diagnostics.Trace.dll</HintPath>
     </Reference>
     <Reference Include="System" />

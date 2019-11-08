@@ -83,6 +83,54 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
+        /// Enables logging to an UDP client.
+        /// </summary>
+        /// <param name="initializeData">A string in "hostname:port" format.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddUdp(string initializeData)
+        {
+            var listener = new UdpTraceListener(initializeData);
+            return AddTraceListener(listener);
+        }
+
+        /// <summary>
+        /// Enables logging to an UDP client.
+        /// </summary>
+        /// <param name="initializeData">A string in "hostname:port" format.</param>
+        /// <param name="minimumLogLevel">The minimum log level of messages to send to the trace listener.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddUdp(string initializeData, LogLevel minimumLogLevel)
+        {
+            var listener = new UdpTraceListener(initializeData);
+            return AddTraceListener(listener, minimumLogLevel);
+        }
+
+        /// <summary>
+        /// Enables logging to an UDP client.
+        /// </summary>
+        /// <param name="hostname">The name or IP address of the remote host.</param>
+        /// <param name="port">The UDP port number to use.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddUdp(string hostname, int port)
+        {
+            var listener = new UdpTraceListener(hostname, port);
+            return AddTraceListener(listener);
+        }
+
+        /// <summary>
+        /// Enables logging to an UDP client.
+        /// </summary>
+        /// <param name="hostname">The name or IP address of the remote host.</param>
+        /// <param name="port">The UDP port number to use.</param>
+        /// <param name="minimumLogLevel">The minimum log level of messages to send to the trace listener.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddUdp(string hostname, int port, LogLevel minimumLogLevel)
+        {
+            var listener = new UdpTraceListener(hostname, port);
+            return AddTraceListener(listener, minimumLogLevel);
+        }
+
+        /// <summary>
         /// Enables logging to the specified trace listener.
         /// </summary>
         /// <param name="traceListener">The trace listener to add.</param>
