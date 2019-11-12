@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using Decos.Diagnostics.Trace;
 
 namespace Decos.Diagnostics
 {
@@ -47,9 +49,12 @@ namespace Decos.Diagnostics
         /// </summary>
         /// <param name="customerID">The new default customerID</param>
         /// <returns>A reference to this builder.</returns>
-        public virtual LogFactoryBuilder<TOptions> SetStaticCustomerId(Guid customerID)
+        public virtual LogFactoryBuilder<TOptions> SetStaticCustomerId(Guid customerID, Boolean threadSpecific)
         {
-            Options.DefaultCustomerID = customerID;
+            if (threadSpecific)
+                Options.DefaultThreadCustomerID = customerID;
+            else
+                Options.DefaultCustomerID = customerID;
             return this;
         }
 

@@ -203,7 +203,7 @@ namespace Decos.Diagnostics.Trace
 
         /// <summary>
         /// Adds the listeners in Options.Listeners to System.Diagnostics.Trace.Listeners
-        /// if they aren't in there already
+        /// if there aren't any of that type in there already
         /// </summary>
         /// <returns>A reference to this builder.</returns>
         public TraceSourceLogFactoryBuilder AddListenersToTraceListenersCollection()
@@ -213,6 +213,16 @@ namespace Decos.Diagnostics.Trace
                 if (!ListenersContainsType(System.Diagnostics.Trace.Listeners, listener.GetType()))
                 {
                     System.Diagnostics.Trace.Listeners.Add(listener);
+                }
+                else
+                {
+                    var temp = System.Diagnostics.Trace.Listeners;
+                    int listenerIndexToEdit = GetIndexOfListenerOfTypeInTraceListenerCollection(System.Diagnostics.Trace.Listeners, listener.GetType());
+                    if (System.Diagnostics.Trace.Listeners[listenerIndexToEdit] is TraceListenerBase traceListenerBase)
+                    {
+                        Decos.Diagnostics.Trace.TraceListenerBase.ThreadCustomerId = Options.DefaultThreadCustomerID;
+                    }
+                    temp = System.Diagnostics.Trace.Listeners;
                 }
             }
 
@@ -234,6 +244,18 @@ namespace Decos.Diagnostics.Trace
             return false;
         }
 
+        private int GetIndexOfListenerOfTypeInTraceListenerCollection(TraceListenerCollection listeners, Type type)
+        {
+            for (int i = 0; i < listeners.Count; i++)
+            {
+                if (listeners[i].GetType() == type)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         /// <summary>
         /// Creates a new <see cref="ILogFactory"/> instance with the configured
         /// options.
@@ -251,14 +273,45 @@ namespace Decos.Diagnostics.Trace
         /// <param name="options">options containing listeners</param>
         private void SetCustomerIdInListenerCollection(TraceSourceLogFactoryOptions options)
         {
-            if (options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) // not null and not guid.empty 
+            if ((options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) ||           // not null and not guid.empty 
+                (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty)) // not null and not guid.empty 
             {
-                foreach (var listener in Options.Listeners)
+                var temp = options;
+                foreach (var listener in options.Listeners)
                 {
-                    if (listener is TraceListenerBase traceListenerBase)
+                    if (options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) // not null and not guid.empty 
                     {
-                        traceListenerBase.SetDefaultCustomerId(Options.DefaultCustomerID);
+                        if (listener is TraceListenerBase traceListenerBase)
+                        {
+                            traceListenerBase.SetDefaultCustomerId(options.DefaultCustomerID);
+                        }
                     }
+                    if (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty) // not null and not guid.empty 
+                    {
+                        if (listener is TraceListenerBase traceListenerBase)
+                        {
+                            Decos.Diagnostics.Trace.TraceListenerBase.SetThreadCustomerId(options.DefaultThreadCustomerID);
+                        }
+                    }
+                    temp = options;
+                }
+                foreach (var listener in System.Diagnostics.Trace.Listeners)
+                {
+                    if (options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) // not null and not guid.empty 
+                    {
+                        if (listener is TraceListenerBase traceListenerBase)
+                        {
+                            traceListenerBase.SetDefaultCustomerId(options.DefaultCustomerID);
+                        }
+                    }
+                    if (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty) // not null and not guid.empty 
+                    {
+                        if (listener is TraceListenerBase traceListenerBase)
+                        {
+                            Decos.Diagnostics.Trace.TraceListenerBase.SetThreadCustomerId(options.DefaultThreadCustomerID);
+                        }
+                    }
+                    temp = options;
                 }
             }
         }

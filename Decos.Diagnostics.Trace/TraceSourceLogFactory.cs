@@ -89,8 +89,8 @@ namespace Decos.Diagnostics.Trace
                 traceSource.Attributes.Add("customerID", Options.DefaultCustomerID.ToString());
             }
 
-            var listeners = Options.Listeners
-                .Concat(System.Diagnostics.Trace.Listeners.Cast<TraceListener>());
+            var listeners = Options.Listeners;
+                //.Concat(System.Diagnostics.Trace.Listeners.Cast<TraceListener>());
             foreach (var listener in listeners)
             {
                 if (listener is DefaultTraceListener
@@ -140,6 +140,11 @@ namespace Decos.Diagnostics.Trace
             var processTask = listener.ProcessQueueAsync(
                 shutdownTokenSource.Token, cancellationTokenSource.Token);
             shutdownTasks.Add(processTask);
+        }
+
+        public void SetCustomerId()
+        {
+            throw new NotImplementedException();
         }
     }
 }

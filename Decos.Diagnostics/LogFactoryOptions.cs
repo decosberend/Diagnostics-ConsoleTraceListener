@@ -23,6 +23,9 @@ namespace Decos.Diagnostics
         /// </summary>
         public Guid DefaultCustomerID { get; set; }
 
+
+        [ThreadStatic] public Guid DefaultThreadCustomerID;
+
         /// <summary>
         /// Gets a dictionary that specifies the minimum severity levels that
         /// messages from certain sources must have to be written to a log.
