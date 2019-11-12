@@ -32,6 +32,13 @@ namespace Decos.Diagnostics.Trace
             DefaultCustomerId = newDefaultCustomerId;
         }
 
+        [ThreadStatic] public static Guid ThreadCustomerId;
+
+        public static void SetThreadCustomerId(Guid newThreadCustomerId)
+        {
+            ThreadCustomerId = newThreadCustomerId;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceListenerBase"/>
         /// class using the specified name.
@@ -161,7 +168,21 @@ namespace Decos.Diagnostics.Trace
         /// <param name="id">A numeric identifier for the event.</param>
         /// <param name="message">A message to write.</param>
         public sealed override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
-            => Trace(new TraceEventData(eventCache, source, eventType, id), message);
+        {
+            if (ThreadCustomerId != Guid.Empty)
+            {
+                Trace(new TraceEventData(eventCache, source, eventType, id, ThreadCustomerId), message);
+            }
+            else if (DefaultCustomerId != Guid.Empty)
+            {
+                Trace(new TraceEventData(eventCache, source, eventType, id, DefaultCustomerId), message);
+            }
+            else
+            {
+                Trace(new TraceEventData(eventCache, source, eventType, id), message);
+            }
+        }
+
 
         /// <summary>
         /// Writes a message.
@@ -204,7 +225,11 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The message to write.</param>
         public sealed override void WriteLine(string message)
         {
-            if (DefaultCustomerId != Guid.Empty)
+            if (ThreadCustomerId != Guid.Empty)
+            {
+                Trace(new TraceEventData(ThreadCustomerId), message);
+            }
+            else if (DefaultCustomerId != Guid.Empty)
             {
                 Trace(new TraceEventData(DefaultCustomerId), message);
             }
