@@ -210,7 +210,7 @@ namespace Decos.Diagnostics.Trace
         {
             foreach (var listener in Options.Listeners)
             {
-                if (!ListenersContainsType(System.Diagnostics.Trace.Listeners, listener.GetType()))
+                if (GetIndexOfListenerOfTypeInTraceListenerCollection(System.Diagnostics.Trace.Listeners, listener.GetType()) < 0)
                 {
                     System.Diagnostics.Trace.Listeners.Add(listener);
                 }
@@ -226,22 +226,13 @@ namespace Decos.Diagnostics.Trace
 
             return this;
         }
-
+        
         /// <summary>
-        /// Checks is a specific kind of listener is already in a TraceListenerCollection
+        /// Finds what index of a TraceListenerCollection has a listener of a specified type.
         /// </summary>
         /// <param name="listeners">The collection to check</param>
         /// <param name="type">The type of listener to find in the collection</param>
-        /// <returns>true if the listeners contain the specified type, else false</returns>
-        private bool ListenersContainsType(TraceListenerCollection listeners, Type type) {
-            foreach (var listener in listeners) {
-                if (listener.GetType() == type) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
+        /// <returns>The index number of the specified type, if there is non returns -1</returns>
         private int GetIndexOfListenerOfTypeInTraceListenerCollection(TraceListenerCollection listeners, Type type)
         {
             for (int i = 0; i < listeners.Count; i++)
