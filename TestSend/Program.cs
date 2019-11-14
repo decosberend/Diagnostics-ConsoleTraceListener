@@ -53,7 +53,7 @@ namespace TestSend
             }
 
             log.Critical("Critical message.");
-            log.Critical(new { data = "Critical data", data2 = 4 });
+            log.Critical(new { datas = "Critical data", data2 = 4 });
             
             /*
             Thread thread1 = new Thread(new ThreadStart(LogInThread));
