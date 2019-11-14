@@ -24,21 +24,23 @@ namespace TestSend
                 .SetMinimumLogLevel(LogLevel.Debug)
                 .SetStaticCustomerId(customerID, false)
                 .Build();
-            //logFactory.SetCustomerId(customerID);
             var log = LogFactory.Create<Program>();
             
-            System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe");
-            
-            log.Debug("Debug message.");
+            System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 1");
+            System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 2");
+
             log.Debug("Debug message.", new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
-            log.Debug(new { data = "Debug data", data2 = 1 });
-            log.Debug(new { data = "Debug data", data2 = 1 }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
+
+            log.Debug("Debug message.");
+            
+            log.Debug(new { datas = "Debug data", data2 = 1 });
+            log.Debug(new { datas = "Debug data", data2 = 1 }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
 
             log.Info("Info message.");
-            log.Info(new { data = "Info data", data2 = 2 });
+            log.Info(new { datas = "Info data", data2 = 2 });
 
             log.Warn("Warning message.");
-            log.Warn(new { data = "Warning data", data2 = 3 });
+            log.Warn(new { datas = "Warning data", data2 = 3 });
 
             try
             {
@@ -52,11 +54,13 @@ namespace TestSend
 
             log.Critical("Critical message.");
             log.Critical(new { data = "Critical data", data2 = 4 });
+            
+            /*
             Thread thread1 = new Thread(new ThreadStart(LogInThread));
             thread1.Start();
 
             Thread thread2 = new Thread(new ThreadStart(LogInThread));
-            thread2.Start();
+            thread2.Start();*/
 
             Console.ReadKey();
         }

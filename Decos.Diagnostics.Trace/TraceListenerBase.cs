@@ -68,14 +68,23 @@ namespace Decos.Diagnostics.Trace
         /// <param name="data">The trace data to emit.</param>
         public sealed override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data)
         {
-            TraceEventData traceEventData = null;
             if (data != null && data is CustomerLogData customerData)
             {
-                traceEventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId);
+                TraceEventData traceEventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId);
                 Trace(traceEventData, data);
             }
-            else 
-                Trace(new TraceEventData(eventCache, source, eventType, id), data);
+            else if (data != null)
+            {
+                if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                    Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), data);
+                else
+                    Trace(new TraceEventData(eventCache, source, eventType, id), data);
+            } 
+
+
+
+
+                // Trace(new TraceEventData(eventCache, source, eventType, id), data);
         }
 
         /// <summary>
@@ -169,18 +178,10 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">A message to write.</param>
         public sealed override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
         {
-            if (ThreadCustomerId != Guid.Empty)
-            {
-                Trace(new TraceEventData(eventCache, source, eventType, id, ThreadCustomerId), message);
-            }
-            else if (DefaultCustomerId != Guid.Empty)
-            {
-                Trace(new TraceEventData(eventCache, source, eventType, id, DefaultCustomerId), message);
-            }
+            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), message);
             else
-            {
                 Trace(new TraceEventData(eventCache, source, eventType, id), message);
-            }
         }
 
 
@@ -225,18 +226,10 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The message to write.</param>
         public sealed override void WriteLine(string message)
         {
-            if (ThreadCustomerId != Guid.Empty)
-            {
-                Trace(new TraceEventData(ThreadCustomerId), message);
-            }
-            else if (DefaultCustomerId != Guid.Empty)
-            {
-                Trace(new TraceEventData(DefaultCustomerId), message);
-            }
+            if(ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                Trace(new TraceEventData(customerIdToUse), message);
             else
-            {
                 Trace(new TraceEventData(), message);
-            }
         }
 
         /// <summary>
@@ -444,6 +437,22 @@ namespace Decos.Diagnostics.Trace
             }
 
             return messageBuilder.ToString();
+        }
+
+        private Boolean ADefaultCustomerIdIsSet(out Guid customerIdToUse)
+        {
+            if (ThreadCustomerId != Guid.Empty)
+            {
+                customerIdToUse = ThreadCustomerId;
+                return true;
+            }
+            else if (DefaultCustomerId != Guid.Empty)
+            {
+                customerIdToUse = DefaultCustomerId;
+                return true;
+            }
+            customerIdToUse = Guid.Empty;
+            return false;
         }
 
         /// <summary>

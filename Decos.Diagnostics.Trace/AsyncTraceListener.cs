@@ -140,14 +140,17 @@ namespace Decos.Diagnostics.Trace
                 Source = e.Source,
                 EventId = e.ID,
                 ProcessId = e.Cache.ProcessId,
-                ThreadId = e.Cache.ThreadId
+                ThreadId = e.Cache.ThreadId,
+                CustomerId = e.CustomerID
             };
             if (data is CustomerLogData)
             {
-                data = CustomerLogData.TryExtractCustomerId(data, out Guid? customerId);
-
-                logEntry.CustomerId = e.CustomerID;
-                logEntry.Message = data.ToString();
+                var content = CustomerLogData.TryExtractCustomerId(data, out Guid? customerId);
+                var temp = content.GetType();
+                if (content.GetType() == typeof(String) || content.GetType() == typeof(string))
+                    logEntry.Message = content.ToString();
+                else
+                    logEntry.Data = content;
             }
             else
             {
