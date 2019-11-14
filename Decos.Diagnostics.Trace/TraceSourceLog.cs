@@ -21,10 +21,6 @@ namespace Decos.Diagnostics.Trace
         public TraceSourceLog(TraceSource traceSource)
         {
             TraceSource = traceSource;
-            if (!string.IsNullOrEmpty(TraceSource.Attributes["customerid"]))
-            {
-                DefaultCustomerID = new Guid(TraceSource.Attributes["customerid"]);
-            }
         }
 
         /// <summary>
@@ -32,12 +28,6 @@ namespace Decos.Diagnostics.Trace
         /// that logging events and data are written to.
         /// </summary>
         public TraceSource TraceSource { get; }
-
-        /// <summary>
-        /// Gets or sets the default CustomerID to send with the logs 
-        /// if no other CustomerId is specified when sending the log itself.
-        /// </summary>
-        public Guid DefaultCustomerID { get; set; }
 
         /// <summary>
         /// Determines whether messages of the specified log level are accepted.

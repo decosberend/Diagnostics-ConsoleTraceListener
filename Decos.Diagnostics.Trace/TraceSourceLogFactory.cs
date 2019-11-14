@@ -84,10 +84,6 @@ namespace Decos.Diagnostics.Trace
         {
             var switchValue = Options.GetLogLevel(name).ToSourceLevels();
             var traceSource = new TraceSource(name, switchValue);
-            if (Options.DefaultCustomerID != null && Options.DefaultCustomerID != Guid.Empty)
-            {
-                traceSource.Attributes.Add("customerID", Options.DefaultCustomerID.ToString());
-            }
 
             var listeners = Options.Listeners;
                 //.Concat(System.Diagnostics.Trace.Listeners.Cast<TraceListener>());
@@ -140,11 +136,6 @@ namespace Decos.Diagnostics.Trace
             var processTask = listener.ProcessQueueAsync(
                 shutdownTokenSource.Token, cancellationTokenSource.Token);
             shutdownTasks.Add(processTask);
-        }
-
-        public void SetCustomerId()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -20,8 +20,6 @@ namespace Decos.Diagnostics
         /// </returns>
         ILog Create<T>();
 
-        void SetCustomerId();
-
         /// <summary>
         /// Creates a new <see cref="ILog"/> instance that write logging
         /// information with the specified name.
