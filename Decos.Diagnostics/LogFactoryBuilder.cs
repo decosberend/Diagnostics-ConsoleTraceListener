@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using Decos.Diagnostics.Trace;
 
 namespace Decos.Diagnostics
 {
