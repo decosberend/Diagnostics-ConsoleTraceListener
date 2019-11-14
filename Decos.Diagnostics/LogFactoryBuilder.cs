@@ -46,6 +46,7 @@ namespace Decos.Diagnostics
         /// Specifies the default CustomerId to send it isn't specified when writing the log itself.
         /// </summary>
         /// <param name="customerID">The new default customerID</param>
+        /// <param name="threadSpecific">If this ID is purely for the current Thread.</param>
         /// <returns>A reference to this builder.</returns>
         public virtual LogFactoryBuilder<TOptions> SetStaticCustomerId(Guid customerID, Boolean threadSpecific)
         {
