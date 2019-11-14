@@ -146,7 +146,6 @@ namespace Decos.Diagnostics.Trace
             if (data is CustomerLogData)
             {
                 var content = CustomerLogData.TryExtractCustomerId(data, out Guid? customerId);
-                var temp = content.GetType();
                 if (content.GetType() == typeof(String) || content.GetType() == typeof(string))
                     logEntry.Message = content.ToString();
                 else

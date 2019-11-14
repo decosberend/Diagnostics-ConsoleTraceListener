@@ -216,13 +216,11 @@ namespace Decos.Diagnostics.Trace
                 }
                 else
                 {
-                    var temp = System.Diagnostics.Trace.Listeners;
                     int listenerIndexToEdit = GetIndexOfListenerOfTypeInTraceListenerCollection(System.Diagnostics.Trace.Listeners, listener.GetType());
                     if (System.Diagnostics.Trace.Listeners[listenerIndexToEdit] is TraceListenerBase traceListenerBase)
                     {
                         Decos.Diagnostics.Trace.TraceListenerBase.ThreadCustomerId = Options.DefaultThreadCustomerID;
                     }
-                    temp = System.Diagnostics.Trace.Listeners;
                 }
             }
 
@@ -276,7 +274,6 @@ namespace Decos.Diagnostics.Trace
             if ((options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) ||           // not null and not guid.empty 
                 (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty)) // not null and not guid.empty 
             {
-                var temp = options;
                 foreach (var listener in options.Listeners)
                 {
                     if (options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) // not null and not guid.empty 
@@ -293,7 +290,6 @@ namespace Decos.Diagnostics.Trace
                             Decos.Diagnostics.Trace.TraceListenerBase.SetThreadCustomerId(options.DefaultThreadCustomerID);
                         }
                     }
-                    temp = options;
                 }
                 foreach (var listener in System.Diagnostics.Trace.Listeners)
                 {
@@ -311,7 +307,6 @@ namespace Decos.Diagnostics.Trace
                             Decos.Diagnostics.Trace.TraceListenerBase.SetThreadCustomerId(options.DefaultThreadCustomerID);
                         }
                     }
-                    temp = options;
                 }
             }
         }
