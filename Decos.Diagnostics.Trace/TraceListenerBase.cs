@@ -79,12 +79,7 @@ namespace Decos.Diagnostics.Trace
                     Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), data);
                 else
                     Trace(new TraceEventData(eventCache, source, eventType, id), data);
-            } 
-
-
-
-
-                // Trace(new TraceEventData(eventCache, source, eventType, id), data);
+            }
         }
 
         /// <summary>
@@ -107,7 +102,15 @@ namespace Decos.Diagnostics.Trace
         /// <param name="id">A numeric identifier for the event.</param>
         /// <param name="data">The trace data to emit.</param>
         public sealed override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, params object[] data)
-            => Trace(new TraceEventData(eventCache, source, eventType, id), data);
+        {
+            if (data != null)
+            {
+                if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                    Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), data);
+                else
+                    Trace(new TraceEventData(eventCache, source, eventType, id), data);
+            }
+        }
 
         /// <summary>
         /// Writes trace and event information to the listener specific output.
@@ -127,7 +130,12 @@ namespace Decos.Diagnostics.Trace
         /// </param>
         /// <param name="id">A numeric identifier for the event.</param>
         public sealed override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id)
-            => Trace(new TraceEventData(eventCache, source, eventType, id), string.Empty);
+        {
+            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), string.Empty);
+            else
+                Trace(new TraceEventData(eventCache, source, eventType, id), string.Empty);
+        }
 
         /// <summary>
         /// Writes trace information, a formatted array of objects and event
@@ -155,7 +163,12 @@ namespace Decos.Diagnostics.Trace
         /// An object array containing zero or more objects to format.
         /// </param>
         public sealed override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args)
-            => Trace(new TraceEventData(eventCache, source, eventType, id), format, args);
+        {
+            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), format, args);
+            else
+                Trace(new TraceEventData(eventCache, source, eventType, id), format, args);
+        }
 
         /// <summary>
         /// Writes trace information, a message, and event information to the
@@ -184,13 +197,17 @@ namespace Decos.Diagnostics.Trace
                 Trace(new TraceEventData(eventCache, source, eventType, id), message);
         }
 
-
         /// <summary>
         /// Writes a message.
         /// </summary>
         /// <param name="message">The message to write.</param>
         public sealed override void Write(string message)
-            => Trace(new TraceEventData(), message);
+        {
+            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                Trace(new TraceEventData(customerIdToUse), message);
+            else
+                Trace(new TraceEventData(), message);
+        }
 
         /// <summary>
         /// Writes a message, using the category as event type.
@@ -198,7 +215,12 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The message to write.</param>
         /// <param name="category">The category to use.</param>
         public sealed override void Write(string message, string category)
-            => Trace(new TraceEventData(ParseCategory(category)), message);
+        {
+            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                Trace(new TraceEventData(ParseCategory(category), customerIdToUse), message);
+            else
+                Trace(new TraceEventData(ParseCategory(category)), message);
+        }
 
         /// <summary>
         /// Writes the value of an object.
@@ -238,7 +260,12 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The message to write.</param>
         /// <param name="category">The category to use.</param>
         public sealed override void WriteLine(string message, string category)
-            => Trace(new TraceEventData(ParseCategory(category)), message);
+        {
+            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                Trace(new TraceEventData(ParseCategory(category), customerIdToUse), message);
+            else
+                Trace(new TraceEventData(ParseCategory(category)), message);
+        }
 
         /// <summary>
         /// Writes the value of an object.
@@ -247,9 +274,15 @@ namespace Decos.Diagnostics.Trace
         public sealed override void WriteLine(object o) 
         {
             if (o is Exception)
-                Trace(new TraceEventData(TraceEventType.Error), o);
+                if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                    Trace(new TraceEventData(TraceEventType.Error, customerIdToUse), o);
+                else
+                    Trace(new TraceEventData(TraceEventType.Error), o);
             else
-                Trace(new TraceEventData(), o);
+                if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                    Trace(new TraceEventData(customerIdToUse), o);
+                else
+                    Trace(new TraceEventData(), o);
         }
 
         /// <summary>
@@ -258,7 +291,12 @@ namespace Decos.Diagnostics.Trace
         /// <param name="o">The object to write.</param>
         /// <param name="category">The category to use.</param>
         public sealed override void WriteLine(object o, string category)
-            => Trace(new TraceEventData(ParseCategory(category)), o);
+        {
+            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                Trace(new TraceEventData(ParseCategory(category), customerIdToUse), o);
+            else
+                Trace(new TraceEventData(ParseCategory(category)), o);
+        }
 
         /// <summary>
         /// Determines the <see cref="TraceEventType"/> to use based on the
@@ -460,6 +498,8 @@ namespace Decos.Diagnostics.Trace
         /// </summary>
         protected class TraceEventData 
         {
+            private Guid customerIdToUse;
+
             //private static System.Collections.Generic.Dictionary<string, Type> typePerSourceFileCache = new System.Collections.Generic.Dictionary<string, Type>();
 
             /// <summary>
@@ -484,6 +524,9 @@ namespace Decos.Diagnostics.Trace
             /// <param name="customerID">The ID of the customer active when sending the log.</param>
             public TraceEventData(Guid customerID)
               : this(new TraceEventCache(), null, null, 0, customerID) { }
+
+            public TraceEventData(TraceEventType eventType, Guid customerID)
+              : this(new TraceEventCache(), null, eventType, 0, customerID) { }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="TraceEventData"/>

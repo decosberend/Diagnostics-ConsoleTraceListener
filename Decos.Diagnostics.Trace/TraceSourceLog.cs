@@ -67,9 +67,7 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The text of the message to log.</param>
         public virtual void Write(TraceEventType eventType, string message)
         {
-            if (CustomerLogData.TryParseFromMessage(TraceSource, message, out CustomerLogData customerLogData))
-                Write(eventType, customerLogData);
-            else TraceSource.TraceEvent(eventType, 0, message);
+            TraceSource.TraceEvent(eventType, 0, message);
         }
 
         /// <summary>
