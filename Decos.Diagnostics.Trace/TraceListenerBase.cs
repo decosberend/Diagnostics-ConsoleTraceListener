@@ -20,14 +20,14 @@ namespace Decos.Diagnostics.Trace
         /// Gets or sets the defaultCustomerID to send with the logs 
         /// if it isn't specified when sending the log itself.
         /// </summary>
-        public Guid DefaultCustomerId { get; set; }
+        public static Guid DefaultCustomerId { get; set; }
 
         /// <summary>
         /// Sets the defaultCustomerID to send with the logs 
         /// if it isn't specified when sending the log itself.
         /// </summary>
         /// <param name="newDefaultCustomerId">the new DefaultCustomerID</param>
-        public void SetDefaultCustomerId(Guid newDefaultCustomerId)
+        public static void SetDefaultCustomerId(Guid newDefaultCustomerId)
         {
             DefaultCustomerId = newDefaultCustomerId;
         }
