@@ -25,6 +25,7 @@ namespace TestSend
                 .SetStaticCustomerId(customerID, false)
                 .Build();
             var log = LogFactory.Create<Program>();
+
             
             System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 1");
             System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 2");
@@ -54,7 +55,7 @@ namespace TestSend
 
             log.Critical("Critical message.");
             log.Critical(new { datas = "Critical data", data2 = 4 });
-            
+
             /*
             Thread thread1 = new Thread(new ThreadStart(LogInThread));
             thread1.Start();

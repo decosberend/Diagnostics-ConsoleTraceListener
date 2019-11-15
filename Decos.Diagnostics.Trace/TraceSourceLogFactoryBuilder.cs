@@ -262,43 +262,13 @@ namespace Decos.Diagnostics.Trace
         /// <param name="options">options containing listeners</param>
         private void SetCustomerIdInListenerCollection(TraceSourceLogFactoryOptions options)
         {
-            if ((options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) ||           // not null and not guid.empty 
-                (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty)) // not null and not guid.empty 
+            if (options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) // not null and not guid.empty 
             {
-                foreach (var listener in options.Listeners)
-                {
-                    if (options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) // not null and not guid.empty 
-                    {
-                        if (listener is TraceListenerBase traceListenerBase)
-                        {
-                            traceListenerBase.SetDefaultCustomerId(options.DefaultCustomerID);
-                        }
-                    }
-                    if (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty) // not null and not guid.empty 
-                    {
-                        if (listener is TraceListenerBase traceListenerBase)
-                        {
-                            Decos.Diagnostics.Trace.TraceListenerBase.SetThreadCustomerId(options.DefaultThreadCustomerID);
-                        }
-                    }
-                }
-                foreach (var listener in System.Diagnostics.Trace.Listeners)
-                {
-                    if (options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) // not null and not guid.empty 
-                    {
-                        if (listener is TraceListenerBase traceListenerBase)
-                        {
-                            traceListenerBase.SetDefaultCustomerId(options.DefaultCustomerID);
-                        }
-                    }
-                    if (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty) // not null and not guid.empty 
-                    {
-                        if (listener is TraceListenerBase traceListenerBase)
-                        {
-                            Decos.Diagnostics.Trace.TraceListenerBase.SetThreadCustomerId(options.DefaultThreadCustomerID);
-                        }
-                    }
-                }
+                Decos.Diagnostics.Trace.TraceListenerBase.SetDefaultCustomerId(options.DefaultCustomerID);
+            }
+            if (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty) // not null and not guid.empty 
+            {
+                Decos.Diagnostics.Trace.TraceListenerBase.SetThreadCustomerId(options.DefaultThreadCustomerID);
             }
         }
     }
