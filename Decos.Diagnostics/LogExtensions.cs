@@ -18,6 +18,18 @@ namespace Decos.Diagnostics
             => log.Write(logLevel, new LogData<T>(message, data));
 
         /// <summary>
+        /// Writes a message to the log with the specified severity, additional data and a specific customerID.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="logLevel">The severity of the message.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="data">An object that provides additional data.</param>
+        /// <param name="customerID">The specific customerID to send with the log.</param>
+        public static void Write<T>(this ILog log, LogLevel logLevel, string message, T data, Guid customerID)
+            => log.Write(logLevel, new LogData<T>(message, data), customerID);
+
+
+        /// <summary>
         /// Logs a verbose message for development or debugging purposes. These are not enabled in production by default and should only be enabled temporarily for troubleshooting.
         /// </summary>
         /// <param name="log">The log to write to.</param>
