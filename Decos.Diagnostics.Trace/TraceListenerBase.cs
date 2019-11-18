@@ -32,8 +32,17 @@ namespace Decos.Diagnostics.Trace
             DefaultCustomerId = newDefaultCustomerId;
         }
 
+        /// <summary>
+        /// the defaultCustomerID for the current specific thread to send 
+        /// with the logs if it isn't specified when sending the log itself.
+        /// </summary>
         [ThreadStatic] public static Guid ThreadCustomerId;
 
+        /// <summary>
+        /// Sets the defaultCustomerID for the current specific thread to send 
+        /// with the logs if it isn't specified when sending the log itself.
+        /// </summary>
+        /// <param name="newThreadCustomerId"></param>
         public static void SetThreadCustomerId(Guid newThreadCustomerId)
         {
             ThreadCustomerId = newThreadCustomerId;
@@ -498,10 +507,6 @@ namespace Decos.Diagnostics.Trace
         /// </summary>
         protected class TraceEventData 
         {
-            private Guid customerIdToUse;
-
-            //private static System.Collections.Generic.Dictionary<string, Type> typePerSourceFileCache = new System.Collections.Generic.Dictionary<string, Type>();
-
             /// <summary>
             /// Initializes a new instance of the <see cref="TraceEventData"/>
             /// class.
@@ -525,6 +530,12 @@ namespace Decos.Diagnostics.Trace
             public TraceEventData(Guid customerID)
               : this(new TraceEventCache(), null, null, 0, customerID) { }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TraceEventData"/>
+            /// class with the specified event type and customerID.
+            /// </summary>
+            /// <param name="eventType">The type of event.</param>
+            /// <param name="customerID">The ID of the customer active when sending the log.</param>
             public TraceEventData(TraceEventType eventType, Guid customerID)
               : this(new TraceEventCache(), null, eventType, 0, customerID) { }
 

@@ -23,7 +23,10 @@ namespace Decos.Diagnostics
         /// </summary>
         public Guid DefaultCustomerID { get; set; }
 
-
+        /// <summary>
+        /// the defaultCustomerID for the current specific thread to send with the logs 
+        /// if it isn't specified when sending the log itself.
+        /// </summary>
         [ThreadStatic] public Guid DefaultThreadCustomerID;
 
         /// <summary>

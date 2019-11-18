@@ -19,7 +19,6 @@ namespace Decos.Diagnostics.Trace
         /// </summary>
         public const int MaximumDatagramSize = 1472;
 
-        // private static readonly ITracer _trace = Tracer.Create("Decos.Shared");
         private const string _defaultSource = "Trace";
         private UdpClient _client;
 
@@ -94,15 +93,7 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The message to write.</param>
         protected override void TraceInternal(TraceEventData e, string message)
         {
-            Send(new Log4NetEvent
-            {
-                Message = ConstructLogMessageToWrite(e, message),
-                Source = e.Source,
-                Level = GetTraceEventDataTypeWithInformationAsDefault(e),
-                Timestamp = e.Cache.DateTime,
-                Thread = e.Cache.ThreadId ?? e.Cache.ThreadId.ToString(),
-                Application = AppDomain.CurrentDomain.FriendlyName
-            });
+            Send(new LogForUdp(ConstructLogMessageToWrite(e, message), GetTraceEventDataTypeWithInformationAsDefault(e)));
         }
 
         /// <summary>
@@ -115,21 +106,14 @@ namespace Decos.Diagnostics.Trace
         /// <param name="data">The object to write.</param>
         protected override void TraceInternal(TraceEventData e, object data)
         {
-            Send(new Log4NetEvent {
-                Message = ConstructLogMessageToWrite(e, data.ToString()),
-                Source = e.Source,
-                Level = GetTraceEventDataTypeWithInformationAsDefault(e),
-                Timestamp = e.Cache.DateTime,
-                Thread = e.Cache.ThreadId ?? e.Cache.ThreadId.ToString(),
-                Application = AppDomain.CurrentDomain.FriendlyName
-            });
+            TraceInternal(e, data.ToString());
         }
 
         /// <summary>
         /// Sends the specified string to the remote host.
         /// </summary>
         /// <param name="data">The string to send.</param>
-        private void Send(Log4NetEvent data)
+        private void Send(LogForUdp data)
         {
             try
             {
@@ -139,7 +123,6 @@ namespace Decos.Diagnostics.Trace
                     System.Diagnostics.Trace.WriteLine("Datagram exceeds maximum size (" + buffer.Length + ", max: " + MaximumDatagramSize + ")");
                 }
                 _client.Send(buffer, buffer.Length);
-                Console.WriteLine(data.Message);
             }
             catch (SocketException ex)
             {
@@ -165,102 +148,28 @@ namespace Decos.Diagnostics.Trace
         }
     }
 
-    /// <summary>
-    /// Represents a log event in the log4net XML layout.
-    /// </summary>
-    public class Log4NetEvent
+
+    public class LogForUdp
     {
         private static readonly XmlParserContext parserContext = CreateXmlParserContext();
-        private static readonly XmlSerializer serializer = new XmlSerializer(typeof(Log4NetEvent));
+        private static readonly XmlSerializer serializer = new XmlSerializer(typeof(LogForUdp));
 
-        /// <summary>
-        /// The XML namespace used by log4net events.
-        /// </summary>
-        public const string Log4NetEvents = "http://logging.apache.org/log4net/schemas/log4net-events-1.2";
-
-        /// <summary>
-        /// The prefix used to identify the log4net events namespace.
-        /// </summary>
-        public const string Log4NetPrefix = "log4net";
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Log4NetEvent"/> class.
-        /// </summary>
-        public Log4NetEvent()
+        public LogForUdp()
         {
+            this.Message = "";
+            this.Level = "";
         }
 
-        /// <summary>
-        /// Gets or sets the source that logged the event.
-        /// </summary>
-        [XmlAttribute("logger")]
-        public string Source { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date and time the event was logged.
-        /// </summary>
-        [XmlIgnore]
-        public DateTimeOffset Timestamp { get; set; }
-
-        /// <summary>
-        /// Gets or sets a string representing the date and time the event was 
-        /// logged. This property exists for compatibility with XML serialization 
-        /// only and should not be used in code directly; use the 
-        /// <see cref="Timestamp"/> instead.
-        /// </summary>
-        [XmlAttribute("timestamp")]
-        public string TimestampValue
+        public LogForUdp(string message, string level)
         {
-            get { return Timestamp.ToString("O"); }
-            set
-            {
-                DateTimeOffset timestamp;
-                if (DateTimeOffset.TryParse(value, out timestamp))
-                    Timestamp = timestamp;
-            }
+            this.Message = message;
+            this.Level = level;
         }
 
-        /// <summary>
-        /// Gets or sets the level of the log event, e.g. INFO.
-        /// </summary>
-        [XmlAttribute("level")]
-        public string Level { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name or managed ID of the current thread.
-        /// </summary>
-        [XmlAttribute("thread")]
-        public string Thread { get; set; }
-
-        /// <summary>
-        /// Gets or sets the friendly name of the current application domain.
-        /// </summary>
-        [XmlAttribute("domain")]
-        public string Application { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the current user.
-        /// </summary>
-        [XmlAttribute("username")]
-        public string UserName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the message that describes the log event.
-        /// </summary>
-        [XmlElement("message", Namespace = Log4NetEvents)]
         public string Message { get; set; }
 
-        /// <summary>
-        /// Returns a value that indicates whether the specified XML fragment can be
-        /// deserialized as a <see cref="Log4NetEvent"/> object.
-        /// </summary>
-        /// <param name="xmlFragment">
-        /// A string containing the log4net:event XML fragment.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if the XML fragment can be deserialized; otherwise, 
-        /// <c>false</c>.
-        /// </returns>
+        public string Level { get; set; }
+
         public static bool CanDeserialize(string xmlFragment)
         {
             using (var reader = new XmlTextReader(xmlFragment, XmlNodeType.Element, parserContext))
@@ -269,26 +178,14 @@ namespace Decos.Diagnostics.Trace
             }
         }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="Log4NetEvent"/> class with a
-        /// serialized XML fragment.
-        /// </summary>
-        /// <param name="xmlFragment">
-        /// A string containing the log4net:event XML fragment.
-        /// </param>
-        /// <returns>A new <see cref="Log4NetEvent"/> instance.</returns>
-        public static Log4NetEvent Deserialize(string xmlFragment)
+        public static LogForUdp Deserialize(string xmlFragment)
         {
             using (var reader = new XmlTextReader(xmlFragment, XmlNodeType.Element, parserContext))
             {
-                return (Log4NetEvent)serializer.Deserialize(reader);
+                return (LogForUdp)serializer.Deserialize(reader);
             }
         }
 
-        /// <summary>
-        /// Returns a string representation of the log event.
-        /// </summary>
-        /// <returns>A string that contains the log4net event XML.</returns>
         public string Serialize()
         {
             var valueBuilder = new StringBuilder();
@@ -300,9 +197,7 @@ namespace Decos.Diagnostics.Trace
                 CheckCharacters = false
             };
 
-            // Define the log4net namespace prefix to ensure proper XML
             var ns = new XmlSerializerNamespaces();
-            ns.Add(Log4NetPrefix, Log4NetEvents);
             using (var writer = XmlWriter.Create(valueBuilder, settings))
             {
                 serializer.Serialize(writer, this, ns);
@@ -311,29 +206,10 @@ namespace Decos.Diagnostics.Trace
             return valueBuilder.ToString();
         }
 
-        /// <summary>
-        /// Returns a string that represents the log event.
-        /// </summary>
-        /// <returns>A string representing the log event.</returns>
-        public override string ToString()
-        {
-            return string.Format("{0}: {1}", Source, Message);
-        }
-
-        /// <summary>
-        /// Creates an <see cref="XmlParserContext"/> object that defines the 
-        /// log4net namespace prefix which is used in deserialization.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="XmlParserContext"/> object that can be used by an 
-        /// <see cref="XmlTextReader"/> to properly read and deserialize log4net 
-        /// events.
-        /// </returns>
         private static XmlParserContext CreateXmlParserContext()
         {
             var nameTable = new NameTable();
             var namespaceManager = new XmlNamespaceManager(nameTable);
-            namespaceManager.AddNamespace(Log4NetPrefix, Log4NetEvents);
             return new XmlParserContext(nameTable, namespaceManager, "en", XmlSpace.None, Encoding.UTF8);
         }
     }

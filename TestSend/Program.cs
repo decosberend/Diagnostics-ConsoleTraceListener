@@ -26,7 +26,7 @@ namespace TestSend
                 .Build();
             var log = LogFactory.Create<Program>();
 
-            
+
             System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 1");
             System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 2");
 
