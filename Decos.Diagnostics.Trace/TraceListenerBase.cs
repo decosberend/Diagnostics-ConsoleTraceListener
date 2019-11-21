@@ -91,22 +91,28 @@ namespace Decos.Diagnostics.Trace
         /// <param name="data">The trace data to emit.</param>
         public sealed override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data)
         {
+            TraceEventData eventData;
             if (data != null && data is CustomerLogData customerData)
             {
-                if (ADefaultSessionIdIsSet(out Guid sessionIdToUse))
+                if (customerData.HasCustomerId() && customerData.HasSessionId())
                 {
-                    TraceEventData eventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId, sessionIdToUse);
-                    Trace(eventData, data);
+                    eventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId, customerData.SessionId);
+                }
+                else if (customerData.HasCustomerId())
+                {
+                    eventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId);
+                    if (ADefaultSessionIdIsSet(out Guid sessionIdToUse))
+                        eventData.SessionID = sessionIdToUse;
                 }
                 else
                 {
-                    TraceEventData eventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId);
-                    Trace(eventData, data);
+                    eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(eventCache, source, eventType, id));
                 }
+                Trace(eventData, data);
             }
             else if (data != null)
             {
-                TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(eventCache, source, eventType, id));
+                eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(eventCache, source, eventType, id));
                 Trace(eventData, data);
             }
         }

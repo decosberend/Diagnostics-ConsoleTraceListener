@@ -30,13 +30,12 @@ namespace TestSend
             System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 1");
             System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 2");
 
-            log.Debug("Debug message.", new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
-            log.Debug("Debug message.");
-            
             log.Debug(new { datas = "Debug data", data2 = 1 });
-            log.Debug(new { datas = "Debug data", data2 = 1 }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
+            log.Debug(new { datas = "Debug data", data2 = 2 }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"));
+            log.Debug(new { datas = "Debug data", data2 = 3 }, new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a06")));
 
-            log.Info("Info message.");
+            /*
+            log.Info("Info message.", new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a06")));
             log.Info(new { datas = "Info data", data2 = 2 });
 
             log.Warn("Warning message.");
@@ -49,10 +48,10 @@ namespace TestSend
             }
             catch (Exception ex)
             {
-                log.Error(new { exception = ex, message = "Error message." });
+                log.Error(new { exception = ex, message = "Error message." }, new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a06")));
             }
 
-            log.Critical("Critical message.");
+            log.Critical("Critical message.", new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a06")));
             log.Critical(new { datas = "Critical data", data2 = 4 });
             
             /*
