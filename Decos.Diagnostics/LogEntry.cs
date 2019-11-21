@@ -72,7 +72,7 @@ namespace Decos.Diagnostics
         /// <summary>
         /// Gets or sets the ID of the Session that was active when the log was written.
         /// </summary>
-        public Guid? SessionId { get; set; }
+        public string SessionId { get; set; }
 
         private static string GetHostName()
         {

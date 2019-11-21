@@ -18,7 +18,7 @@ namespace Decos.Diagnostics
         /// <summary>
         /// SessionId that is connected to the object
         /// </summary>
-        public Guid? SessionId { get; set; }
+        public String SessionId { get; set; }
 
         /// <summary>
         /// Data object that is connected to the CustomerId
@@ -52,7 +52,7 @@ namespace Decos.Diagnostics
         /// <param name="data">Data object to set</param>
         /// <param name="customerId">CustomerId to set</param>
         /// <param name="sessionId">SessionId to set</param>
-        public CustomerLogData(object data, Guid? customerId, Guid? sessionId)
+        public CustomerLogData(object data, Guid? customerId, String sessionId)
         {
             CustomerId = customerId;
             SessionId = sessionId;
@@ -67,8 +67,8 @@ namespace Decos.Diagnostics
         {
             if (CustomerId.HasValue)
             {
-                if(SessionId.HasValue)
-                    return CustomerId.ToString() + " " + SessionId.ToString() + " " + Data?.ToString();
+                if(!string.IsNullOrEmpty(SessionId))
+                    return CustomerId.ToString() + " " + SessionId + " " + Data?.ToString();
                 else
                     return CustomerId.ToString() + " " + Data?.ToString();
             }
@@ -161,7 +161,7 @@ namespace Decos.Diagnostics
         /// <returns>true if SessionId is not null or empty.</returns>
         public Boolean HasSessionId()
         {
-            return SessionId != null && SessionId != Guid.Empty;
+            return !string.IsNullOrEmpty(SessionId);
         }
     }
 }

@@ -276,7 +276,7 @@ namespace Decos.Diagnostics.Trace
 
         private void SetSessionIdInListenerCollection(TraceSourceLogFactoryOptions options)
         {
-            if (options.DefaultThreadSessionID != null && options.DefaultThreadSessionID != Guid.Empty) // not null and not guid.empty 
+            if (!string.IsNullOrEmpty(options.DefaultThreadSessionID)) // not null
             {
                 Decos.Diagnostics.Trace.TraceListenerBase.SetThreadSessionId(options.DefaultThreadSessionID);
             }

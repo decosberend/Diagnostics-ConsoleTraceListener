@@ -51,13 +51,13 @@ namespace Decos.Diagnostics.Trace
         /// <summary>
         /// the defaultSessionID for the current specific thread to send with the logs.
         /// </summary>
-        [ThreadStatic] public static Guid ThreadSessionId;
+        [ThreadStatic] public static string ThreadSessionId;
 
         /// <summary>
         /// Sets the defaultSessionID for the current specific thread to send with the logs.
         /// </summary>
         /// <param name="newThreadSessionId"></param>
-        public static void SetThreadSessionId(Guid newThreadSessionId)
+        public static void SetThreadSessionId(string newThreadSessionId)
         {
             ThreadSessionId = newThreadSessionId;
         }
@@ -101,7 +101,7 @@ namespace Decos.Diagnostics.Trace
                 else if (customerData.HasCustomerId())
                 {
                     eventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId);
-                    if (ADefaultSessionIdIsSet(out Guid sessionIdToUse))
+                    if (ADefaultSessionIdIsSet(out string sessionIdToUse))
                         eventData.SessionID = sessionIdToUse;
                 }
                 else
@@ -508,7 +508,7 @@ namespace Decos.Diagnostics.Trace
             if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
             {
                 eventData.CustomerID = customerIdToUse;
-                if (ADefaultSessionIdIsSet(out Guid sessionIdToUse))
+                if (ADefaultSessionIdIsSet(out string sessionIdToUse))
                     eventData.SessionID = sessionIdToUse;
                 return eventData;
             }
@@ -532,14 +532,14 @@ namespace Decos.Diagnostics.Trace
             return false;
         }
 
-        private Boolean ADefaultSessionIdIsSet(out Guid sessionIdToUse)
+        private Boolean ADefaultSessionIdIsSet(out string sessionIdToUse)
         {
-            if (ThreadSessionId != Guid.Empty)
+            if (!string.IsNullOrEmpty(ThreadSessionId))
             {
                 sessionIdToUse = ThreadSessionId;
                 return true;
             }
-            sessionIdToUse = Guid.Empty;
+            sessionIdToUse = null;
             return false;
         }
 
@@ -586,7 +586,7 @@ namespace Decos.Diagnostics.Trace
             /// </summary>
             /// <param name="customerID">The ID of the customer active when sending the log.</param>
             /// <param name="sessionID">The ID of the session active when sending the log.</param>
-            public TraceEventData(Guid customerID, Guid sessionID)
+            public TraceEventData(Guid customerID, string sessionID)
               : this(new TraceEventCache(), null, null, 0, customerID, sessionID) { }
 
             /// <summary>
@@ -596,7 +596,7 @@ namespace Decos.Diagnostics.Trace
             /// <param name="eventType">The type of event.</param>
             /// <param name="customerID">The ID of the customer active when sending the log.</param>
             /// <param name="sessionID">The ID of the session active when sending the log.</param>
-            public TraceEventData(TraceEventType eventType, Guid customerID, Guid sessionID)
+            public TraceEventData(TraceEventType eventType, Guid customerID, string sessionID)
               : this(new TraceEventCache(), null, eventType, 0, customerID, sessionID) { }
 
             /// <summary>
@@ -611,7 +611,7 @@ namespace Decos.Diagnostics.Trace
             /// <param name="id">The ID of the event.</param>
             /// <param name="customerID">The ID of the Customer who was active on the moment of writing</param>
             /// <param name="sessionID">The ID of the Session that was active on the moment of writing</param>
-            public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id, Guid? customerID = null, Guid? sessionID = null) 
+            public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id, Guid? customerID = null, string sessionID = null) 
             {
                 Cache = eventCache;
                 if (string.IsNullOrEmpty(source))
@@ -669,7 +669,7 @@ namespace Decos.Diagnostics.Trace
             /// <summary>
             /// The ID of the the Session that was active on the moment of writing.
             /// </summary>
-            public Guid? SessionID { get; set; }
+            public string SessionID { get; set; }
         }
     }
 }
