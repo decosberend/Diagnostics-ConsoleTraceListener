@@ -49,6 +49,20 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
+        /// the defaultSessionID for the current specific thread to send with the logs.
+        /// </summary>
+        [ThreadStatic] public static Guid ThreadSessionId;
+
+        /// <summary>
+        /// Sets the defaultSessionID for the current specific thread to send with the logs.
+        /// </summary>
+        /// <param name="newThreadSessionId"></param>
+        public static void SetThreadSessionId(Guid newThreadSessionId)
+        {
+            ThreadSessionId = newThreadSessionId;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TraceListenerBase"/>
         /// class using the specified name.
         /// </summary>
@@ -79,15 +93,21 @@ namespace Decos.Diagnostics.Trace
         {
             if (data != null && data is CustomerLogData customerData)
             {
-                TraceEventData traceEventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId);
-                Trace(traceEventData, data);
+                if (ADefaultSessionIdIsSet(out Guid sessionIdToUse))
+                {
+                    TraceEventData eventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId, sessionIdToUse);
+                    Trace(eventData, data);
+                }
+                else
+                {
+                    TraceEventData eventData = new TraceEventData(eventCache, source, eventType, id, customerData.CustomerId);
+                    Trace(eventData, data);
+                }
             }
             else if (data != null)
             {
-                if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                    Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), data);
-                else
-                    Trace(new TraceEventData(eventCache, source, eventType, id), data);
+                TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(eventCache, source, eventType, id));
+                Trace(eventData, data);
             }
         }
 
@@ -114,10 +134,8 @@ namespace Decos.Diagnostics.Trace
         {
             if (data != null)
             {
-                if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                    Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), data);
-                else
-                    Trace(new TraceEventData(eventCache, source, eventType, id), data);
+                TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(eventCache, source, eventType, id));
+                Trace(eventData, data);
             }
         }
 
@@ -140,10 +158,8 @@ namespace Decos.Diagnostics.Trace
         /// <param name="id">A numeric identifier for the event.</param>
         public sealed override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id)
         {
-            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), string.Empty);
-            else
-                Trace(new TraceEventData(eventCache, source, eventType, id), string.Empty);
+            TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(eventCache, source, eventType, id));
+            Trace(eventData, string.Empty);
         }
 
         /// <summary>
@@ -173,10 +189,8 @@ namespace Decos.Diagnostics.Trace
         /// </param>
         public sealed override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string format, params object[] args)
         {
-            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), format, args);
-            else
-                Trace(new TraceEventData(eventCache, source, eventType, id), format, args);
+            TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(eventCache, source, eventType, id));
+            Trace(eventData, format, args);
         }
 
         /// <summary>
@@ -200,10 +214,8 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">A message to write.</param>
         public sealed override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id, string message)
         {
-            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                Trace(new TraceEventData(eventCache, source, eventType, id, customerIdToUse), message);
-            else
-                Trace(new TraceEventData(eventCache, source, eventType, id), message);
+            TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(eventCache, source, eventType, id));
+            Trace(eventData, message);
         }
 
         /// <summary>
@@ -212,10 +224,8 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The message to write.</param>
         public sealed override void Write(string message)
         {
-            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                Trace(new TraceEventData(customerIdToUse), message);
-            else
-                Trace(new TraceEventData(), message);
+            TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData());
+            Trace(eventData, message);
         }
 
         /// <summary>
@@ -225,10 +235,8 @@ namespace Decos.Diagnostics.Trace
         /// <param name="category">The category to use.</param>
         public sealed override void Write(string message, string category)
         {
-            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                Trace(new TraceEventData(ParseCategory(category), customerIdToUse), message);
-            else
-                Trace(new TraceEventData(ParseCategory(category)), message);
+            TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(ParseCategory(category)));
+            Trace(eventData, message);
         }
 
         /// <summary>
@@ -238,9 +246,15 @@ namespace Decos.Diagnostics.Trace
         public sealed override void Write(object o) 
         {
             if (o is Exception)
-                Trace(new TraceEventData(TraceEventType.Error), o);
+            {
+                TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(TraceEventType.Error));
+                Trace(eventData, o);
+            }
             else
-                Trace(new TraceEventData(), o);
+            {
+                TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData());
+                Trace(eventData, o);
+            }
         }
 
         /// <summary>
@@ -249,7 +263,10 @@ namespace Decos.Diagnostics.Trace
         /// <param name="o">The object to write.</param>
         /// <param name="category">The category to use.</param>
         public sealed override void Write(object o, string category)
-            => Trace(new TraceEventData(ParseCategory(category)), o);
+        {
+            TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(ParseCategory(category)));
+            Trace(eventData, o);
+        }
 
         /// <summary>
         /// Writes a message.
@@ -257,10 +274,8 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The message to write.</param>
         public sealed override void WriteLine(string message)
         {
-            if(ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                Trace(new TraceEventData(customerIdToUse), message);
-            else
-                Trace(new TraceEventData(), message);
+            TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData());
+            Trace(eventData, message);
         }
 
         /// <summary>
@@ -270,10 +285,8 @@ namespace Decos.Diagnostics.Trace
         /// <param name="category">The category to use.</param>
         public sealed override void WriteLine(string message, string category)
         {
-            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                Trace(new TraceEventData(ParseCategory(category), customerIdToUse), message);
-            else
-                Trace(new TraceEventData(ParseCategory(category)), message);
+            TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(ParseCategory(category)));
+            Trace(eventData, message);
         }
 
         /// <summary>
@@ -283,15 +296,15 @@ namespace Decos.Diagnostics.Trace
         public sealed override void WriteLine(object o) 
         {
             if (o is Exception)
-                if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                    Trace(new TraceEventData(TraceEventType.Error, customerIdToUse), o);
-                else
-                    Trace(new TraceEventData(TraceEventType.Error), o);
+            {
+                TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(TraceEventType.Error));
+                Trace(eventData, o);
+            }
             else
-                if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                    Trace(new TraceEventData(customerIdToUse), o);
-                else
-                    Trace(new TraceEventData(), o);
+            {
+                TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData());
+                Trace(eventData, o);
+            }
         }
 
         /// <summary>
@@ -301,10 +314,8 @@ namespace Decos.Diagnostics.Trace
         /// <param name="category">The category to use.</param>
         public sealed override void WriteLine(object o, string category)
         {
-            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-                Trace(new TraceEventData(ParseCategory(category), customerIdToUse), o);
-            else
-                Trace(new TraceEventData(ParseCategory(category)), o);
+            TraceEventData eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(ParseCategory(category)));
+            Trace(eventData, o);
         }
 
         /// <summary>
@@ -486,6 +497,19 @@ namespace Decos.Diagnostics.Trace
             return messageBuilder.ToString();
         }
 
+        private TraceEventData AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(TraceEventData eventData)
+        {
+            if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+            {
+                eventData.CustomerID = customerIdToUse;
+                if (ADefaultSessionIdIsSet(out Guid sessionIdToUse))
+                    eventData.SessionID = sessionIdToUse;
+                return eventData;
+            }
+            else
+                return eventData;
+        }
+
         private Boolean ADefaultCustomerIdIsSet(out Guid customerIdToUse)
         {
             if (ThreadCustomerId != Guid.Empty)
@@ -499,6 +523,17 @@ namespace Decos.Diagnostics.Trace
                 return true;
             }
             customerIdToUse = Guid.Empty;
+            return false;
+        }
+
+        private Boolean ADefaultSessionIdIsSet(out Guid sessionIdToUse)
+        {
+            if (ThreadSessionId != Guid.Empty)
+            {
+                sessionIdToUse = ThreadSessionId;
+                return true;
+            }
+            sessionIdToUse = Guid.Empty;
             return false;
         }
 
@@ -541,6 +576,25 @@ namespace Decos.Diagnostics.Trace
 
             /// <summary>
             /// Initializes a new instance of the <see cref="TraceEventData"/>
+            /// class with the specified customerID and sessionID.
+            /// </summary>
+            /// <param name="customerID">The ID of the customer active when sending the log.</param>
+            /// <param name="sessionID">The ID of the session active when sending the log.</param>
+            public TraceEventData(Guid customerID, Guid sessionID)
+              : this(new TraceEventCache(), null, null, 0, customerID, sessionID) { }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TraceEventData"/>
+            /// class with the specified customerID and sessionID.
+            /// </summary>
+            /// <param name="eventType">The type of event.</param>
+            /// <param name="customerID">The ID of the customer active when sending the log.</param>
+            /// <param name="sessionID">The ID of the session active when sending the log.</param>
+            public TraceEventData(TraceEventType eventType, Guid customerID, Guid sessionID)
+              : this(new TraceEventCache(), null, eventType, 0, customerID, sessionID) { }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TraceEventData"/>
             /// class with the specified parameters.
             /// </summary>
             /// <param name="eventCache">
@@ -549,8 +603,9 @@ namespace Decos.Diagnostics.Trace
             /// <param name="source">The source of the event.</param>
             /// <param name="eventType">The type of the event.</param>
             /// <param name="id">The ID of the event.</param>
-            /// <param name="customerID">The ID of Customer who was active on the moment of writing</param>
-            public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id, Guid? customerID = null) 
+            /// <param name="customerID">The ID of the Customer who was active on the moment of writing</param>
+            /// <param name="sessionID">The ID of the Session that was active on the moment of writing</param>
+            public TraceEventData(TraceEventCache eventCache, string source, TraceEventType? eventType, int id, Guid? customerID = null, Guid? sessionID = null) 
             {
                 Cache = eventCache;
                 if (string.IsNullOrEmpty(source))
@@ -559,19 +614,17 @@ namespace Decos.Diagnostics.Trace
                 Type = eventType;
                 ID = id;
                 CustomerID = customerID;
+                SessionID = sessionID;
             }
 
             private string GetCallingSource([System.Runtime.CompilerServices.CallerMemberName] string memberName = "", [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "") {
                 try {
-                    //if (typePerSourceFileCache.TryGetValue(sourceFilePath, out Type type)) 
-                    //    return type.ToString();
                     var stackFrames = new System.Diagnostics.StackTrace().GetFrames();
                     if (stackFrames == null) return null;
                     foreach (var frame in stackFrames) {
                         var frameReflectedType = frame.GetMethod().ReflectedType;
                         var namespaceName = frameReflectedType.Namespace;
                         if (!namespaceName.StartsWith("System.Diagnostics") && !namespaceName.StartsWith("Decos.Diagnostics")) {
-                            //typePerSourceFileCache.Add(sourceFilePath, frameReflectedType);
                             return frameReflectedType.ToString();
                         }
                     }
@@ -603,9 +656,14 @@ namespace Decos.Diagnostics.Trace
             public TraceEventType? Type { get; }
 
             /// <summary>
-            /// The ID of Customer who was active on the moment of writing
+            /// The ID of the Customer who was active on the moment of writing.
             /// </summary>
             public Guid? CustomerID { get; set; }
+
+            /// <summary>
+            /// The ID of the the Session that was active on the moment of writing.
+            /// </summary>
+            public Guid? SessionID { get; set; }
         }
     }
 }

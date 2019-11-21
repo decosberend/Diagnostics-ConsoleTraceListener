@@ -30,6 +30,11 @@ namespace Decos.Diagnostics
         [ThreadStatic] public Guid DefaultThreadCustomerID;
 
         /// <summary>
+        /// the defaultSessionID for the current specific thread to send with the logs.
+        /// </summary>
+        [ThreadStatic] public Guid DefaultThreadSessionID;
+
+        /// <summary>
         /// Gets a dictionary that specifies the minimum severity levels that
         /// messages from certain sources must have to be written to a log.
         /// </summary>

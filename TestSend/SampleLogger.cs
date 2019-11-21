@@ -19,7 +19,6 @@ namespace TestSend
         public void LogInThread()
         {
             var threadId = Environment.CurrentManagedThreadId;
-            var customerId = Program.guidForThread;
             for (int i = 0; i < 10; i++)
             {
                 System.Diagnostics.Trace.WriteLine($"sysway This log belongs to some customer and we are thread id {threadId}");

@@ -43,7 +43,7 @@ namespace Decos.Diagnostics
         }
 
         /// <summary>
-        /// Specifies the default CustomerId to send it isn't specified when writing the log itself.
+        /// Specifies the default CustomerId to send if it isn't specified when writing the log itself.
         /// </summary>
         /// <param name="customerID">The new default customerID</param>
         /// <param name="threadSpecific">If this ID is purely for the current Thread.</param>
@@ -54,6 +54,17 @@ namespace Decos.Diagnostics
                 Options.DefaultThreadCustomerID = customerID;
             else
                 Options.DefaultCustomerID = customerID;
+            return this;
+        }
+
+        /// <summary>
+        /// Specifies the default SessionId to send with the log.
+        /// </summary>
+        /// <param name="sessionID">The new default sessionID</param>
+        /// <returns>A reference to this builder.</returns>
+        public virtual LogFactoryBuilder<TOptions> SetStaticSessionId(Guid sessionID)
+        {
+            Options.DefaultThreadSessionID = sessionID;
             return this;
         }
 

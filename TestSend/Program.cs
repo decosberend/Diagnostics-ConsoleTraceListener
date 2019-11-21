@@ -7,8 +7,7 @@ namespace TestSend
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal class Program
     {
-        [ThreadStatic] public static Guid guidForThread = new Guid("12345678-abcd-1234-abcd-123456789876");
-        static Guid guidForProcess = new Guid("12345678-abcd-1234-abcd-123456789876");
+        [ThreadStatic] public static Guid customerGuidForThread = new Guid("12345678-abcd-1234-abcd-123456789876");
         [ThreadStatic] public static ILogFactory LogFactory = null;
 
         private static void Main(string[] args)
@@ -16,6 +15,7 @@ namespace TestSend
             var logstashAddress = Environment.GetEnvironmentVariable("LOGSTASH_ADDRESS");
             logstashAddress = "http://logstashtest.decos.com:9090/";
             var customerID = new Guid("a6835c7c-6095-4e35-809e-4242af81e0d6");
+            var sessionID = new Guid("12345678-abcd-1234-abcd-123456789876");
             LogFactory = new LogFactoryBuilder()
                 .UseTraceSource()
                 .AddConsole()
@@ -23,15 +23,14 @@ namespace TestSend
                 .AddListenersToTraceListenersCollection()
                 .SetMinimumLogLevel(LogLevel.Debug)
                 .SetStaticCustomerId(customerID, false)
+                .SetStaticSessionId(sessionID)
                 .Build();
             var log = LogFactory.Create<Program>();
-
 
             System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 1");
             System.Diagnostics.Trace.WriteLine("ThisIsALogWrittenByMe 2");
 
             log.Debug("Debug message.", new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
-
             log.Debug("Debug message.");
             
             log.Debug(new { datas = "Debug data", data2 = 1 });
@@ -55,21 +54,22 @@ namespace TestSend
 
             log.Critical("Critical message.");
             log.Critical(new { datas = "Critical data", data2 = 4 });
-
+            
             /*
             Thread thread1 = new Thread(new ThreadStart(LogInThread));
             thread1.Start();
 
             Thread thread2 = new Thread(new ThreadStart(LogInThread));
-            thread2.Start();*/
-
+            thread2.Start();
+            */
             Console.ReadKey();
         }
 
         private static void LogInThread()
         {
             var customerId = Guid.NewGuid();
-            guidForThread = customerId;
+            var sessionId = Guid.NewGuid();
+            customerGuidForThread = customerId;
 
             LogFactory = new LogFactoryBuilder()
                 .UseTraceSource()
@@ -78,6 +78,7 @@ namespace TestSend
                 .AddListenersToTraceListenersCollection()
                 .SetMinimumLogLevel(LogLevel.Debug)
                 .SetStaticCustomerId(customerId, true)
+                .SetStaticSessionId(sessionId)
                 .Build();
             var log = LogFactory.Create<Program>();
 
