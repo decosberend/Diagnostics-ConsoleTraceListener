@@ -9,13 +9,14 @@ namespace TestSend
     {
         [ThreadStatic] public static Guid customerGuidForThread = new Guid("12345678-abcd-1234-abcd-123456789876");
         [ThreadStatic] public static ILogFactory LogFactory = null;
+        public static Random random = new Random();
 
         private static void Main(string[] args)
         {
             var logstashAddress = Environment.GetEnvironmentVariable("LOGSTASH_ADDRESS");
             logstashAddress = "http://logstashtest.decos.com:9090/";
             var customerID = new Guid("a6835c7c-6095-4e35-809e-4242af81e0d6");
-            var sessionID = new Guid("12345678-abcd-1234-abcd-123456789876");
+            string sessionID = "123456789az";
             LogFactory = new LogFactoryBuilder()
                 .UseTraceSource()
                 .AddConsole()
@@ -32,10 +33,10 @@ namespace TestSend
 
             log.Debug(new { datas = "Debug data", data2 = 1 });
             log.Debug(new { datas = "Debug data", data2 = 2 }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"));
-            log.Debug(new { datas = "Debug data", data2 = 3 }, new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a06")));
+            log.Debug(new { datas = "Debug data", data2 = 3 }, new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
 
             /*
-            log.Info("Info message.", new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a06")));
+            log.Info("Info message.", new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
             log.Info(new { datas = "Info data", data2 = 2 });
 
             log.Warn("Warning message.");
@@ -48,13 +49,13 @@ namespace TestSend
             }
             catch (Exception ex)
             {
-                log.Error(new { exception = ex, message = "Error message." }, new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a06")));
+                log.Error(new { exception = ex, message = "Error message." }, new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
             }
 
-            log.Critical("Critical message.", new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a06")));
+            log.Critical("Critical message.", new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
             log.Critical(new { datas = "Critical data", data2 = 4 });
             
-            /*
+            
             Thread thread1 = new Thread(new ThreadStart(LogInThread));
             thread1.Start();
 
@@ -67,7 +68,7 @@ namespace TestSend
         private static void LogInThread()
         {
             var customerId = Guid.NewGuid();
-            var sessionId = Guid.NewGuid();
+            var sessionId = "randomID" + random.Next(0, 9).ToString() ;
             customerGuidForThread = customerId;
 
             LogFactory = new LogFactoryBuilder()

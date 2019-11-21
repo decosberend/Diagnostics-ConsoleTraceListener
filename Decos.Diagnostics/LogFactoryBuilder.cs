@@ -62,7 +62,7 @@ namespace Decos.Diagnostics
         /// </summary>
         /// <param name="sessionID">The new default sessionID</param>
         /// <returns>A reference to this builder.</returns>
-        public virtual LogFactoryBuilder<TOptions> SetStaticSessionId(Guid sessionID)
+        public virtual LogFactoryBuilder<TOptions> SetStaticSessionId(String sessionID)
         {
             Options.DefaultThreadSessionID = sessionID;
             return this;

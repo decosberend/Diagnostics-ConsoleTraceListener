@@ -17,7 +17,7 @@ namespace Decos.Diagnostics
         /// <summary>
         /// Gets or sets the ID of the Session that was active when the log was written.
         /// </summary>
-        public Guid? SessionId { get; set; }
+        public String SessionId { get; set; }
 
         /// <summary>
         /// Initializes a new instance of LogSenderDetails
@@ -33,7 +33,7 @@ namespace Decos.Diagnostics
         /// </summary>
         /// <param name="customerId">ID of a customer</param>
         /// <param name="sessionId">ID of a session</param>
-        public LogSenderDetails(Guid? customerId, Guid? sessionId)
+        public LogSenderDetails(Guid? customerId, String sessionId)
         {
             CustomerId = customerId;
             SessionId = sessionId;
@@ -54,7 +54,7 @@ namespace Decos.Diagnostics
         /// <returns>true if SessionId is not null or empty.</returns>
         public Boolean HasSessionId()
         {
-            return SessionId != null && SessionId != Guid.Empty;
+            return !string.IsNullOrEmpty(SessionId);
         }
     }
 }
