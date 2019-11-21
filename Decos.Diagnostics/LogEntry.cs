@@ -69,6 +69,11 @@ namespace Decos.Diagnostics
         /// </summary>
         public Guid? CustomerId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the ID of the Session that was active when the log was written.
+        /// </summary>
+        public Guid? SessionId { get; set; }
+
         private static string GetHostName()
         {
             try

@@ -111,7 +111,8 @@ namespace Decos.Diagnostics.Trace
                 EventId = e.ID,
                 ProcessId = e.Cache.ProcessId,
                 ThreadId = e.Cache.ThreadId,
-                CustomerId = e.CustomerID
+                CustomerId = e.CustomerID,
+                SessionId = e.SessionID
             };
 
             RequestQueue.Enqueue(logEntry);
@@ -141,7 +142,8 @@ namespace Decos.Diagnostics.Trace
                 EventId = e.ID,
                 ProcessId = e.Cache.ProcessId,
                 ThreadId = e.Cache.ThreadId,
-                CustomerId = e.CustomerID
+                CustomerId = e.CustomerID,
+                SessionId = e.SessionID
             };
             if (data is CustomerLogData)
             {

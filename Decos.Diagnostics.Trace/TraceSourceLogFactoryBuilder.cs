@@ -253,6 +253,7 @@ namespace Decos.Diagnostics.Trace
         public override ILogFactory Build()
         {
             SetCustomerIdInListenerCollection(Options);
+            SetSessionIdInListenerCollection(Options);
             return new TraceSourceLogFactory(Options);
         }
 
@@ -269,6 +270,15 @@ namespace Decos.Diagnostics.Trace
             if (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty) // not null and not guid.empty 
             {
                 Decos.Diagnostics.Trace.TraceListenerBase.SetThreadCustomerId(options.DefaultThreadCustomerID);
+            }
+        }
+
+
+        private void SetSessionIdInListenerCollection(TraceSourceLogFactoryOptions options)
+        {
+            if (options.DefaultThreadSessionID != null && options.DefaultThreadSessionID != Guid.Empty) // not null and not guid.empty 
+            {
+                Decos.Diagnostics.Trace.TraceListenerBase.SetThreadSessionId(options.DefaultThreadSessionID);
             }
         }
     }
