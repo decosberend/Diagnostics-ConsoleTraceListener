@@ -109,7 +109,7 @@ namespace Decos.Diagnostics.Trace
             if (eventType == null)
                 return;
 
-            CustomerLogData data = new CustomerLogData(customerID, message);
+            CustomerLogData data = new CustomerLogData(message, customerID);
             Write(eventType.Value, data);
         }
 
@@ -126,7 +126,34 @@ namespace Decos.Diagnostics.Trace
             if (eventType == null)
                 return;
 
-            CustomerLogData data = new CustomerLogData(customerID, objectToSend);
+            CustomerLogData data = new CustomerLogData(objectToSend, customerID);
+            Write(eventType.Value, data);
+        }
+
+        /// <summary>
+        /// Writes structured data to the log with the specified severity and data of the sender.
+        /// </summary>
+        /// <typeparam name="T">The type of data to write.</typeparam>
+        /// <param name="logLevel">The severity of the data.</param>
+        /// <param name="objectToSend">The data to log.</param>
+        /// <param name="senderDetails">Object containing data of the sender.</param>
+        public void Write<T>(LogLevel logLevel, T objectToSend, LogSenderDetails senderDetails)
+        {
+            var eventType = logLevel.ToTraceEventType();
+            if (eventType == null)
+                return;
+
+            CustomerLogData data = null;
+
+            if (senderDetails.HasCustomerId())
+            {
+                if(senderDetails.HasSessionId())
+                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId, senderDetails.SessionId);
+                else
+                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId);
+            }
+            else
+                Write(eventType.Value, objectToSend);
             Write(eventType.Value, data);
         }
     }

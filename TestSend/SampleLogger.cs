@@ -25,7 +25,7 @@ namespace TestSend
                 log.Info($"logway This log belongs to some customer and we are thread id {threadId}");
                 Thread.Sleep(500);
             }
-            log.Debug("This log belongs to some customer that is unique", new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04"));
+            log.Debug("This log belongs to some customer that is unique", new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a04")));
         }
     }
 }

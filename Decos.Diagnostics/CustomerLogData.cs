@@ -16,6 +16,11 @@ namespace Decos.Diagnostics
         public Guid? CustomerId { get; set; }
 
         /// <summary>
+        /// SessionId that is connected to the object
+        /// </summary>
+        public Guid? SessionId { get; set; }
+
+        /// <summary>
         /// Data object that is connected to the CustomerId
         /// </summary>
         public object Data { get; set; }
@@ -32,11 +37,25 @@ namespace Decos.Diagnostics
         /// Initializes a new instance of CustomerLogData
         /// and sets the CustomerId and the data object
         /// </summary>
-        /// <param name="customerId">CustomerId to set</param>
         /// <param name="data">Data object to set</param>
-        public CustomerLogData(Guid? customerId, object data)
+        /// <param name="customerId">CustomerId to set</param>
+        public CustomerLogData(object data, Guid? customerId)
         {
             CustomerId = customerId;
+            Data = data;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of CustomerLogData
+        /// and sets the CustomerId and the data object
+        /// </summary>
+        /// <param name="data">Data object to set</param>
+        /// <param name="customerId">CustomerId to set</param>
+        /// <param name="sessionId">SessionId to set</param>
+        public CustomerLogData(object data, Guid? customerId, Guid? sessionId)
+        {
+            CustomerId = customerId;
+            SessionId = sessionId;
             Data = data;
         }
 
@@ -48,7 +67,10 @@ namespace Decos.Diagnostics
         {
             if (CustomerId.HasValue)
             {
-                return CustomerId.ToString() + " " + Data?.ToString();
+                if(SessionId.HasValue)
+                    return CustomerId.ToString() + " " + SessionId.ToString() + " " + Data?.ToString();
+                else
+                    return CustomerId.ToString() + " " + Data?.ToString();
             }
             return Data?.ToString();
         }
@@ -122,6 +144,24 @@ namespace Decos.Diagnostics
             }
             customerLogData = null;
             return false;
+        }
+
+        /// <summary>
+        /// Checks if the CustomerID is set or not
+        /// </summary>
+        /// <returns>true if CustomerId is not null or empty.</returns>
+        public Boolean HasCustomerId()
+        {
+            return CustomerId != null && CustomerId != Guid.Empty;
+        }
+
+        /// <summary>
+        /// Checks if the SessionID is set or not
+        /// </summary>
+        /// <returns>true if SessionId is not null or empty.</returns>
+        public Boolean HasSessionId()
+        {
+            return SessionId != null && SessionId != Guid.Empty;
         }
     }
 }
