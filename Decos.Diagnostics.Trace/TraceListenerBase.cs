@@ -516,7 +516,7 @@ namespace Decos.Diagnostics.Trace
                 return eventData;
         }
 
-        private Boolean ADefaultCustomerIdIsSet(out Guid customerIdToUse)
+        private bool ADefaultCustomerIdIsSet(out Guid customerIdToUse)
         {
             if (ThreadCustomerId != Guid.Empty)
             {
@@ -532,7 +532,7 @@ namespace Decos.Diagnostics.Trace
             return false;
         }
 
-        private Boolean ADefaultSessionIdIsSet(out string sessionIdToUse)
+        private bool ADefaultSessionIdIsSet(out string sessionIdToUse)
         {
             if (!string.IsNullOrEmpty(ThreadSessionId))
             {

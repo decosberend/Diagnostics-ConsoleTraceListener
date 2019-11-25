@@ -17,7 +17,7 @@ namespace Decos.Diagnostics
         /// <summary>
         /// Gets or sets the ID of the Session that was active when the log was written.
         /// </summary>
-        public String SessionId { get; set; }
+        public string SessionId { get; set; }
 
         /// <summary>
         /// Initializes a new instance of LoggerContext
@@ -33,7 +33,7 @@ namespace Decos.Diagnostics
         /// </summary>
         /// <param name="customerId">ID of a customer</param>
         /// <param name="sessionId">ID of a session</param>
-        public LoggerContext(Guid? customerId, String sessionId)
+        public LoggerContext(Guid? customerId, string sessionId)
         {
             CustomerId = customerId;
             SessionId = sessionId;
@@ -43,7 +43,7 @@ namespace Decos.Diagnostics
         /// Checks if the CustomerID is set or not
         /// </summary>
         /// <returns>true if CustomerId is not null or empty.</returns>
-        public Boolean HasCustomerId()
+        public bool HasCustomerId()
         {
             return CustomerId != null && CustomerId != Guid.Empty;
         }
@@ -52,7 +52,7 @@ namespace Decos.Diagnostics
         /// Checks if the SessionID is set or not
         /// </summary>
         /// <returns>true if SessionId is not null or empty.</returns>
-        public Boolean HasSessionId()
+        public bool HasSessionId()
         {
             return !string.IsNullOrEmpty(SessionId);
         }

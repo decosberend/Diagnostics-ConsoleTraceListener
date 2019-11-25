@@ -32,7 +32,7 @@ namespace Decos.Diagnostics
         /// <summary>
         /// the defaultSessionID for the current specific thread to send with the logs.
         /// </summary>
-        [ThreadStatic] public String DefaultThreadSessionID;
+        [ThreadStatic] public string DefaultThreadSessionID;
 
         /// <summary>
         /// Gets a dictionary that specifies the minimum severity levels that
