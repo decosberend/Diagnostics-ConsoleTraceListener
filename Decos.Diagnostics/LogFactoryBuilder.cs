@@ -48,7 +48,7 @@ namespace Decos.Diagnostics
         /// <param name="customerID">The new default customerID</param>
         /// <param name="threadSpecific">If this ID is purely for the current Thread.</param>
         /// <returns>A reference to this builder.</returns>
-        public virtual LogFactoryBuilder<TOptions> SetStaticCustomerId(Guid customerID, Boolean threadSpecific)
+        public virtual LogFactoryBuilder<TOptions> SetStaticCustomerId(Guid customerID, bool threadSpecific)
         {
             if (threadSpecific)
                 Options.DefaultThreadCustomerID = customerID;
@@ -62,7 +62,7 @@ namespace Decos.Diagnostics
         /// </summary>
         /// <param name="sessionID">The new default sessionID</param>
         /// <returns>A reference to this builder.</returns>
-        public virtual LogFactoryBuilder<TOptions> SetStaticSessionId(String sessionID)
+        public virtual LogFactoryBuilder<TOptions> SetStaticSessionId(string sessionID)
         {
             Options.DefaultThreadSessionID = sessionID;
             return this;
