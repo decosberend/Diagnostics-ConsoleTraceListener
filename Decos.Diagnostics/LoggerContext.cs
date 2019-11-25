@@ -7,7 +7,7 @@ namespace Decos.Diagnostics
     /// <summary>
     /// An object containing different kinds of data related to the sender of a log
     /// </summary>
-    public class LogSenderDetails
+    public class LoggerContext
     {
         /// <summary>
         /// Gets or sets the ID of the Customer who was active when the log was written.
@@ -20,20 +20,20 @@ namespace Decos.Diagnostics
         public String SessionId { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of LogSenderDetails
+        /// Initializes a new instance of LoggerContext
         /// </summary>
         /// <param name="customerId">ID of a customer</param>
-        public LogSenderDetails(Guid? customerId)
+        public LoggerContext(Guid? customerId)
         {
             CustomerId = customerId;
         }
 
         /// <summary>
-        /// Initializes a new instance of LogSenderDetails
+        /// Initializes a new instance of LoggerContext
         /// </summary>
         /// <param name="customerId">ID of a customer</param>
         /// <param name="sessionId">ID of a session</param>
-        public LogSenderDetails(Guid? customerId, String sessionId)
+        public LoggerContext(Guid? customerId, String sessionId)
         {
             CustomerId = customerId;
             SessionId = sessionId;

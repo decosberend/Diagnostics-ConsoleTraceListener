@@ -33,10 +33,10 @@ namespace TestSend
 
             log.Debug(new { datas = "Debug data", data2 = 1 });
             log.Debug(new { datas = "Debug data", data2 = 2 }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"));
-            log.Debug(new { datas = "Debug data", data2 = 3 }, new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
+            log.Debug(new { datas = "Debug data", data2 = 3 }, new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
 
             /*
-            log.Info("Info message.", new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
+            log.Info("Info message.", new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
             log.Info(new { datas = "Info data", data2 = 2 });
 
             log.Warn("Warning message.");
@@ -49,10 +49,10 @@ namespace TestSend
             }
             catch (Exception ex)
             {
-                log.Error(new { exception = ex, message = "Error message." }, new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
+                log.Error(new { exception = ex, message = "Error message." }, new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
             }
 
-            log.Critical("Critical message.", new LogSenderDetails(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
+            log.Critical("Critical message.", new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
             log.Critical(new { datas = "Critical data", data2 = 4 });
             
             

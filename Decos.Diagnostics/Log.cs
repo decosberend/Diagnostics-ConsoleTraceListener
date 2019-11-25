@@ -89,7 +89,7 @@ namespace Decos.Diagnostics
         /// <param name="logLevel">The severity of the data.</param>
         /// <param name="data">The data to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public void Write<T>(LogLevel logLevel, T data, LogSenderDetails senderDetails)
+        public void Write<T>(LogLevel logLevel, T data, LoggerContext senderDetails)
             => log.Write(logLevel, data, senderDetails);
     }
 }

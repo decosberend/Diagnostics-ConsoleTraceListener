@@ -36,7 +36,7 @@ namespace Decos.Diagnostics
         /// <param name="message">The text of the message to log.</param>
         /// <param name="data">An object that provides additional data.</param>
         /// <param name="senderDetails">Object containing data from the sender.</param>
-        public static void Write<T>(this ILog log, LogLevel logLevel, string message, T data, LogSenderDetails senderDetails)
+        public static void Write<T>(this ILog log, LogLevel logLevel, string message, T data, LoggerContext senderDetails)
             => log.Write(logLevel, new LogData<T>(message, data), senderDetails);
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="message">The text of the message to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Debug(this ILog log, string message, LogSenderDetails senderDetails)
+        public static void Debug(this ILog log, string message, LoggerContext senderDetails)
             => log.Write(LogLevel.Debug, message, senderDetails);
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="data">The data to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Debug<T>(this ILog log, T data, LogSenderDetails senderDetails)
+        public static void Debug<T>(this ILog log, T data, LoggerContext senderDetails)
             => log.Write(LogLevel.Debug, data, senderDetails);
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="message">The text of the message to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Info(this ILog log, string message, LogSenderDetails senderDetails)
+        public static void Info(this ILog log, string message, LoggerContext senderDetails)
             => log.Write(LogLevel.Information, message, senderDetails);
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="data">The data to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Info<T>(this ILog log, T data, LogSenderDetails senderDetails)
+        public static void Info<T>(this ILog log, T data, LoggerContext senderDetails)
             => log.Write(LogLevel.Information, data, senderDetails);
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="message">The text of the message to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Warn(this ILog log, string message, LogSenderDetails senderDetails)
+        public static void Warn(this ILog log, string message, LoggerContext senderDetails)
             => log.Write(LogLevel.Warning, message, senderDetails);
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="data">The data to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Warn<T>(this ILog log, T data, LogSenderDetails senderDetails)
+        public static void Warn<T>(this ILog log, T data, LoggerContext senderDetails)
             => log.Write(LogLevel.Warning, data, senderDetails);
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="message">The text of the message to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Error(this ILog log, string message, LogSenderDetails senderDetails)
+        public static void Error(this ILog log, string message, LoggerContext senderDetails)
             => log.Write(LogLevel.Error, message, senderDetails);
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="data">The data to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Error<T>(this ILog log, T data, LogSenderDetails senderDetails)
+        public static void Error<T>(this ILog log, T data, LoggerContext senderDetails)
             => log.Write(LogLevel.Error, data, senderDetails);
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="message">The text of the message to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Critical(this ILog log, string message, LogSenderDetails senderDetails)
+        public static void Critical(this ILog log, string message, LoggerContext senderDetails)
             => log.Write(LogLevel.Critical, message, senderDetails);
 
         /// <summary>
@@ -351,7 +351,7 @@ namespace Decos.Diagnostics
         /// <param name="log">The log to write to.</param>
         /// <param name="data">The data to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public static void Critical<T>(this ILog log, T data, LogSenderDetails senderDetails)
+        public static void Critical<T>(this ILog log, T data, LoggerContext senderDetails)
             => log.Write(LogLevel.Critical, data, senderDetails);
     }
 }

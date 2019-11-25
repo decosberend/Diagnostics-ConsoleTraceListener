@@ -137,7 +137,7 @@ namespace Decos.Diagnostics.Trace
         /// <param name="logLevel">The severity of the data.</param>
         /// <param name="objectToSend">The data to log.</param>
         /// <param name="senderDetails">Object containing data of the sender.</param>
-        public void Write<T>(LogLevel logLevel, T objectToSend, LogSenderDetails senderDetails)
+        public void Write<T>(LogLevel logLevel, T objectToSend, LoggerContext senderDetails)
         {
             var eventType = logLevel.ToTraceEventType();
             if (eventType == null)
