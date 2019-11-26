@@ -202,6 +202,36 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
+        /// Replaces the listener of the same type as given in both the Options.Listeners and in the System.Diagnostics.Trace.Listeners.
+        /// If there is no listener to replace the listener will be added instead.
+        /// </summary>
+        /// <param name="newListener">The new listener.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder ReplaceListener(TraceListener newListener)
+        {
+            var currentListeners = Options.Listeners;
+            foreach (var listener in currentListeners)
+            {
+                if (newListener.GetType().Equals(listener.GetType()))
+                {
+                    Options.Listeners.Remove(listener);
+                    AddTraceListener(newListener);
+
+                    int indexInDiagnostics = GetIndexOfListenerOfTypeInTraceListenerCollection(System.Diagnostics.Trace.Listeners, listener.GetType());
+                    if (indexInDiagnostics >= 0)
+                    {
+                        System.Diagnostics.Trace.Listeners.Remove(System.Diagnostics.Trace.Listeners[indexInDiagnostics]);
+                        System.Diagnostics.Trace.Listeners.Add(newListener);
+                    }
+                    return this;
+                }
+            }
+            AddTraceListener(newListener);
+            System.Diagnostics.Trace.Listeners.Add(newListener);
+            return this;
+        }
+
+        /// <summary>
         /// Adds the listeners in Options.Listeners to System.Diagnostics.Trace.Listeners
         /// if there aren't any of that type in there already
         /// </summary>
