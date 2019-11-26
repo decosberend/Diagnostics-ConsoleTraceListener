@@ -40,6 +40,78 @@ namespace Decos.Diagnostics
             => log.Write(logLevel, new LogData<T>(message, data), senderDetails);
 
         /// <summary>
+        /// Writes a message to the log with the specified severity and a specific customerID.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="logLevel">The severity of the message.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="customerID">The specific customerID to send with the log.</param>
+        public static void Write(this ILog log, LogLevel logLevel, string message, Guid customerID)
+        {
+            CustomerLogData data = new CustomerLogData(message, customerID);
+            log.Write(logLevel, data);
+        }
+
+        /// <summary>
+        /// Writes an object to the log with the specified severity and a specific customerID.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="logLevel">The severity of the message.</param>
+        /// <param name="objectToSend">The data to log.</param>
+        /// <param name="customerID">The specific customerID to send with the log.</param>
+        public static void Write<T>(this ILog log, LogLevel logLevel, T objectToSend, Guid customerID)
+        {
+            CustomerLogData data = new CustomerLogData(objectToSend, customerID);
+            log.Write(logLevel, data);
+        }
+
+        /// <summary>
+        /// Writes a message to the log with the specified severity and a specific customerID.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="logLevel">The severity of the message.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="senderDetails">Object containing data of the sender.</param>
+        public static void Write(this ILog log, LogLevel logLevel, string message, LoggerContext senderDetails)
+        {
+            CustomerLogData data = null;
+
+            if (senderDetails.HasCustomerId())
+            {
+                if (senderDetails.HasSessionId())
+                    data = new CustomerLogData(message, senderDetails.CustomerId, senderDetails.SessionId);
+                else
+                    data = new CustomerLogData(message, senderDetails.CustomerId);
+                log.Write(logLevel, data);
+            }
+            else
+                log.Write(logLevel, message);
+        }
+
+        /// <summary>
+        /// Writes an object to the log with the specified severity and a specific customerID.
+        /// </summary>
+        /// <param name="log">The log to write to.</param>
+        /// <param name="logLevel">The severity of the message.</param>
+        /// <param name="objectToSend">The data to log.</param>
+        /// <param name="senderDetails">Object containing data of the sender.</param>
+        public static void Write<T>(this ILog log, LogLevel logLevel, T objectToSend, LoggerContext senderDetails)
+        {
+            CustomerLogData data = null;
+
+            if (senderDetails.HasCustomerId())
+            {
+                if (senderDetails.HasSessionId())
+                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId, senderDetails.SessionId);
+                else
+                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId);
+                log.Write(logLevel, data);
+            }
+            else
+                log.Write(logLevel, objectToSend);
+        }
+
+        /// <summary>
         /// Logs a verbose message for development or debugging purposes. These are not enabled in production by default and should only be enabled temporarily for troubleshooting.
         /// </summary>
         /// <param name="log">The log to write to.</param>
