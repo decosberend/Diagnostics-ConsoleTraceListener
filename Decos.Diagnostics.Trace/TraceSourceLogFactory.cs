@@ -85,8 +85,8 @@ namespace Decos.Diagnostics.Trace
             var switchValue = Options.GetLogLevel(name).ToSourceLevels();
             var traceSource = new TraceSource(name, switchValue);
 
-            var listeners = Options.Listeners;
-                //.Concat(System.Diagnostics.Trace.Listeners.Cast<TraceListener>());
+            var listeners = Options.Listeners
+                .Concat(System.Diagnostics.Trace.Listeners.Cast<TraceListener>());
             foreach (var listener in listeners)
             {
                 if (listener is DefaultTraceListener
