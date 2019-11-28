@@ -8,7 +8,9 @@
     <Company>Decos Information Solutions</Company>
     <Description>Decos.Diagnostics is a .NET Standard 2.0 library that provides logging abstractions.</Description>
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics\Decos.Diagnostics.xml</DocumentationFile>
-    <PackageReleaseNotes>Use fully qualified type name instead of namespace for consistency with ASP.NET logging</PackageReleaseNotes>
+    <PackageReleaseNotes>Added support for logging both a message and structured data at the same time.</PackageReleaseNotes>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Decos.Diagnostics.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Decos.Diagnostics.Trace">
+      <HintPath>..\Decos.Diagnostics.Trace\bin\Debug\net461\Decos.Diagnostics.Trace.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net461'" />
   </ItemGroup>
 

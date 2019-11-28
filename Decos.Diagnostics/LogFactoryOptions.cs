@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Decos.Diagnostics
 {
@@ -15,6 +16,23 @@ namespace Decos.Diagnostics
         /// </summary>
         public LogLevel DefaultMinimumLogLevel { get; set; }
             = LogLevel.Information;
+
+        /// <summary>
+        /// Gets or sets the defaultCustomerID to send with the logs 
+        /// if it isn't specified when sending the log itself.
+        /// </summary>
+        public Guid DefaultCustomerID { get; set; }
+
+        /// <summary>
+        /// the defaultCustomerID for the current specific thread to send with the logs 
+        /// if it isn't specified when sending the log itself.
+        /// </summary>
+        [ThreadStatic] public Guid DefaultThreadCustomerID;
+
+        /// <summary>
+        /// the defaultSessionID for the current specific thread to send with the logs.
+        /// </summary>
+        [ThreadStatic] public string DefaultThreadSessionID;
 
         /// <summary>
         /// Gets a dictionary that specifies the minimum severity levels that

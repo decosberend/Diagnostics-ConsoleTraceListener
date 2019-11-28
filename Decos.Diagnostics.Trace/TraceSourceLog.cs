@@ -81,8 +81,9 @@ namespace Decos.Diagnostics.Trace
             var eventType = logLevel.ToTraceEventType();
             if (eventType == null)
                 return;
-
-            Write(eventType.Value, data);
+            if (CustomerLogData.TryParseFromData(TraceSource, data, out CustomerLogData customerLogData))
+                Write(eventType.Value, customerLogData);
+            else Write(eventType.Value, data);
         }
 
         /// <summary>
@@ -94,6 +95,66 @@ namespace Decos.Diagnostics.Trace
         public virtual void Write<T>(TraceEventType eventType, T data)
         {
             TraceSource.TraceData(eventType, 0, data);
+        }
+
+        /// <summary>
+        /// Writes a message to the log with the specified severity and CustomerID.
+        /// </summary>
+        /// <param name="logLevel">The severity of the message.</param>
+        /// <param name="message">The text of the message to log.</param>
+        /// <param name="customerID">CustomerID to send with the log</param>
+        public void Write(LogLevel logLevel, string message, Guid customerID)
+        {
+            var eventType = logLevel.ToTraceEventType();
+            if (eventType == null)
+                return;
+
+            CustomerLogData data = new CustomerLogData(message, customerID);
+            Write(eventType.Value, data);
+        }
+
+        /// <summary>
+        /// Writes structured data to the log with the specified severity and CustomerID.
+        /// </summary>
+        /// <typeparam name="T">The type of data to write.</typeparam>
+        /// <param name="logLevel">The severity of the data.</param>
+        /// <param name="objectToSend">The data to log.</param>
+        /// <param name="customerID">CustomerID to send with the log</param>
+        public void Write<T>(LogLevel logLevel, T objectToSend, Guid customerID)
+        {
+            var eventType = logLevel.ToTraceEventType();
+            if (eventType == null)
+                return;
+
+            CustomerLogData data = new CustomerLogData(objectToSend, customerID);
+            Write(eventType.Value, data);
+        }
+
+        /// <summary>
+        /// Writes structured data to the log with the specified severity and data of the sender.
+        /// </summary>
+        /// <typeparam name="T">The type of data to write.</typeparam>
+        /// <param name="logLevel">The severity of the data.</param>
+        /// <param name="objectToSend">The data to log.</param>
+        /// <param name="senderDetails">Object containing data of the sender.</param>
+        public void Write<T>(LogLevel logLevel, T objectToSend, LoggerContext senderDetails)
+        {
+            var eventType = logLevel.ToTraceEventType();
+            if (eventType == null)
+                return;
+
+            CustomerLogData data = null;
+
+            if (senderDetails.HasCustomerId())
+            {
+                if(senderDetails.HasSessionId())
+                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId, senderDetails.SessionId);
+                else
+                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId);
+            }
+            else
+                Write(eventType.Value, objectToSend);
+            Write(eventType.Value, data);
         }
     }
 }

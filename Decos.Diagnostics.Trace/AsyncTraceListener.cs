@@ -110,7 +110,9 @@ namespace Decos.Diagnostics.Trace
                 Message = message,
                 EventId = e.ID,
                 ProcessId = e.Cache.ProcessId,
-                ThreadId = e.Cache.ThreadId
+                ThreadId = e.Cache.ThreadId,
+                CustomerId = e.CustomerID,
+                SessionId = e.SessionID
             };
 
             RequestQueue.Enqueue(logEntry);
@@ -137,11 +139,24 @@ namespace Decos.Diagnostics.Trace
             {
                 Level = e.Type.ToLogLevel(),
                 Source = e.Source,
-                Data = data,
                 EventId = e.ID,
                 ProcessId = e.Cache.ProcessId,
-                ThreadId = e.Cache.ThreadId
+                ThreadId = e.Cache.ThreadId,
+                CustomerId = e.CustomerID,
+                SessionId = e.SessionID
             };
+            if (data is CustomerLogData)
+            {
+                var content = CustomerLogData.TryExtractCustomerId(data, out Guid? customerId);
+                if (content.GetType() == typeof(String) || content.GetType() == typeof(string))
+                    logEntry.Message = content.ToString();
+                else
+                    logEntry.Data = content;
+            }
+            else
+            {
+                logEntry.Data = data;
+            }
 
             RequestQueue.Enqueue(logEntry);
         }

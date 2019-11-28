@@ -83,6 +83,54 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
+        /// Enables logging to an UDP client.
+        /// </summary>
+        /// <param name="initializeData">A string in "hostname:port" format.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddUdp(string initializeData)
+        {
+            var listener = new UdpTraceListener(initializeData);
+            return AddTraceListener(listener);
+        }
+
+        /// <summary>
+        /// Enables logging to an UDP client.
+        /// </summary>
+        /// <param name="initializeData">A string in "hostname:port" format.</param>
+        /// <param name="minimumLogLevel">The minimum log level of messages to send to the trace listener.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddUdp(string initializeData, LogLevel minimumLogLevel)
+        {
+            var listener = new UdpTraceListener(initializeData);
+            return AddTraceListener(listener, minimumLogLevel);
+        }
+
+        /// <summary>
+        /// Enables logging to an UDP client.
+        /// </summary>
+        /// <param name="hostname">The name or IP address of the remote host.</param>
+        /// <param name="port">The UDP port number to use.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddUdp(string hostname, int port)
+        {
+            var listener = new UdpTraceListener(hostname, port);
+            return AddTraceListener(listener);
+        }
+
+        /// <summary>
+        /// Enables logging to an UDP client.
+        /// </summary>
+        /// <param name="hostname">The name or IP address of the remote host.</param>
+        /// <param name="port">The UDP port number to use.</param>
+        /// <param name="minimumLogLevel">The minimum log level of messages to send to the trace listener.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddUdp(string hostname, int port, LogLevel minimumLogLevel)
+        {
+            var listener = new UdpTraceListener(hostname, port);
+            return AddTraceListener(listener, minimumLogLevel);
+        }
+
+        /// <summary>
         /// Enables logging to the specified trace listener.
         /// </summary>
         /// <param name="traceListener">The trace listener to add.</param>
@@ -143,13 +191,125 @@ namespace Decos.Diagnostics.Trace
         }
 
         /// <summary>
+        /// Clears all Trace listeners in Options.Listeners and System.Diagnostics.Trace.Listeners
+        /// </summary>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder ClearAllTraceListeners()
+        {
+            Options.Listeners.Clear();
+            System.Diagnostics.Trace.Listeners.Clear();
+            return this;
+        }
+
+        /// <summary>
+        /// Replaces the listener of the same type as given in both the Options.Listeners and in the System.Diagnostics.Trace.Listeners.
+        /// If there is no listener to replace the listener will be added instead.
+        /// </summary>
+        /// <param name="newListener">The new listener.</param>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder ReplaceListener(TraceListener newListener)
+        {
+            var currentListeners = Options.Listeners;
+            foreach (var listener in currentListeners)
+            {
+                if (newListener.GetType().Equals(listener.GetType()))
+                {
+                    Options.Listeners.Remove(listener);
+                    AddTraceListener(newListener);
+
+                    int indexInDiagnostics = GetIndexOfListenerOfTypeInTraceListenerCollection(System.Diagnostics.Trace.Listeners, listener.GetType());
+                    if (indexInDiagnostics >= 0)
+                    {
+                        System.Diagnostics.Trace.Listeners.Remove(System.Diagnostics.Trace.Listeners[indexInDiagnostics]);
+                        System.Diagnostics.Trace.Listeners.Add(newListener);
+                    }
+                    return this;
+                }
+            }
+            AddTraceListener(newListener);
+            System.Diagnostics.Trace.Listeners.Add(newListener);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds the listeners in Options.Listeners to System.Diagnostics.Trace.Listeners
+        /// if there aren't any of that type in there already
+        /// </summary>
+        /// <returns>A reference to this builder.</returns>
+        public TraceSourceLogFactoryBuilder AddListenersToTraceListenersCollection()
+        {
+            foreach (var listener in Options.Listeners)
+            {
+                if (GetIndexOfListenerOfTypeInTraceListenerCollection(System.Diagnostics.Trace.Listeners, listener.GetType()) < 0)
+                {
+                    System.Diagnostics.Trace.Listeners.Add(listener);
+                }
+                else
+                {
+                    int listenerIndexToEdit = GetIndexOfListenerOfTypeInTraceListenerCollection(System.Diagnostics.Trace.Listeners, listener.GetType());
+                    if (System.Diagnostics.Trace.Listeners[listenerIndexToEdit] is TraceListenerBase traceListenerBase)
+                    {
+                        Decos.Diagnostics.Trace.TraceListenerBase.ThreadCustomerId = Options.DefaultThreadCustomerID;
+                    }
+                }
+            }
+
+            return this;
+        }
+        
+        /// <summary>
+        /// Finds what index of a TraceListenerCollection has a listener of a specified type.
+        /// </summary>
+        /// <param name="listeners">The collection to check</param>
+        /// <param name="type">The type of listener to find in the collection</param>
+        /// <returns>The index number of the specified type, if there is non returns -1</returns>
+        private int GetIndexOfListenerOfTypeInTraceListenerCollection(TraceListenerCollection listeners, Type type)
+        {
+            for (int i = 0; i < listeners.Count; i++)
+            {
+                if (listeners[i].GetType() == type)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        /// <summary>
         /// Creates a new <see cref="ILogFactory"/> instance with the configured
         /// options.
         /// </summary>
         /// <returns>A new <see cref="ILogFactory"/> instance.</returns>
         public override ILogFactory Build()
         {
+            SetCustomerIdInListenerCollection(Options);
+            SetSessionIdInListenerCollection(Options);
             return new TraceSourceLogFactory(Options);
+        }
+
+        /// <summary>
+        /// Sets the default CustomerId in every Listener in the options
+        /// </summary>
+        /// <param name="options">options containing listeners</param>
+        private void SetCustomerIdInListenerCollection(TraceSourceLogFactoryOptions options)
+        {
+            if (options.DefaultCustomerID != null && options.DefaultCustomerID != Guid.Empty) // not null and not guid.empty 
+            {
+                Decos.Diagnostics.Trace.TraceListenerBase.SetDefaultCustomerId(options.DefaultCustomerID);
+            }
+            if (options.DefaultThreadCustomerID != null && options.DefaultThreadCustomerID != Guid.Empty) // not null and not guid.empty 
+            {
+                Decos.Diagnostics.Trace.TraceListenerBase.SetThreadCustomerId(options.DefaultThreadCustomerID);
+            }
+        }
+
+
+        private void SetSessionIdInListenerCollection(TraceSourceLogFactoryOptions options)
+        {
+            if (!string.IsNullOrEmpty(options.DefaultThreadSessionID)) // not null
+            {
+                Decos.Diagnostics.Trace.TraceListenerBase.SetThreadSessionId(options.DefaultThreadSessionID);
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Decos.Diagnostics
+﻿using System;
+
+namespace Decos.Diagnostics
 {
     /// <summary>
     /// Defines methods for writing events and data to a log.
