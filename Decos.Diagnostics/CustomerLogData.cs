@@ -138,13 +138,6 @@ namespace Decos.Diagnostics
                 if (Data != null && !string.IsNullOrEmpty(Data.ToString()))
                     returnValue += Data.ToString() + " ";
                 return returnValue.Trim();
-
-
-                //if (!string.IsNullOrEmpty(SessionId))
-                //    returnValue += CustomerId.ToString() + " " + SessionId + " " + Message.ToString() + " " + Data?.ToString();
-                //else
-                //    returnValue += CustomerId.ToString() + " " + Message.ToString() + " " + Data?.ToString();
-
             }
             return Data?.ToString();
         }
