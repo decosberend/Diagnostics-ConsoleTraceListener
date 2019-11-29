@@ -150,6 +150,11 @@ namespace Decos.Diagnostics.Trace
                 var content = CustomerLogData.TryExtractCustomerId(data, out Guid? customerId);
                 if (content.GetType() == typeof(String) || content.GetType() == typeof(string))
                     logEntry.Message = content.ToString();
+                else if (content is LogData dataLogData) 
+                {
+                    logEntry.Message = dataLogData.Message;
+                    logEntry.Data = dataLogData.Data;
+                }
                 else
                     logEntry.Data = content;
             }
@@ -180,7 +185,9 @@ namespace Decos.Diagnostics.Trace
                 Data = data.Data,
                 EventId = e.ID,
                 ProcessId = e.Cache.ProcessId,
-                ThreadId = e.Cache.ThreadId
+                ThreadId = e.Cache.ThreadId,
+                CustomerId = e.CustomerID,
+                SessionId = e.SessionID
             };
 
             RequestQueue.Enqueue(logEntry);

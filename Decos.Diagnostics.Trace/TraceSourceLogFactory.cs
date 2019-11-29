@@ -85,15 +85,15 @@ namespace Decos.Diagnostics.Trace
             var switchValue = Options.GetLogLevel(name).ToSourceLevels();
             var traceSource = new TraceSource(name, switchValue);
 
-            var listeners = Options.Listeners
-                .Concat(System.Diagnostics.Trace.Listeners.Cast<TraceListener>());
+            var listeners = System.Diagnostics.Trace.Listeners.Cast<TraceListener>()
+                .Concat(Options.Listeners);
             foreach (var listener in listeners)
             {
                 if (listener is DefaultTraceListener
                     && traceSource.Listeners.OfType<DefaultTraceListener>().Any())
                     continue;
 
-                if (!traceSource.Listeners.Contains(listener))
+                if (!ContainsListenerOfType(traceSource.Listeners, listener.GetType()))
                 {
                     if (listener is AsyncTraceListener asyncListener)
                         HookShutdown(asyncListener);
@@ -136,6 +136,22 @@ namespace Decos.Diagnostics.Trace
             var processTask = listener.ProcessQueueAsync(
                 shutdownTokenSource.Token, cancellationTokenSource.Token);
             shutdownTasks.Add(processTask);
+        }
+
+        /// <summary>
+        /// Checks if a TraceListenerCollection contains a listener of a certain type
+        /// </summary>
+        /// <param name="listeners">Collection of TraceListeners to seach in</param>
+        /// <param name="type">The type of listener to find</param>
+        /// <returns>true if the collection contains a listener of the specified type, else false</returns>
+        private bool ContainsListenerOfType(TraceListenerCollection listeners, Type type)
+        {
+            foreach (var listener in listeners)
+            {
+                if (listener.GetType() == type)
+                    return true;
+            }
+            return false;
         }
     }
 }
