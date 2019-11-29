@@ -21,6 +21,11 @@ namespace Decos.Diagnostics
         public string SessionId { get; set; }
 
         /// <summary>
+        /// Message that is connected to the CustomerId
+        /// </summary>
+        public object Message { get; set; }
+
+        /// <summary>
         /// Data object that is connected to the CustomerId
         /// </summary>
         public object Data { get; set; }
@@ -31,6 +36,18 @@ namespace Decos.Diagnostics
         public CustomerLogData()
         {
 
+        }
+
+        /// <summary>
+        /// Initializes a new instance of CustomerLogData
+        /// and sets the CustomerId and the message
+        /// </summary>
+        /// <param name="message">Message to set</param>
+        /// <param name="customerId">CustomerId to set</param>
+        public CustomerLogData(string message, Guid? customerId)
+        {
+            CustomerId = customerId;
+            Message = message;
         }
 
         /// <summary>
@@ -49,6 +66,34 @@ namespace Decos.Diagnostics
         /// Initializes a new instance of CustomerLogData
         /// and sets the CustomerId and the data object
         /// </summary>
+        /// <param name="message">Message to set</param>
+        /// <param name="data">Data object to set</param>
+        /// <param name="customerId">CustomerId to set</param>
+        public CustomerLogData(string message, object data, Guid? customerId)
+        {
+            CustomerId = customerId;
+            Message = message;
+            Data = data;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of CustomerLogData
+        /// and sets the CustomerId and the data object
+        /// </summary>
+        /// <param name="message">Message to set</param>
+        /// <param name="customerId">CustomerId to set</param>
+        /// <param name="sessionId">SessionId to set</param>
+        public CustomerLogData(string message, Guid? customerId, string sessionId)
+        {
+            CustomerId = customerId;
+            SessionId = sessionId;
+            Message = message;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of CustomerLogData
+        /// and sets the CustomerId, SessionId and the data object
+        /// </summary>
         /// <param name="data">Data object to set</param>
         /// <param name="customerId">CustomerId to set</param>
         /// <param name="sessionId">SessionId to set</param>
@@ -60,6 +105,22 @@ namespace Decos.Diagnostics
         }
 
         /// <summary>
+        /// Initializes a new instance of CustomerLogData
+        /// and sets the CustomerId, SessionId, a message and a data object
+        /// </summary>
+        /// <param name="message">Message to set</param>
+        /// <param name="data">Data object to set</param>
+        /// <param name="customerId">CustomerId to set</param>
+        /// <param name="sessionId">SessionId to set</param>
+        public CustomerLogData(string message, object data, Guid? customerId, string sessionId)
+        {
+            CustomerId = customerId;
+            SessionId = sessionId;
+            Data = data;
+            Message = message;
+        }
+
+        /// <summary>
         /// Returns the saved CustomerId and the Data object as string
         /// </summary>
         /// <returns>CustomerId and Data object both as string</returns>
@@ -67,10 +128,23 @@ namespace Decos.Diagnostics
         {
             if (CustomerId.HasValue)
             {
-                if(!string.IsNullOrEmpty(SessionId))
-                    return CustomerId.ToString() + " " + SessionId + " " + Data?.ToString();
-                else
-                    return CustomerId.ToString() + " " + Data?.ToString();
+                string returnValue = "";
+                if (CustomerId != null && !string.IsNullOrEmpty(CustomerId.ToString()))
+                    returnValue += CustomerId.ToString() + " ";
+                if (SessionId != null && !string.IsNullOrEmpty(SessionId))
+                    returnValue += SessionId + " ";
+                if (Message != null && !string.IsNullOrEmpty(Message.ToString()))
+                    returnValue += Message.ToString() + " ";
+                if (Data != null && !string.IsNullOrEmpty(Data.ToString()))
+                    returnValue += Data.ToString() + " ";
+                return returnValue.Trim();
+
+
+                //if (!string.IsNullOrEmpty(SessionId))
+                //    returnValue += CustomerId.ToString() + " " + SessionId + " " + Message.ToString() + " " + Data?.ToString();
+                //else
+                //    returnValue += CustomerId.ToString() + " " + Message.ToString() + " " + Data?.ToString();
+
             }
             return Data?.ToString();
         }
@@ -114,6 +188,8 @@ namespace Decos.Diagnostics
             if (data != null && data is CustomerLogData customerData)
             {
                 customerId = customerData.CustomerId;
+                if (customerData.Message != null && !string.IsNullOrEmpty(customerData.Message.ToString()))
+                    return customerData.Message;
                 return customerData.Data;
             }
             else return data;
