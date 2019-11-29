@@ -26,8 +26,12 @@ namespace TestSend
                 .SetStaticSessionId(sessionID)
                 .Build();
             var log = LogFactory.Create<Program>();
-
+            
             System.Diagnostics.Trace.WriteLine("Trace log");
+
+            log.Write(LogLevel.Debug, "A");
+            log.Write(LogLevel.Debug, "B", new { data3 = "bbb" }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"));
+            log.Write(LogLevel.Debug, "C", new { data3 = "ccc" }, new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
 
             log.Debug("Debug message.");
             log.Debug(new { data1 = "Debug data", data2 = 1 });
@@ -36,6 +40,7 @@ namespace TestSend
 
             log.Info("Info message.");
             log.Info(new { data1 = "Info data", data2 = 2 });
+            log.Info("InfoMessage", new { data1 = "InfoData", data2 = 2 });
 
             log.Warn("Warning message.");
             log.Warn(new { data1 = "Warning data", data2 = 3 });

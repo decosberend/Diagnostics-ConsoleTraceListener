@@ -81,9 +81,7 @@ namespace Decos.Diagnostics.Trace
             var eventType = logLevel.ToTraceEventType();
             if (eventType == null)
                 return;
-            if (CustomerLogData.TryParseFromData(TraceSource, data, out CustomerLogData customerLogData))
-                Write(eventType.Value, customerLogData);
-            else Write(eventType.Value, data);
+            Write(eventType.Value, data);
         }
 
         /// <summary>
