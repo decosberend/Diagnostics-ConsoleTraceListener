@@ -26,7 +26,7 @@ namespace TestSend
                 .SetStaticSessionId(sessionID)
                 .Build();
             var log = LogFactory.Create<Program>();
-            
+
             System.Diagnostics.Trace.WriteLine("Trace log");
 
             log.Write(LogLevel.Debug, "A");

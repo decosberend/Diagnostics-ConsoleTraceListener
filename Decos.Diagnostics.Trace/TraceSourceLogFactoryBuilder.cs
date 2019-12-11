@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Decos.Diagnostics.Trace
@@ -209,21 +210,22 @@ namespace Decos.Diagnostics.Trace
         /// <returns>A reference to this builder.</returns>
         public TraceSourceLogFactoryBuilder ReplaceListener(TraceListener newListener)
         {
-            var currentListeners = Options.Listeners;
+            var currentListeners = new List<TraceListener>(Options.Listeners);
+
             foreach (var listener in currentListeners)
             {
                 if (newListener.GetType().Equals(listener.GetType()))
                 {
-                    Options.Listeners.Remove(listener);
-                    AddTraceListener(newListener);
-
-                    int indexInDiagnostics = GetIndexOfListenerOfTypeInTraceListenerCollection(System.Diagnostics.Trace.Listeners, listener.GetType());
-                    if (indexInDiagnostics >= 0)
+                    try
                     {
-                        System.Diagnostics.Trace.Listeners.Remove(System.Diagnostics.Trace.Listeners[indexInDiagnostics]);
-                        System.Diagnostics.Trace.Listeners.Add(newListener);
+                        Options.Listeners.Remove(listener);
                     }
-                    return this;
+                    catch { }
+                    try
+                    {
+                        System.Diagnostics.Trace.Listeners.Remove(listener);
+                    }
+                    catch { }
                 }
             }
             AddTraceListener(newListener);
