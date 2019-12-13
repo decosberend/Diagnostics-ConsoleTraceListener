@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Decos.Diagnostics.AspNetCore.Tests
 {
-    internal class DummyApplicationLifetime : IApplicationLifetime
+    internal class DummyApplicationLifetime : IHostApplicationLifetime
     {
         private readonly int timeout;
         private readonly CancellationTokenSource applicationStarted = new CancellationTokenSource();

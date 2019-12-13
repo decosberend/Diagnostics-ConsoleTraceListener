@@ -22,25 +22,6 @@ namespace Decos.Diagnostics.AspNetCore
         /// <param name="applicationLifetime">
         /// The lifetime of the application to monitor.
         /// </param>
-        [Obsolete("IApplicationLifetime is obsolete. Use the overload that accepts IHostApplicationLifetime instead.")]
-        public ApplicationShutdownHandler(ILogFactory logFactory, IApplicationLifetime applicationLifetime)
-        {
-            LogFactory = logFactory;
-
-            applicationLifetime.ApplicationStopping.Register(OnShutdown);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see
-        /// cref="ApplicationShutdownHandler"/> class for the specified log
-        /// factory and application lifetime.
-        /// </summary>
-        /// <param name="logFactory">
-        /// The log factory to shut down gracefully.
-        /// </param>
-        /// <param name="applicationLifetime">
-        /// The lifetime of the application to monitor.
-        /// </param>
         public ApplicationShutdownHandler(ILogFactory logFactory, IHostApplicationLifetime applicationLifetime)
         {
             LogFactory = logFactory;

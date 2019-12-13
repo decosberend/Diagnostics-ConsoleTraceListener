@@ -200,7 +200,7 @@ namespace Decos.Diagnostics.AspNetCore.Tests
         {
             var listener = new DelayAsyncTraceListener(500);
             var services = new ServiceCollection();
-            services.AddSingleton<IApplicationLifetime>(new DummyApplicationLifetime(10));
+            services.AddSingleton<IHostApplicationLifetime>(new DummyApplicationLifetime(10));
             services.AddTraceSourceLogging(options =>
             {
                 options.AddTraceListener(listener);
@@ -212,7 +212,7 @@ namespace Decos.Diagnostics.AspNetCore.Tests
 
             Assert.AreNotEqual(0, listener.QueueCount);
             var handler = provider.GetRequiredService<ApplicationShutdownHandler>();
-            var lifeTime = provider.GetRequiredService<IApplicationLifetime>();
+            var lifeTime = provider.GetRequiredService<IHostApplicationLifetime>();
             lifeTime.StopApplication();
             Assert.AreEqual(0, listener.QueueCount);
         }
