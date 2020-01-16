@@ -74,18 +74,7 @@ namespace Decos.Diagnostics
         /// <param name="senderDetails">Object containing data of the sender.</param>
         public static void Write(this ILog log, LogLevel logLevel, string message, LoggerContext senderDetails)
         {
-            CustomerLogData data = null;
-
-            if (senderDetails.HasCustomerId())
-            {
-                if (senderDetails.HasSessionId())
-                    data = new CustomerLogData(message, senderDetails.CustomerId, senderDetails.SessionId);
-                else
-                    data = new CustomerLogData(message, senderDetails.CustomerId);
-                log.Write(logLevel, data);
-            }
-            else
-                log.Write(logLevel, message);
+            log.Write(logLevel, new CustomerLogData(message, senderDetails.CustomerId, senderDetails.SessionId));
         }
 
         /// <summary>
@@ -97,16 +86,8 @@ namespace Decos.Diagnostics
         /// <param name="senderDetails">Object containing data of the sender.</param>
         public static void Write<T>(this ILog log, LogLevel logLevel, T objectToSend, LoggerContext senderDetails)
         {
-            CustomerLogData data = null;
-
-            if (senderDetails.HasCustomerId())
-            {
-                if (senderDetails.HasSessionId())
-                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId, senderDetails.SessionId);
-                else
-                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId);
-                log.Write(logLevel, data);
-            }
+            if (senderDetails.HasCustomerId() || senderDetails.HasSessionId())
+                log.Write(logLevel, new CustomerLogData(objectToSend, senderDetails.CustomerId, senderDetails.SessionId));
             else
                 log.Write(logLevel, objectToSend);
         }

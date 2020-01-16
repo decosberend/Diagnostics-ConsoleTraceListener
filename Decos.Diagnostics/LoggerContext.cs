@@ -31,6 +31,15 @@ namespace Decos.Diagnostics
         /// <summary>
         /// Initializes a new instance of LoggerContext
         /// </summary>
+        /// <param name="sessionId">ID of a session</param>
+        public LoggerContext(string sessionId)
+        {
+            SessionId = sessionId;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of LoggerContext
+        /// </summary>
         /// <param name="customerId">ID of a customer</param>
         /// <param name="sessionId">ID of a session</param>
         public LoggerContext(Guid? customerId, string sessionId)

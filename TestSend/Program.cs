@@ -14,6 +14,7 @@ namespace TestSend
         private static void Main(string[] args)
         {
             var logstashAddress = Environment.GetEnvironmentVariable("LOGSTASH_ADDRESS");
+            logstashAddress = "http://logstashtest.decos.com:9090/";
             var customerID = new Guid("a6835c7c-6095-4e35-809e-4242af81e0d6");
             string sessionID = "123456789az";
             LogFactory = new LogFactoryBuilder()
@@ -30,8 +31,11 @@ namespace TestSend
             System.Diagnostics.Trace.WriteLine("Trace log");
 
             log.Write(LogLevel.Debug, "A");
-            log.Write(LogLevel.Debug, "B", new { data3 = "bbb" }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"));
-            log.Write(LogLevel.Debug, "C", new { data3 = "ccc" }, new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
+            log.Write(LogLevel.Debug, "B", new LoggerContext("mySessionID"));
+            log.Write(LogLevel.Debug, "C", new { data1 = "OwO", data2 = 7}, new LoggerContext("mySessionID"));
+
+            log.Write(LogLevel.Debug, "D", new { data3 = "bbb" }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"));
+            log.Write(LogLevel.Debug, "E", new { data3 = "ccc" }, new LoggerContext("za987654321"));
 
             log.Debug("Debug message.");
             log.Debug(new { data1 = "Debug data", data2 = 1 });
