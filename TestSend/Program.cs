@@ -7,14 +7,12 @@ namespace TestSend
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal class Program
     {
-        [ThreadStatic] public static Guid customerGuidForThread = new Guid("12345678-abcd-1234-abcd-123456789876");
         [ThreadStatic] public static ILogFactory LogFactory = null;
         public static Random random = new Random();
 
         private static void Main(string[] args)
         {
             var logstashAddress = Environment.GetEnvironmentVariable("LOGSTASH_ADDRESS");
-            logstashAddress = "http://logstashtest.decos.com:9090/";
             var customerID = new Guid("a6835c7c-6095-4e35-809e-4242af81e0d6");
             string sessionID = "123456789az";
             LogFactory = new LogFactoryBuilder()
@@ -27,20 +25,27 @@ namespace TestSend
                 .SetStaticSessionId(sessionID)
                 .Build();
             var log = LogFactory.Create<Program>();
-
+            
             System.Diagnostics.Trace.WriteLine("Trace log");
 
             log.Write(LogLevel.Debug, "A");
-            log.Write(LogLevel.Debug, "B", new LoggerContext("mySessionID"));
-            log.Write(LogLevel.Debug, "C", new { data1 = "OwO", data2 = 7}, new LoggerContext("mySessionID"));
+            log.Write(LogLevel.Debug, "B", new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05")));
+            log.Write(LogLevel.Debug, "C", new LoggerContext("mySessionID"));
+            log.Write(LogLevel.Debug, "D", new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "mySessionID"));
 
-            log.Write(LogLevel.Debug, "D", new { data3 = "bbb" }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"));
-            log.Write(LogLevel.Debug, "E", new { data3 = "ccc" }, new LoggerContext("za987654321"));
+            log.Write(LogLevel.Debug, new { data1 = "E", data2 = 1 });
+            log.Write(LogLevel.Debug, new { data1 = "F", data2 = 1 }, new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05")));
+            log.Write(LogLevel.Debug, new { data1 = "G", data2 = 1 }, new LoggerContext("mySessionID"));
+            log.Write(LogLevel.Debug, new { data1 = "H", data2 = 1 }, new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "mySessionID"));
+
+            log.Write(LogLevel.Debug, "I", new { data1 = "I", data2 = 2 });
+            log.Write(LogLevel.Debug, "J", new { data1 = "J", data2 = 2 }, new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05")));
+            log.Write(LogLevel.Debug, "K", new { data1 = "K", data2 = 2 }, new LoggerContext("mySessionID"));
+            log.Write(LogLevel.Debug, "L", new { data1 = "L", data2 = 2 }, new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "mySessionID"));
+
 
             log.Debug("Debug message.");
-            log.Debug(new { data1 = "Debug data", data2 = 1 });
-            log.Debug(new { data1 = "Debug data", data2 = 2 }, new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"));
-            log.Debug(new { data1 = "Debug data", data2 = 3 }, new LoggerContext(new Guid("fd760922-c420-4c27-ab7f-c0a640eb6a05"), "za987654321"));
+            log.Debug(new { data1 = "Debug data", data2 = 2 });
 
             log.Info("Info message.");
             log.Info(new { data1 = "Info data", data2 = 2 });
@@ -56,12 +61,12 @@ namespace TestSend
             }
             catch (Exception ex)
             {
-                log.Error(new { exception = ex, message = "Error message." });
+                log.Error(ex, new LoggerContext("errSess"));
             }
 
             log.Critical("Critical message.");
             log.Critical(new { data1 = "Critical data", data2 = 4 });
-            
+
             /*
             Thread thread1 = new Thread(new ThreadStart(LogInThread));
             thread1.Start();
@@ -69,6 +74,7 @@ namespace TestSend
             Thread thread2 = new Thread(new ThreadStart(LogInThread));
             thread2.Start();
             */
+
             Console.ReadKey();
         }
 
@@ -76,7 +82,6 @@ namespace TestSend
         {
             var customerId = Guid.NewGuid();
             var sessionId = "randomID" + random.Next(0, 9).ToString() ;
-            customerGuidForThread = customerId;
 
             LogFactory = new LogFactoryBuilder()
                 .UseTraceSource()
