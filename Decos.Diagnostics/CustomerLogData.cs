@@ -64,7 +64,45 @@ namespace Decos.Diagnostics
 
         /// <summary>
         /// Initializes a new instance of CustomerLogData
-        /// and sets the CustomerId and the data object
+        /// and sets the SessionId and the message
+        /// </summary>
+        /// <param name="message">Message to set</param>
+        /// <param name="sessionId">SessionId to set</param>
+        public CustomerLogData(string message, string sessionId)
+        {
+            SessionId = sessionId;
+            Message = message;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of CustomerLogData
+        /// and sets the SessionId and the data object
+        /// </summary>
+        /// <param name="data">Data object to set</param>
+        /// <param name="sessionId">SessionId to set</param>
+        public CustomerLogData(object data, string sessionId)
+        {
+            SessionId = sessionId;
+            Data = data;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of CustomerLogData
+        /// and sets the CustomerId, message and the data object
+        /// </summary>
+        /// <param name="message">Message to set</param>
+        /// <param name="data">Data object to set</param>
+        /// <param name="sessionId">SessionId to set</param>
+        public CustomerLogData(string message, object data, string sessionId)
+        {
+            SessionId = sessionId;
+            Message = message;
+            Data = data;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of CustomerLogData
+        /// and sets the CustomerId, message and the data object
         /// </summary>
         /// <param name="message">Message to set</param>
         /// <param name="data">Data object to set</param>
@@ -126,7 +164,7 @@ namespace Decos.Diagnostics
         /// <returns>CustomerId and Data object both as string</returns>
         public override string ToString()
         {
-            if (CustomerId.HasValue)
+            if (CustomerId.HasValue || !string.IsNullOrEmpty(SessionId))
             {
                 string returnValue = "";
                 if (CustomerId != null && !string.IsNullOrEmpty(CustomerId.ToString()))

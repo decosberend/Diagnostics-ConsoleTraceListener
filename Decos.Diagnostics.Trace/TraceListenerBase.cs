@@ -104,6 +104,12 @@ namespace Decos.Diagnostics.Trace
                     if (ADefaultSessionIdIsSet(out string sessionIdToUse))
                         eventData.SessionID = sessionIdToUse;
                 }
+                else if (customerData.HasSessionId())
+                {
+                    eventData = new TraceEventData(eventCache, source, eventType, id, null, customerData.SessionId);
+                    if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
+                        eventData.CustomerID = customerIdToUse;
+                }
                 else
                 {
                     eventData = AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(new TraceEventData(eventCache, source, eventType, id));
@@ -506,14 +512,10 @@ namespace Decos.Diagnostics.Trace
         private TraceEventData AddCustomerIdAndSessionIdToEventDataIfTheyAreSet(TraceEventData eventData)
         {
             if (ADefaultCustomerIdIsSet(out Guid customerIdToUse))
-            {
                 eventData.CustomerID = customerIdToUse;
-                if (ADefaultSessionIdIsSet(out string sessionIdToUse))
-                    eventData.SessionID = sessionIdToUse;
-                return eventData;
-            }
-            else
-                return eventData;
+            if (ADefaultSessionIdIsSet(out string sessionIdToUse))
+                eventData.SessionID = sessionIdToUse;
+            return eventData;
         }
 
         private bool ADefaultCustomerIdIsSet(out Guid customerIdToUse)

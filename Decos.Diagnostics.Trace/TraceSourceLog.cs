@@ -141,18 +141,14 @@ namespace Decos.Diagnostics.Trace
             if (eventType == null)
                 return;
 
-            CustomerLogData data = null;
-
-            if (senderDetails.HasCustomerId())
-            {
-                if(senderDetails.HasSessionId())
-                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId, senderDetails.SessionId);
-                else
-                    data = new CustomerLogData(objectToSend, senderDetails.CustomerId);
-            }
+            if (senderDetails.HasCustomerId() && senderDetails.HasSessionId())
+                Write(eventType.Value, new CustomerLogData(objectToSend, senderDetails.CustomerId, senderDetails.SessionId));
+            else if (senderDetails.HasCustomerId())
+                Write(eventType.Value, new CustomerLogData(objectToSend, senderDetails.CustomerId));
+            else if (senderDetails.HasSessionId())
+                Write(eventType.Value, new CustomerLogData(objectToSend, senderDetails.SessionId));
             else
                 Write(eventType.Value, objectToSend);
-            Write(eventType.Value, data);
         }
     }
 }
