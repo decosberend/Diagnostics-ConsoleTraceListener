@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
+using System.Runtime.CompilerServices;
+using System.Collections.Concurrent;
+
+[assembly: InternalsVisibleTo("Decos.Diagnostics.Trace.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c9709b02ab5e2d5dccf428f03c886e3c800fc48d449d627d6905614299e3666c69c7c906a14576296455aaab0503a7b62e56da8a696b3bbdb1ee3e9334722129e82e5b94ca37bcfe184b1340f23f173bce47aa56dfdc66702611ed01d4846e214a4bc031bf48cc742e7ccda15c3999f912e55e0b86ad27c0c04e09000cb118dd")]
 
 namespace Decos.Diagnostics.Trace
 {
@@ -13,14 +17,14 @@ namespace Decos.Diagnostics.Trace
     /// </summary>
     public class TraceSourceLogFactory : ILogFactory
     {
-        private readonly CancellationTokenSource shutdownTokenSource
+        private readonly CancellationTokenSource _shutdownTokenSource
             = new CancellationTokenSource();
 
-        private readonly CancellationTokenSource cancellationTokenSource
+        private readonly CancellationTokenSource _cancellationTokenSource
             = new CancellationTokenSource();
 
-        private readonly ICollection<Task> shutdownTasks
-            = new List<Task>();
+        internal readonly ConcurrentDictionary<int, Task> _shutdownTasks
+            = new ConcurrentDictionary<int, Task>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceSourceLogFactory"/>
@@ -96,7 +100,7 @@ namespace Decos.Diagnostics.Trace
                 if (!ContainsListenerOfType(traceSource.Listeners, listener.GetType()))
                 {
                     if (listener is AsyncTraceListener asyncListener)
-                        HookShutdown(asyncListener);
+                        StartProcessing(asyncListener);
 
                     traceSource.Listeners.Add(listener);
                 }
@@ -112,8 +116,8 @@ namespace Decos.Diagnostics.Trace
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task ShutdownAsync()
         {
-            shutdownTokenSource.Cancel();
-            await Task.WhenAll(shutdownTasks);
+            _shutdownTokenSource.Cancel();
+            await Task.WhenAll(_shutdownTasks.Values);
         }
 
         /// <summary>
@@ -127,15 +131,17 @@ namespace Decos.Diagnostics.Trace
         /// <returns>A task that represents the asynchronous operation.</returns>
         public Task ShutdownAsync(CancellationToken cancellationToken)
         {
-            cancellationToken.Register(() => cancellationTokenSource.Cancel());
+            cancellationToken.Register(() => _cancellationTokenSource.Cancel());
             return ShutdownAsync();
         }
 
-        private void HookShutdown(AsyncTraceListener listener)
+        private void StartProcessing(AsyncTraceListener listener)
         {
-            var processTask = listener.ProcessQueueAsync(
-                shutdownTokenSource.Token, cancellationTokenSource.Token);
-            shutdownTasks.Add(processTask);
+            _ = _shutdownTasks.GetOrAdd(listener.GetHashCode(), _ =>
+            {
+                return listener.ProcessQueueAsync(
+                    _shutdownTokenSource.Token, _cancellationTokenSource.Token);
+            });
         }
 
         /// <summary>
