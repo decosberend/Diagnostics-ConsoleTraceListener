@@ -157,6 +157,24 @@ namespace Decos.Diagnostics.Trace.Tests
             Assert.AreNotEqual(0, listener.QueueCount);
         }
 
+        [TestMethod]
+        public async Task FactoryOnlyHooksOncePerAsyncListener()
+        {
+            var listener = new DelayAsyncTraceListener(5);
+            var factory = new LogFactoryBuilder()
+                .UseTraceSource()
+                .AddTraceListener(listener)
+                .Build();
+
+            for (int i = 0; i < 100; i++)
+            {
+                var log = factory.Create($"Logger{i}");
+                log.Info($"{i}");
+            }
+
+            Assert.AreEqual(1, ((TraceSourceLogFactory)factory)._shutdownTasks.Count);
+        }
+
         private static TraceSourceLogFactory CreateFactory(LogLevel minLogLevel, params (SourceName, LogLevel)[] levels)
         {
             var options = new TraceSourceLogFactoryOptions();
