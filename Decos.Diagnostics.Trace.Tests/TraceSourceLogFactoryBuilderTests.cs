@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Decos.Diagnostics.Trace.Tests.Mocks;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Decos.Diagnostics.Trace.Tests

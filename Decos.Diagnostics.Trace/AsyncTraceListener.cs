@@ -67,7 +67,18 @@ namespace Decos.Diagnostics.Trace
                 while (RequestQueue.TryDequeue(out var logEntry))
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    await TraceAsync(logEntry, cancellationToken);
+                    try
+                    {
+                        await TraceAsync(logEntry, cancellationToken).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine($"Unhandled exception in {GetType().Name}.TraceAsync: {ex}.\n\nLog entry: {logEntry}");
+                    }
                 }
 
                 if (RequestQueue.Count == 0 && shutdownToken.IsCancellationRequested)
