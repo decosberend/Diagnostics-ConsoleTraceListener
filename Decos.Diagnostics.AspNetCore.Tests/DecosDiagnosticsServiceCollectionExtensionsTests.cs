@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Decos.Diagnostics.Trace.Tests;
+using Decos.Diagnostics.Trace.Tests.Mocks;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

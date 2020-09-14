@@ -86,7 +86,7 @@ namespace TestSendCore
                 options.SetMinimumLogLevel(LogLevel.Debug);
                 options.AddConsole();
 
-                var logstashAddress = Environment.GetEnvironmentVariable("LOGSTASH_ADDRESS");
+                var logstashAddress = "http://127.0.0.1:9090/"; Environment.GetEnvironmentVariable("LOGSTASH_ADDRESS");
                 if (!string.IsNullOrEmpty(logstashAddress))
                     options.AddLogstash(logstashAddress);
 

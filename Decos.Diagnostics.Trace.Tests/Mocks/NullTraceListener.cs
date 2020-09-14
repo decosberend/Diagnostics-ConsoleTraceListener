@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Decos.Diagnostics.Trace.Tests
+namespace Decos.Diagnostics.Trace.Tests.Mocks
 {
     /// <summary>
     /// Represents a trace listener that does nothing.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Decos.Diagnostics.Trace.Tests
+namespace Decos.Diagnostics.Trace.Tests.Mocks
 {
     public class DelayAsyncTraceListener : AsyncTraceListener
     {
