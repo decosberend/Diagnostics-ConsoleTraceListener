@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>3.1.4</Version>
+    <Version>3.1.7</Version>
     <Authors>Laura Verdoes</Authors>
     <Company>Decos Information Solutions</Company>
     <Description>Provides extension methods for registering the Decos.Diagnostics TraceSource implementation as services with the Microsoft.Extensions.DependencyInjection framework.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics.AspNetCore\Decos.Diagnostics.AspNetCore.xml</DocumentationFile>
-    <PackageReleaseNotes>3.1: Updated for ASP.NET Core 3.1.</PackageReleaseNotes>
+    <PackageReleaseNotes>3.1.7: Update package reference for Decos.Diagnostics.Trace to 1.3.6</PackageReleaseNotes>
   </PropertyGroup>
   
   <ItemGroup>
