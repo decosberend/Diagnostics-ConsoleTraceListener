@@ -87,3 +87,30 @@ namespace Decos.Diagnostics.Trace.Tests
         }
     }
 }
+
+[TestClass]
+public class NoNamespaceTraceTest
+{
+  private const int Delay = 100;
+  private const int EventCount = 10;
+
+  [TestMethod]
+  public async Task AsyncTraceListenerDoesNotThrowWhenCalledWithoutNamespace()
+  {
+    var listener = new DelayAsyncTraceListener(Delay);
+
+    for (int i = 0; i < EventCount; i++)
+    {
+      listener.WriteLine(i);
+    }
+
+    var cancellation = new CancellationTokenSource(Delay);
+    try
+    {
+      await listener.ProcessQueueAsync(CancellationToken.None, cancellation.Token);
+    }
+    catch (OperationCanceledException) { }
+
+    Assert.AreNotEqual(0, listener.QueueCount);
+  }
+}

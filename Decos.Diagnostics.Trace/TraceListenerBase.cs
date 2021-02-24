@@ -632,7 +632,7 @@ namespace Decos.Diagnostics.Trace
                     foreach (var frame in stackFrames) {
                         var frameReflectedType = frame.GetMethod().ReflectedType;
                         var namespaceName = frameReflectedType.Namespace;
-                        if (!namespaceName.StartsWith("System.Diagnostics") && !namespaceName.StartsWith("Decos.Diagnostics")) {
+                        if (namespaceName != null && !namespaceName.StartsWith("System.Diagnostics") && !namespaceName.StartsWith("Decos.Diagnostics")) {
                             return frameReflectedType.ToString();
                         }
                     }
