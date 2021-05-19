@@ -49,6 +49,9 @@ namespace Decos.Diagnostics.Trace
         /// <returns>A task that represents the asynchronous operation.</returns>
         public override Task TraceAsync(LogEntry logEntry, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrEmpty(logEntry.Message) && logEntry.Data is Exception)
+                logEntry.Message = ((Exception)logEntry.Data).Message;
+
             return LogstashClient.LogAsync(logEntry, cancellationToken);
         }
     }
