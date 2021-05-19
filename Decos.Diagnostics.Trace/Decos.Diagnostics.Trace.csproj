@@ -4,13 +4,13 @@
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.3.7</Version>
+    <Version>1.3.8</Version>
     <Authors>Laura Verdoes</Authors>
     <Company>Decos Information Solutions</Company>
     <Product>Decos.Diagnostics.Trace</Product>
     <Description>Provides a System.Diagnostics.TraceSource implementation for the Decos.Diagnostics abstractions.</Description>
     <DocumentationFile>C:\Decos\Git\Decos.Diagnostics\Decos.Diagnostics.Trace\Decos.Diagnostics.Trace.xml</DocumentationFile>
-    <PackageReleaseNotes>Improved error handling with async trace listeners.</PackageReleaseNotes>
+    <PackageReleaseNotes>Ensure Logstash message property is filled when logging exceptions</PackageReleaseNotes>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Decos.Diagnostics.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
