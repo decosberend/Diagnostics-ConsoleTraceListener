@@ -90,7 +90,7 @@ namespace Decos.Diagnostics.Trace
             var traceSource = new TraceSource(name, switchValue);
 
             var listeners = System.Diagnostics.Trace.Listeners.Cast<TraceListener>()
-                .Concat(Options.Listeners);
+                .Concat(Options.Listeners).ToArray(); // #288882: .ToArray() to prevent "Collection was modified" exception 
             foreach (var listener in listeners)
             {
                 if (listener is DefaultTraceListener
