@@ -46,24 +46,28 @@ namespace Decos.Diagnostics.Trace
         /// <param name="message">The message to write.</param>
         protected override void TraceInternal(TraceEventData e, string message)
         {
+          try // Berend #345703: Prevent console logging from crashing the app
+          {
             Console.Write("[");
             using (new ConsoleHighlight(ConsoleColor.Gray))
-                Console.Write($"{e.Cache.DateTime:T}");
+              Console.Write($"{e.Cache.DateTime:T}");
             Console.Write("] ");
 
             Console.Write("[");
             using (FormatForLogLevel(e.Type ?? TraceEventType.Information))
-                Console.Write($"{e.Type ?? TraceEventType.Information}");
+              Console.Write($"{e.Type ?? TraceEventType.Information}");
             Console.Write("] ");
 
             Console.Write(message);
 
             Console.Write(" [");
             using (new ConsoleHighlight(ConsoleColor.DarkCyan))
-                Console.Write($"{e.Source}");
+              Console.Write($"{e.Source}");
             Console.Write("]");
 
             Console.WriteLine();
+          }
+          catch { }
         }
 
         /// <summary>
